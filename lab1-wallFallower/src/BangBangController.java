@@ -1,20 +1,19 @@
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.*;
 
-public class BangBangController implements UltrasonicController{
+public class BangBangController implements UltrasonicController {
 	private final int bandCenter, bandwith;
 	private final int motorLow, motorHigh;
 	private final int motorStraight = 200;
 	private final NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.C;
 	private int distance;
 	private int currentLeftSpeed;
-	private int wideTurn;
-	private int i;
 	private boolean backwards;
 	private boolean inBand;
-	
-	public BangBangController(int bandCenter, int bandwith, int motorLow, int motorHigh) {
-		//Default Constructor
+
+	public BangBangController(int bandCenter, int bandwith, int motorLow,
+			int motorHigh) {
+		// Default Constructor
 		this.bandCenter = bandCenter;
 		this.bandwith = bandwith;
 		this.motorLow = motorLow;
@@ -24,16 +23,17 @@ public class BangBangController implements UltrasonicController{
 		leftMotor.forward();
 		rightMotor.forward();
 		currentLeftSpeed = 0;
+		inBand = true;
+		backwards = false;
 	}
-	
 
 	/**
-	 * author: CEDRIC BONJOUR
-	 * TODO: process a movement based on the us distance passed in (BANG-BANG style)
+	 * author: CEDRIC BONJOUR TODO: process a movement based on the us distance
+	 * passed in (BANG-BANG style)
 	 */
 	@Override
 	public void processUSData(int distance) {
-	
+
 		this.distance = distance;
 		if (distance >= (bandCenter - bandwith)
 				&& distance <= (bandCenter + bandwith)) {
@@ -42,14 +42,14 @@ public class BangBangController implements UltrasonicController{
 			inBand = false;
 		}
 
-		if (distance < 14) {
+		if (distance < 18) {
 			sharpTurn();
 		}
 
 		if (backwards) {
 			sharpTurn();
 		} else {
-			if (distance > 13 && distance < (bandCenter - bandwith)) {
+			if (distance > 17 && distance < (bandCenter - bandwith)) {
 				leftMotor.setSpeed(motorHigh);
 				rightMotor.setSpeed(motorStraight);
 			}
@@ -61,34 +61,23 @@ public class BangBangController implements UltrasonicController{
 				rightMotor.setSpeed(motorHigh);
 				leftMotor.setSpeed(motorStraight);
 			}
-
 			if (distance > 59) {
-				i++;
-				if (wideTurn < 150 && i > 100) {
-					wideTurn += 100;
-				}
 				rightMotor.setSpeed(motorHigh);
 				leftMotor.setSpeed(motorStraight);
-			} else {
-				i = 0;
-				wideTurn = 0;
 			}
-
 		}
-		
 	}
 
 	private void sharpTurn() {
 		backwards = true;
-		if (distance < 16) {
+		if (distance < 21) {
 			rightMotor.backward();
-			rightMotor.setSpeed(motorStraight);
+			rightMotor.setSpeed(motorStraight * 2);
 			leftMotor.setSpeed(motorStraight);
 		} else {
 			backwards = false;
 			rightMotor.forward();
 		}
-
 	}
 
 	@Override
