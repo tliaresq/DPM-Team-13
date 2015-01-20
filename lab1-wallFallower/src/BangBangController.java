@@ -8,6 +8,10 @@ public class BangBangController implements UltrasonicController{
 	private final NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.C;
 	private int distance;
 	private int currentLeftSpeed;
+	private int wideTurn;
+	private int i;
+	private boolean backwards;
+	private boolean inBand;
 	
 	public BangBangController(int bandCenter, int bandwith, int motorLow, int motorHigh) {
 		//Default Constructor
@@ -24,33 +28,67 @@ public class BangBangController implements UltrasonicController{
 	
 
 	/**
-	 * CEDRIC BONJOUR method
+	 * author: CEDRIC BONJOUR
 	 * TODO: process a movement based on the us distance passed in (BANG-BANG style)
 	 */
 	@Override
 	public void processUSData(int distance) {
 	
 		this.distance = distance;
+		if (distance >= (bandCenter - bandwith)
+				&& distance <= (bandCenter + bandwith)) {
+			inBand = true;
+		} else {
+			inBand = false;
+		}
+
+		if (distance < 14) {
+			sharpTurn();
+		}
+
+		if (backwards) {
+			sharpTurn();
+		} else {
+			if (distance > 13 && distance < (bandCenter - bandwith)) {
+				leftMotor.setSpeed(motorHigh);
+				rightMotor.setSpeed(motorStraight);
+			}
+			if (inBand) {
+				leftMotor.setSpeed(motorHigh);
+				rightMotor.setSpeed(motorHigh);
+			}
+			if (distance > bandCenter + bandwith && distance < 60) {
+				rightMotor.setSpeed(motorHigh);
+				leftMotor.setSpeed(motorStraight);
+			}
+
+			if (distance > 59) {
+				i++;
+				if (wideTurn < 150 && i > 100) {
+					wideTurn += 100;
+				}
+				rightMotor.setSpeed(motorHigh);
+				leftMotor.setSpeed(motorStraight);
+			} else {
+				i = 0;
+				wideTurn = 0;
+			}
+
+		}
 		
-		if(distance==25){
-		leftMotor.setSpeed(motorHigh);
-		rightMotor.setSpeed(motorHigh);
+	}
+
+	private void sharpTurn() {
+		backwards = true;
+		if (distance < 16) {
+			rightMotor.backward();
+			rightMotor.setSpeed(motorStraight);
+			leftMotor.setSpeed(motorStraight);
+		} else {
+			backwards = false;
+			rightMotor.forward();
 		}
-		if (distance<25){
-			rightMotor.setSpeed(50);
-			leftMotor.setSpeed(250);
-			
-		}
-		
-		if (distance>25 && distance<200){
-		leftMotor.setSpeed(50); 
-		rightMotor.setSpeed(250);
-		}
-		if (distance >140){
-		leftMotor.setSpeed(50);
-		rightMotor.setSpeed(motorStraight);
-		}
-		
+
 	}
 
 	@Override
