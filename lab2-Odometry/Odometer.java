@@ -1,10 +1,15 @@
 /*
  * Odometer.java
  */
+import lejos.nxt.Motor;
+import lejos.nxt.Motor.*;
 
 public class Odometer extends Thread {
 	// robot position
 	private double x, y, theta;
+	private double temp,tempX,tempY,tempTacho,tempTheta,wheelPerimeter,nxtRadius, rad;
+	boolean turning;
+	
 
 	// odometer update period, in ms
 	private static final long ODOMETER_PERIOD = 25;
@@ -16,8 +21,18 @@ public class Odometer extends Thread {
 	public Odometer() {
 		x = 0.0;
 		y = 0.0;
-		theta = 0.0;
+		theta = 90.0;
+		temp=0;
+		tempX = 0;
+		tempY=0;
+		tempTacho=0;
+		tempTheta=90;
+		wheelPerimeter=13.35;
+		nxtRadius=7.56;
+		rad = 0;
+		turning = false;
 		lock = new Object();
+		
 	}
 
 	// run method (required for Thread)
@@ -27,10 +42,29 @@ public class Odometer extends Thread {
 		while (true) {
 			updateStart = System.currentTimeMillis();
 			// put (some of) your odometer code here
-
+			
 			synchronized (lock) {
 				// don't use the variables x, y, or theta anywhere but here!
-				theta = -0.7376;
+			
+					//Motor.A.getTachoCount(); 
+				
+			if(Motor.B.getSpeed()<170){
+				tempX=x;
+				tempY=y;
+				tempTacho=Motor.A.getTachoCount();
+				  turning= true;
+					theta=tempTheta-((temp-Motor.B.getTachoCount())*wheelPerimeter/360)*360/(2*3.1415*nxtRadius);
+					
+			}else{
+				turning= false;
+				temp=Motor.B.getTachoCount() ;
+				tempTheta=theta;
+				rad = Math.toRadians(theta);
+				
+				x=tempX+Math.cos(rad)*(Motor.A.getTachoCount()-tempTacho)*wheelPerimeter/360;
+				y=tempY+Math.sin(rad)*(Motor.A.getTachoCount()-tempTacho)*wheelPerimeter/360;
+				
+			}
 			}
 
 			// this ensures that the odometer only runs once every period
@@ -45,6 +79,9 @@ public class Odometer extends Thread {
 				}
 			}
 		}
+		
+			
+		
 	}
 
 	// accessors
