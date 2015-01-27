@@ -1,11 +1,23 @@
 /* 
  * OdometryCorrection.java
  */
+import lejos.nxt.ColorSensor;
+
+import lejos.nxt.SensorPort;
+import lejos.nxt.Sound;
+import lejos.nxt.SoundSensor.*;
+import lejos.nxt.SoundSensor;
 
 public class OdometryCorrection extends Thread {
+	static ColorSensor cs = new ColorSensor(SensorPort.S2);
+	private int lightDetector;
+
+	
 	private static final long CORRECTION_PERIOD = 10;
 	private Odometer odometer;
-
+	private int iColor;
+	private double x,y;
+	
 	// constructor
 	public OdometryCorrection(Odometer odometer) {
 		this.odometer = odometer;
@@ -17,7 +29,71 @@ public class OdometryCorrection extends Thread {
 
 		while (true) {
 			correctionStart = System.currentTimeMillis();
+		
+			cs.setFloodlight(true);
+			
+			iColor=cs.getRawLightValue();			
+			//odometer.setX((double) iColor);
+			//odometer.setY(i);
+			if (iColor <300){
+				
+				x=0;
+				y=27.5;
+				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
+					 odometer.setX(x);
+					 odometer.setY(y);
+				}
 
+				x=0;
+				y=57.5;
+				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
+					 odometer.setX(x);
+					 odometer.setY(y);
+				}
+
+				x=27.5;
+				y=60.96;
+				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
+					 odometer.setX(x);
+					 odometer.setY(y);
+				}
+
+				x=57.5;
+				y=60.96;
+				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
+					 odometer.setX(x);
+					 odometer.setY(y);
+				}
+
+				x=60.96;
+				y=33.46;
+				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
+					 odometer.setX(x);
+					 odometer.setY(y);
+				}
+
+				x=60.96;
+				y=3.46;
+				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
+					 odometer.setX(x);
+					 odometer.setY(y);
+				}
+
+				x=33.46;
+				y=0;
+				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
+					 odometer.setX(x);
+					 odometer.setY(y);
+				}
+				x=3.46;
+				y=0;
+				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
+					 odometer.setX(x);
+					 odometer.setY(y);
+				}
+			
+			}
+			
 			// put your correction code here
 
 			// this ensure the odometry correction occurs only once every period
@@ -33,5 +109,14 @@ public class OdometryCorrection extends Thread {
 				}
 			}
 		}
+	}
+	private boolean inBand(double val, double pos){
+		int j = 20;
+		if (val>(pos-j) && val< (pos+j)){
+			return true;
+		}else{
+			return false;
+		}
+	
 	}
 }
