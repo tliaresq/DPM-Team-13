@@ -35,14 +35,13 @@ public class Lab2 {
 
 			// start only the odometer and the odometry display
 			odometer.start();
-			//odometryCorrection.start();
 			odometryDisplay.start();
 		} else {
 			// start the odometer, the odometry display and (possibly) the
 			// odometry correction
 			odometer.start();
 			odometryDisplay.start();
-			odometryCorrection.start();//i added that
+			odometryCorrection.start();//we added that
 
 			// spawn a new Thread to avoid SquareDriver.drive() from blocking
 			(new Thread() {
