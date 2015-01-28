@@ -35,6 +35,8 @@ public class OdometryCorrection extends Thread {
 			iColor=cs.getRawLightValue();			
 			//odometer.setX((double) iColor);
 			//odometer.setY(i);
+			
+			// when a black line is updated check the current position and if it is within j cm of any preset position, updated to that position.
 			if (iColor <300){
 				
 				x=0;
@@ -111,7 +113,7 @@ public class OdometryCorrection extends Thread {
 		}
 	}
 	private boolean inBand(double val, double pos){
-		int j = 20;
+		int j = 10;//distance error permitted between a preset position and the odometer theoretical position for update 
 		if (val>(pos-j) && val< (pos+j)){
 			return true;
 		}else{
