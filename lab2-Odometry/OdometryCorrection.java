@@ -12,91 +12,73 @@ public class OdometryCorrection extends Thread {
 	static ColorSensor cs = new ColorSensor(SensorPort.S2);
 	private int lightDetector;
 
-	
 	private static final long CORRECTION_PERIOD = 10;
 	private Odometer odometer;
 	private int iColor;
-	private double x,y;
+	private double x, y;
+	private double dX, dY;
 	
+	private int i;
+
 	// constructor
 	public OdometryCorrection(Odometer odometer) {
 		this.odometer = odometer;
+		dY = 0;
+		dX = 0;
+		i=0;
 	}
 
 	// run method (required for Thread)
 	public void run() {
 		long correctionStart, correctionEnd;
-
-		while (true) {
-			correctionStart = System.currentTimeMillis();
 		
+		while (true) {
+			
+			
+			correctionStart = System.currentTimeMillis();
+			dY = 4.5 * Math.sin(odometer.getTheta()*3.1416/180); // light sensor is 4.5cm
+														// away from the center
+														// of robot
+			dX = 4.5 * Math.cos(odometer.getTheta()*3.1416/180);
 			cs.setFloodlight(true);
-			
-			iColor=cs.getRawLightValue();			
-			//odometer.setX((double) iColor);
-			//odometer.setY(i);
-			
-			// when a black line is updated check the current position and if it is within j cm of any preset position, updated to that position.
-			if (iColor <300){
-				
-				x=0;
-				y=27.5;
-				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
-					 odometer.setX(x);
-					 odometer.setY(y);
+			iColor = cs.getRawLightValue();
+
+			//odometer.setV((double)iColor);
+			// when a black line is updated check the current position and if it
+			// is within j cm of any preset position, updated to that position.
+			if (iColor < 250) {
+
+				i++;
+				//odometer.setV((double)i);
+				y = 15 - dY;
+				odometer.setV(y);
+				if (inBand(odometer.getY(), y)) {
+					odometer.setY(y);
 				}
 
-				x=0;
-				y=57.5;
-				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
-					 odometer.setX(x);
-					 odometer.setY(y);
+				y = 45 - dY;
+				if (inBand(odometer.getY(), y)) {
+					odometer.setY(y);
 				}
 
-				x=27.5;
-				y=60.96;
-				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
-					 odometer.setX(x);
-					 odometer.setY(y);
+				y = 75 - dY;
+				if (inBand(odometer.getY(), y)) {
+					odometer.setY(y);
 				}
 
-				x=57.5;
-				y=60.96;
-				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
-					 odometer.setX(x);
-					 odometer.setY(y);
+				x = 15 - dX;
+				if (inBand(odometer.getX(), x)) {
+					odometer.setX(x);
 				}
-
-				x=60.96;
-				y=33.46;
-				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
-					 odometer.setX(x);
-					 odometer.setY(y);
+				x = 45 - dX;
+				if (inBand(odometer.getX(), x)) {
+					odometer.setX(x);
 				}
-
-				x=60.96;
-				y=3.46;
-				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
-					 odometer.setX(x);
-					 odometer.setY(y);
+				x = 75 - dX;
+				if (inBand(odometer.getX(), x)) {
+					odometer.setX(x);
 				}
-
-				x=33.46;
-				y=0;
-				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
-					 odometer.setX(x);
-					 odometer.setY(y);
-				}
-				x=3.46;
-				y=0;
-				if(inBand(odometer.getX() , x) && inBand(odometer.getY() , y) ){
-					 odometer.setX(x);
-					 odometer.setY(y);
-				}
-			
 			}
-			
-			// put your correction code here
 
 			// this ensure the odometry correction occurs only once every period
 			correctionEnd = System.currentTimeMillis();
@@ -112,13 +94,15 @@ public class OdometryCorrection extends Thread {
 			}
 		}
 	}
-	private boolean inBand(double val, double pos){
-		int j = 10;//distance error permitted between a preset position and the odometer theoretical position for update 
-		if (val>(pos-j) && val< (pos+j)){
+
+	private boolean inBand(double val, double pos) {
+		int j = 8;// distance error permitted between a preset position and the
+					// odometer theoretical position for update
+		if (val > (pos - j) && val < (pos + j)) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
-	
+
 	}
 }

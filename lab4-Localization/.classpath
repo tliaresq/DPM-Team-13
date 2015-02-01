@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="navigation&amp;Odometry/" kind="src" path=""/>
+	<classpathentry kind="src" path="navigation&amp;Odometry"/>
+	<classpathentry kind="con" path="org.lejos.nxt.ldt.LEJOS_LIBRARY_CONTAINER/nxt"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

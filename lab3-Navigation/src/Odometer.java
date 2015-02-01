@@ -2,7 +2,7 @@
  * Odometer.java
  */
 import lejos.nxt.Motor;
-import lejos.nxt.Motor.*;
+
 
 public class Odometer extends Thread {
 

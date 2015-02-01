@@ -4,7 +4,7 @@
 import lejos.nxt.*;
 
 public class SquareDriver {
-	private static final int FORWARD_SPEED = 250;
+	private static final int FORWARD_SPEED = 180;
 	private static final int ROTATE_SPEED = 150;
 
 	public static void drive(NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor,
