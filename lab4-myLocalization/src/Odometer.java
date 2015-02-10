@@ -2,8 +2,6 @@ import lejos.nxt.Motor;
 
 public class Odometer extends Thread {
 
-	
-
 	// odometer update period, in ms
 	private static final long ODOMETER_PERIOD = 25;
 	private Object lock;
@@ -16,24 +14,24 @@ public class Odometer extends Thread {
 
 	private int sensorColor;
 	private double myVar;
-	
-	private double wB;//nxt wheel to wheel distance
-	private double wR;//wheel radius
-	//displays all odometer data
-	
+
+	private double wB;// nxt wheel to wheel distance
+	private double wR;// wheel radius
+	// displays all odometer data
+
 	private OdometryDisplay odometryDisplay = new OdometryDisplay(this);
-			
-	//controls ultrasonic sensor and provides distance measurement
+
+	// controls ultrasonic sensor and provides distance measurement
 	private USController usController = new USController();
 	private LSController lsController = new LSController();
-	
+
 	// default constructor
 	public Odometer(double w, double r) {
 		x = 0.0;
 		y = 0.0;
 		theta = 90.0;
 		lock = new Object();
-		wB =w; //15.22;
+		wB = w; // 15.22;
 		wR = r;
 		myVar = 3.1415;
 
@@ -42,26 +40,21 @@ public class Odometer extends Thread {
 	// run method (required for Thread)
 	public void run() {
 		long updateStart, updateEnd;
-		//usController.start();
-		//lsController.start();
 		odometryDisplay.start();
-		
 
 		while (true) {
 			updateStart = System.currentTimeMillis();
 			// put (some of) your odometer code here
 
 			synchronized (lock) {
-				
+
 				// don't use the variables x, y, or theta anywhere but here!
 
 				double distL, distR, deltaD, deltaT, dX, dY;
-				
-				
-				sensorDist=usController.sensorDist();
+
+				sensorDist = usController.sensorDist();
 				sensorColor = lsController.getColor();
-				
-				
+
 				nowTachoL = Motor.A.getTachoCount();
 				nowTachoR = Motor.B.getTachoCount();
 				// getting distances travelled by the left and right wheel
@@ -105,14 +98,23 @@ public class Odometer extends Thread {
 		}
 
 	}
-	
-	public void usStart(){
+
+	public void usStart() {
 		usController.start();
 	}
-	public void lsStart(){
+
+	public void lsStart() {
 		lsController.start();
 	}
-	
+
+	public void usStop() {
+		usController.stopUS();
+	}
+
+	public void lsStop() {
+		lsController.stopLS();
+	}
+
 	public void getPosition(double[] position, boolean[] update) {
 		// ensure that the values don't change while the odometer is running
 		synchronized (lock) {
@@ -154,6 +156,7 @@ public class Odometer extends Thread {
 
 		return result;
 	}
+
 	public double getV() {
 		double result;
 
@@ -163,6 +166,7 @@ public class Odometer extends Thread {
 
 		return result;
 	}
+
 	public double getSensorDist() {
 		double result;
 
@@ -172,6 +176,7 @@ public class Odometer extends Thread {
 
 		return result;
 	}
+
 	public double getSensorColor() {
 		double result;
 
@@ -212,7 +217,7 @@ public class Odometer extends Thread {
 			this.theta = theta;
 		}
 	}
-	
+
 	public void setV(double v) {
 		synchronized (lock) {
 			this.myVar = v;

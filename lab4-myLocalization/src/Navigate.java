@@ -34,7 +34,7 @@ public class Navigate extends Thread {
 	}
 
 	public void demoOne() {
-
+		
 		// destinations to go to in that order
 		travelTo(60, 30);
 		travelTo(30, 30);
@@ -43,10 +43,13 @@ public class Navigate extends Thread {
 	}
 
 	public void demoTwo() {
+		//implements USController
 
 		// destinations to go to in that order
+		odometer.usStart();
 		travelTo(0, 60);
 		travelTo(60, 0);
+		odometer.usStop();
 	}
 
 	public static void travelTo(double x, double y) {
@@ -272,5 +275,30 @@ public class Navigate extends Thread {
 	// returns true if the nxt is currently driving to a destination
 	public boolean isNavigating() {
 		return isNavigating;
+	}
+
+	public void pointTo(double angle) {
+		double theta = odometer.getTheta();
+		if (theta > 180) {
+			theta -= 360;
+		}
+		if (angle > 180) {
+			angle -= 360;
+		}
+
+		angle = theta - angle;
+
+		if (angle > 180) {
+			angle -= 360;
+		}
+		if (angle < -180) {
+			angle += 360;
+		}
+		leftMotor.setSpeed(ROTATE_SPEED);
+		rightMotor.setSpeed(ROTATE_SPEED);
+
+		leftMotor.rotate(convertAngle(leftRadius, width, angle), true);
+		rightMotor.rotate(-convertAngle(rightRadius, width, angle), false);
+
 	}
 }
