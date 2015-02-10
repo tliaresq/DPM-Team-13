@@ -35,8 +35,9 @@ public class OdometryDisplay extends Thread {
 			for (int i = 0; i < 3; i++) {
 				LCD.drawString(formattedDoubleToString(position[i], 2), 3, i);
 			}
-			LCD.drawString(formattedDoubleToString(odometer.getSensorDist(),2), 0, 3);
+			LCD.drawString("dist: "+formattedDoubleToString(odometer.getSensorDist(),2), 0, 3);
 
+			LCD.drawString("color: "+formattedDoubleToString(odometer.getSensorColor(),2), 0, 4);
 			// throttle the OdometryDisplay
 			displayEnd = System.currentTimeMillis();
 			if (displayEnd - displayStart < DISPLAY_PERIOD) {

@@ -13,13 +13,22 @@ public class Odometer extends Thread {
 	private int lastTachoL;
 	private int lastTachoR;
 	private int sensorDist;
+
+	private int sensorColor;
 	private double myVar;
 	
 	private double wB;//nxt wheel to wheel distance
 	private double wR;//wheel radius
-	private USController usController;
+	//displays all odometer data
+	
+	private OdometryDisplay odometryDisplay = new OdometryDisplay(this);
+			
+	//controls ultrasonic sensor and provides distance measurement
+	private USController usController = new USController();
+	private LSController lsController = new LSController();
+	
 	// default constructor
-	public Odometer(USController usc, double w, double r) {
+	public Odometer(double w, double r) {
 		x = 0.0;
 		y = 0.0;
 		theta = 90.0;
@@ -27,13 +36,16 @@ public class Odometer extends Thread {
 		wB =w; //15.22;
 		wR = r;
 		myVar = 3.1415;
-		usController=usc;
 
 	}
 
 	// run method (required for Thread)
 	public void run() {
 		long updateStart, updateEnd;
+		//usController.start();
+		//lsController.start();
+		odometryDisplay.start();
+		
 
 		while (true) {
 			updateStart = System.currentTimeMillis();
@@ -47,6 +59,7 @@ public class Odometer extends Thread {
 				
 				
 				sensorDist=usController.sensorDist();
+				sensorColor = lsController.getColor();
 				
 				
 				nowTachoL = Motor.A.getTachoCount();
@@ -93,6 +106,12 @@ public class Odometer extends Thread {
 
 	}
 	
+	public void usStart(){
+		usController.start();
+	}
+	public void lsStart(){
+		lsController.start();
+	}
 	
 	public void getPosition(double[] position, boolean[] update) {
 		// ensure that the values don't change while the odometer is running
@@ -149,6 +168,15 @@ public class Odometer extends Thread {
 
 		synchronized (lock) {
 			result = sensorDist;
+		}
+
+		return result;
+	}
+	public double getSensorColor() {
+		double result;
+
+		synchronized (lock) {
+			result = sensorColor;
 		}
 
 		return result;

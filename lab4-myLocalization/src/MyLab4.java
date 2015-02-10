@@ -1,29 +1,37 @@
 import lejos.nxt.*;
 
-public class Lab3 {
+public class MyLab4 {
 
 	static double leftRadius = 2.08;
 	static double rightRadius = leftRadius;
-	static double width = 15.22;
+	static double width = 15.02;
 	
 
 	public static void main(String[] args) {
 		int option = 0;
 		//listens to button to exit program
 		Exit exit= new Exit();
-		//controls ultrasonic sensor and provides distance measurement
-		USController usController = new USController();
+
+		
 		//Handles all data relative to location
-		Odometer odometer = new Odometer(usController, width,leftRadius);
-		//displays all odometer data
-		OdometryDisplay odometryDisplay = new OdometryDisplay(odometer);
+		Odometer odometer = new Odometer(width,leftRadius);
+		
+		
 		//Manages driving nxt to a given location
 		Navigate nav = new Navigate(Motor.A, Motor.B, leftRadius, rightRadius,
 				width, odometer);
 		
+		
+		// perform the ultrasonic localization
+		USLocalizer usl = new USLocalizer(odometer,nav,  USLocalizer.LocalizationType.RISING_EDGE);
+		
+		
+		// perform the light sensor localization
+		LightLocalizer lsl = new LightLocalizer(odometer,nav);
+					
+		
+		
 		exit.start();
-		usController.start();
-		odometer.start();
 		nav.start();
 		LCD.clear();
 		LCD.drawString("left = demo 1",  0, 0);
@@ -33,12 +41,16 @@ public class Lab3 {
 		}
 		switch(option) {
 		case Button.ID_LEFT:
-			odometryDisplay.start();
-			nav.demoOne();
+			odometer.start();
+			usl = new USLocalizer(odometer,nav,  USLocalizer.LocalizationType.FALLING_EDGE);
+			usl.doLocalization();
+			lsl.doLocalization();
+
 			break;
 		case Button.ID_RIGHT:
-			odometryDisplay.start();
-			nav.demoTwo();
+			odometer.start();
+			usl.doLocalization();
+			lsl.doLocalization();
 		default:
 			System.out.println("Error - invalid button");
 			System.exit(-1);
