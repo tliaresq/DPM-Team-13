@@ -22,6 +22,8 @@ public class USController extends Thread {
 			} catch (Exception e) {
 			}
 			if (stop) {
+				usSensor.off();
+				distance = 333;
 				Thread.currentThread().interrupt();
 				return;
 			}
@@ -29,7 +31,7 @@ public class USController extends Thread {
 	}
 
 	public void stopUS() {
-		distance = 333;
+		
 		stop = true;
 	}
 

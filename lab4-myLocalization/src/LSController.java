@@ -20,6 +20,8 @@ public class LSController extends Thread {
 			} catch (Exception e) {
 			}
 			if (stop) {
+				cs.setFloodlight(false);
+				color = 999;
 				Thread.currentThread().interrupt();
 				return;
 			}
@@ -27,7 +29,7 @@ public class LSController extends Thread {
 	}
 
 	public void stopLS() {
-		color = 999;
+		
 		stop = true;
 	}
 
