@@ -1,6 +1,3 @@
-/*
- * OdometryDisplay.java
- */
 import lejos.nxt.LCD;
 
 public class OdometryDisplay extends Thread {
@@ -24,21 +21,23 @@ public class OdometryDisplay extends Thread {
 			displayStart = System.currentTimeMillis();
 
 			// clear the lines for displaying odometry information
-			LCD.drawString("X:              ", 0, 0);
-			LCD.drawString("Y:              ", 0, 1);
-			LCD.drawString("T:              ", 0, 2);
+			LCD.drawString("x: ", 0, 0);
+			LCD.drawString("y: ", 0, 1);
+			LCD.drawString("t: ", 0, 2);
 
 			// get the odometry information
 			odometer.getPosition(position, new boolean[] { true, true, true });
 
 			// display odometry information
 			for (int i = 0; i < 3; i++) {
-				LCD.drawString(formattedDoubleToString(position[i], 2), 3, i);
+				LCD.drawString(formattedDoubleToString(position[i], 2), 5, i);
 			}
-			LCD.drawString("dist: "+formattedDoubleToString(odometer.getRightSensorDist(),2), 0, 3);
-			LCD.drawString("dist: "+formattedDoubleToString(odometer.getLeftSensorDist(),2), 0, 4);
-
-			LCD.drawString("color: "+formattedDoubleToString(odometer.getSensorColor(),2), 0, 5);
+			
+			LCD.drawString("dist: "+formattedDoubleToString(odometer.getRightSensorDist(),0), 0, 3);
+			LCD.drawString("dist: "+formattedDoubleToString(odometer.getLeftSensorDist(),0), 0, 4);
+			LCD.drawString("color: "+formattedDoubleToString(odometer.getSensorColor(),0), 0, 5);
+			
+			
 			// throttle the OdometryDisplay
 			displayEnd = System.currentTimeMillis();
 			if (displayEnd - displayStart < DISPLAY_PERIOD) {

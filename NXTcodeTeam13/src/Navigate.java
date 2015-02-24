@@ -4,6 +4,7 @@ import lejos.nxt.Sound;
 public class Navigate {
 	private NXTRegulatedMotor leftMotor;
 	private NXTRegulatedMotor rightMotor;
+	private Robot robot;
 	private double rightRadius;
 	private double leftRadius;
 	private double xDest;
@@ -17,6 +18,7 @@ public class Navigate {
 	private int defAcc;
 
 	public Navigate(Robot r, Odometer odo) {
+		robot = r;
 		leftMotor = r.leftMotor;
 		rightMotor = r.rightMotor;
 		leftRadius = r.leftWradius;
@@ -74,9 +76,10 @@ public class Navigate {
 	private void follow() {
 
 		double leftDistance = odometer.getLeftSensorDist();
-		double bandCenter = 25;
+		double bandCenter = robot.wallDist;
 		double delta;
-		int ratio;
+		double tooRight;
+		double tooLeft ;
 	
 		// initiating nxt wall following state
 		rotateClockwise(90);
@@ -86,15 +89,10 @@ public class Navigate {
 		// follow obstacle while theta isn't within 5 degrees of the angle needed to reach destination
 		while (Math.abs(delta) > 5) {
 			
-			try {
-				Thread.sleep(20);
-			} 
-			catch (Exception e) {
-			}
-			double tooRight = (Math.pow((odometer.getLeftSensorDist()/bandCenter),1));
-			double tooLeft =(Math.pow((bandCenter/odometer.getLeftSensorDist()),4));
+			try {Thread.sleep(20);} catch (Exception e) {}
 			
-
+			tooRight = (Math.pow((odometer.getLeftSensorDist()/bandCenter),1));
+			tooLeft =(Math.pow((bandCenter/odometer.getLeftSensorDist()),4));
 
 			// checks for wall in front
 			if (odometer.getRightSensorDist()<objectDist){
@@ -110,16 +108,16 @@ public class Navigate {
 			} 
 
 			//too right
-			else if (leftDistance > bandCenter && leftDistance < 50) {
+			else if (leftDistance > bandCenter && leftDistance < 61) {
 				goForth();
 				rightMotor.setSpeed((int) (defSpeed*tooRight));
 				leftMotor.setSpeed(defSpeed);
 			} 
 
 			// no more wall
-			else if (leftDistance > 49) {
+			else if (leftDistance > 60) {
 				goForth();
-				rightMotor.setSpeed((int) (defSpeed*tooRight));
+				rightMotor.setSpeed((int) (defSpeed*tooRight*tooRight));
 				leftMotor.setSpeed(defSpeed);
 			}
 			leftDistance = odometer.getLeftSensorDist();
@@ -130,82 +128,8 @@ public class Navigate {
 		pointToDest();
 	}
 	
-	public void followBangBang(){
-
-		double leftDistance = odometer.getLeftSensorDist();
-		double bandCenter = 18;
-		double bandwidth = 4;
-		int speedHigh = defSpeed*2;
-		int speedLow = defSpeed/2;
-		double delta;
-		boolean inBand = false;
-		
-
-
-		// initiating nxt wall following state
-		rotateClockwise(90);
-		updateDestAngle();
-		delta = deltaAngle(finalDestAngle);
-		setAccSp(8000,100);
-		// follow obstacle while theta isn't within 5 degrees of the angle needed to reach destination
-		while (Math.abs(delta) > 5) {
-			try {
-				Thread.sleep(300);
-			} 
-			catch (Exception e) {
-			}
-			
-
-			// Basic wall follower
-
-			if (leftDistance >= (bandCenter - bandwidth)
-					&& leftDistance <= (bandCenter + bandwidth)) {
-				inBand = true;
-			} else {
-				inBand = false;
-			}
-
-			// checks for wall in front
-			if (odometer.getRightSensorDist()<objectDist){
-				rotateClockwise(90);
-			}
-			//good location 
-			if (inBand) {
-				rightMotor.setSpeed(speedHigh);
-				goForth();
-
-			} 
-
-			//too left
-			else if (leftDistance < (bandCenter - bandwidth)) {
-				goForth();
-				leftMotor.setSpeed(speedHigh);
-				rightMotor.setSpeed(speedLow);
-			} 
-
-			//too right
-			else if (leftDistance > bandCenter + bandwidth && leftDistance < 50) {
-				goForth();
-				rightMotor.setSpeed((int)(defSpeed));
-				leftMotor.setSpeed(defSpeed);
-			} 
-
-			// no more wall
-			else if (leftDistance > 49) {
-				goForth();
-				rightMotor.setSpeed(speedHigh);
-				leftMotor.setSpeed(speedLow);
-			}
-			leftDistance = odometer.getLeftSensorDist();
-			updateDestAngle();
-			delta = deltaAngle(finalDestAngle);
-		}
-		goForth();
-		pointToDest();
-	}
 	
-	
-	//sets Acceleration and speed
+	//sets Acceleration and speed to both motors
 	public void setAccSp(int acc, int sp){
 		leftMotor.setAcceleration(acc);
 		rightMotor.setAcceleration(acc);
@@ -237,7 +161,10 @@ public class Navigate {
 		leftMotor.forward();
 		rightMotor.forward();
 	}
-
+	
+	/**
+	 * stops both motors instantly
+	 */
 	public void stopMotors() {
 		setAccSp(9000,0);
 		leftMotor.stop();
@@ -307,6 +234,7 @@ public class Navigate {
 		}
 		return deltaAngle;
 	}
+	
 	private void updateDestAngle(){
 		finalDestAngle = Math.atan2(yDest - odometer.getY(),xDest - odometer.getX()) * 180 / 3.14159;
 	}

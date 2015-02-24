@@ -1,11 +1,10 @@
 import lejos.nxt.ColorSensor;
 
 public class LSController extends Thread {
+	
 	static ColorSensor colorSensor;
 	private int color;
 	private boolean stop;
-
-
 
 	public LSController(ColorSensor cs) {
 		colorSensor = cs;
@@ -15,25 +14,13 @@ public class LSController extends Thread {
 
 	public void run() {
 		stop = true;
-
 		while (true) {
-
 			if (stop) {	
-				try {
-					Thread.sleep(10);
-				} 
-				catch (Exception e) {
-				}
+				try {Thread.sleep(10);} catch (Exception e) {}
 			}
 			else{
-				// process collected data
-				
 				color = colorSensor.getRawLightValue();
-				try {
-					Thread.sleep(10);
-				} 
-				catch (Exception e) {
-				}
+				try {Thread.sleep(10);} catch (Exception e) {}
 			}
 		}
 	}

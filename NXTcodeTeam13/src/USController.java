@@ -16,14 +16,11 @@ public class USController extends Thread {
 		while (true) {
 			
 			if (stop) {
+				try {Thread.sleep(10);} catch (Exception e) {}
 			}
 			else{	
-			// process collected data
 			distance = usSensor.getDistance();
-			try {
-				Thread.sleep(10);
-			} catch (Exception e) {
-			}
+			try {Thread.sleep(10);} catch (Exception e) {}
 			}
 		}
 	}

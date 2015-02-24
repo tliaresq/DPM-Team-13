@@ -1,5 +1,13 @@
 import lejos.nxt.Sound;
 
+/**
+ * ==============================
+ * TO BE MODIFIED COMPLETLY
+ * ==============================
+ */
+
+
+
 public class LightLocalizer {
 
 	private Odometer odo;

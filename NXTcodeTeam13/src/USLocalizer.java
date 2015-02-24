@@ -1,5 +1,12 @@
 import lejos.nxt.Sound;
 
+/**
+ * ==============================
+ * TO BE MODIFIED COMPLETLY
+ * ==============================
+ */
+
+
 public class USLocalizer {
 	public enum LocalizationType {
 		FALLING_EDGE, RISING_EDGE

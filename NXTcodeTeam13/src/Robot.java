@@ -22,7 +22,7 @@ public class Robot {
 	public double lsDist = 8;
 
 	public double black = 300; 		// raw output of a black line being detected.
-	public double wallDist = 15; 		// distance the robot has to be from a wall when following it.
+	public double wallDist = 25; 		// distance the robot has to be from a wall when following it.
 
 	public int defAcc = 300;
 	public int defSpeed = 200;

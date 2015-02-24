@@ -1,8 +1,12 @@
 import lejos.nxt.NXTRegulatedMotor;
 
 public class LauncherController {
-	private NXTRegulatedMotor motor;
 
+	private NXTRegulatedMotor motor;
+	/**
+	 * 
+	 * @param r
+	 */
 	public LauncherController(Robot r) {
 		motor = r.armMotor;		
 		motor.setAcceleration(0);
@@ -10,8 +14,10 @@ public class LauncherController {
 		motor.setSpeed(0);	
 	}
 
-
-
+	/**
+	 * shoots pingpong balls a number of times
+	 * @param times
+	 */
 	public void shoot(int times) {
 		for (int i = 0; i < times ;  i++){
 			shoot();
@@ -22,6 +28,11 @@ public class LauncherController {
 		}
 	}
 
+	/**
+	 * Shoots 1 pingpong ball at 1m50 exactly
+	 * Angle to be determined
+	 * The Arm has to be in a good starting position
+	 */
 	public void shoot() {
 		int shootAcc = 10000;
 		int shootSpeed = 900;
