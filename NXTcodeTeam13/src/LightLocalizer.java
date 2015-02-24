@@ -4,18 +4,24 @@ public class LightLocalizer {
 
 	private Odometer odo;
 	private Navigate nav;
-	private int speed = 100;
 	private double sensorDist = 10;
+	private Robot robot;
+	private int defAcc;
+	private int defSpeed;
 
-	public LightLocalizer(Odometer odo, Navigate navigation) {
+	public LightLocalizer(Odometer odo, Navigate navigation, Robot r) {
 		this.odo = odo;
 		nav = navigation;
-
+		robot = r;
+		defAcc = r.defAcc;
+		defSpeed = r.defSpeed;
 	}
 
 	public void doLocalization() {
+
+		nav.setAccSp(defSpeed, defAcc);
 		odo.lsStart();
-		nav.goForth(speed);
+		nav.goForth();
 		crossLine();
 		nav.travelDist(sensorDist);
 		odo.setY(0);
@@ -25,7 +31,7 @@ public class LightLocalizer {
 		nav.rotateClockwise(90);
 		nav.travelDist(2);
 		nav.rotateClockwise(90);
-		nav.goForth(speed);
+		nav.goForth();
 		crossLine();
 		nav.travelDist(sensorDist);
 		odo.setX(0);
@@ -34,16 +40,9 @@ public class LightLocalizer {
 		crossLine();
 		odo.setTheta(270);
 		nav.travelDist(odo.getY());
-	//	nav.pointTo(90.0);
 		nav.rotateClockwise(-180);
-//		nav.rotateClockwise(-135);
-//		nav.spinCounterClockWise();
-//		crossLine();
-		
 		nav.stopMotors();
-		//odo.setTheta(90);
-		odo.lsStop();
-		
+
 	}	
 
 	public void clockLines() {
@@ -54,7 +53,7 @@ public class LightLocalizer {
 		double y;
 		double[] angles = new double[4];
 		odo.setX(i);
-		
+
 		do {
 			nav.rotateClockwise(5);
 			nav.spinClockWise();
@@ -67,7 +66,7 @@ public class LightLocalizer {
 			angles[i] = odo.getTheta();
 			odo.setX(i);
 			i++;
-		
+
 		}while(i<4);
 		nav.stopMotors();
 
@@ -98,10 +97,10 @@ public class LightLocalizer {
 	//lets the nxt do whatever it is doing until a line is crossed
 	//the following method filter any individual values that aren't representative of the real color the sensor sees
 	private void crossLine() {
-		
+		odo.lsStart();
 		int counter = 0;
 		int maxCount = 5;
-		double black = 340;
+		double black = robot.black;
 		double sensorColor = 500;
 		do {
 			sensorColor = odo.getSensorColor();
@@ -116,6 +115,7 @@ public class LightLocalizer {
 			}
 		} while (counter < maxCount);
 		Sound.beep();
-	
+		odo.lsStop();
+
 	}
 }

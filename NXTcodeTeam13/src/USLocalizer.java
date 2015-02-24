@@ -11,11 +11,13 @@ public class USLocalizer {
 	private Navigate nav;
 	private LocalizationType locType;
 	private double sensorDist;
-	private int wallDist;
+	private double wallDist;
 	private int counter;
 	private int maxCount;
+	private int defAcc;
+	private int defSpeed;
 
-	public USLocalizer(Odometer odo, Navigate navigation,
+	public USLocalizer(Odometer odo, Navigate navigation,Robot r,
 			LocalizationType locType) {
 		this.odo = odo;
 		this.locType = locType;
@@ -23,14 +25,16 @@ public class USLocalizer {
 		sensorDist = 50;
 		counter = 0;
 		maxCount = 22;
-		wallDist = 35;
+		wallDist = r.wallDist;
+		defAcc = r.defAcc;
+		defSpeed = r.defSpeed;
 	}
-	
+
 	//the two following methods filter any individual values that aren't representative of the real distance of the sensor
 	private void findWall() {
 		counter = 0;
 		do {
-			sensorDist = odo.getSensorDist();
+			sensorDist = odo.getRightSensorDist();
 			if (sensorDist <= wallDist) {
 				counter++;
 			} else {
@@ -43,7 +47,7 @@ public class USLocalizer {
 	private void findNoWall() {
 		counter = 0;
 		do {
-			sensorDist = odo.getSensorDist();
+			sensorDist = odo.getRightSensorDist();
 			try {
 				Thread.sleep(20);
 			} catch (Exception e) {
@@ -57,9 +61,10 @@ public class USLocalizer {
 	}
 
 	public void doLocalization() {
-		double[] pos = new double[3];
+		nav.setAccSp(defSpeed, defAcc);
 		double angleB;
 		odo.usStart();
+
 
 		if (locType == LocalizationType.FALLING_EDGE) {
 			// rotate the robot until it sees no wall

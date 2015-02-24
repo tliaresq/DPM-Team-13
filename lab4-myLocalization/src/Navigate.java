@@ -236,8 +236,9 @@ public class Navigate extends Thread {
 	}
 
 	public static void stopMotors() {
-		leftMotor.setAcceleration(4000);
-		rightMotor.setAcceleration(4000);
+		leftMotor.setAcceleration(8000);
+		rightMotor.setAcceleration(8000);
+	
 		leftMotor.setSpeed(0);
 		rightMotor.setSpeed(0);
 		leftMotor.stop();

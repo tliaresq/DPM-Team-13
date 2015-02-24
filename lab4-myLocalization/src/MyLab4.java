@@ -17,6 +17,8 @@ public class MyLab4 {
 		// Manages driving nxt to a given location
 		Navigate nav = new Navigate(Motor.A, Motor.B, leftRadius, rightRadius,
 				width, odometer);
+		
+		LauncherController lc = new LauncherController(Motor.C);
 
 		// perform the ultrasonic localization
 		USLocalizer usl = new USLocalizer(odometer, nav,
@@ -43,9 +45,8 @@ public class MyLab4 {
 
 			break;
 		case Button.ID_RIGHT:
-			odometer.start();
-			usl.doLocalization();
-			lsl.doLocalization();
+			lc.ballisticsMenu();
+			
 		default:
 			System.out.println("Error - invalid button");
 			System.exit(-1);
