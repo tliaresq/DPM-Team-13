@@ -1,7 +1,7 @@
 import lejos.nxt.Motor;
 
 public class Odometer extends Thread {
-	
+
 	private static final long ODOMETER_PERIOD = 25;	// odometer update period, in ms
 	private Object lock;
 	private double x, y, theta;
@@ -17,6 +17,7 @@ public class Odometer extends Thread {
 	// displays all odometer data
 
 	private OdometryDisplay odometryDisplay = new OdometryDisplay(this);
+	private OdoCorrection odoCorrect;
 
 	// controls ultrasonic sensor and provides distance measurement
 	private USController usLeftController;
@@ -26,6 +27,7 @@ public class Odometer extends Thread {
 	// default constructor
 	public Odometer(Robot r) {
 		lock = new Object();
+		
 		lsController = r.ls;
 		usLeftController = r.usLeft;
 		usRightController  = r.usRight;
@@ -34,6 +36,8 @@ public class Odometer extends Thread {
 		theta = 90.0;
 		wB = r.wwDist; 
 		wR = r.leftWradius;
+		odoCorrect = new OdoCorrection(r, this);
+		
 	}
 
 	// run method (required for Thread)
@@ -98,6 +102,18 @@ public class Odometer extends Thread {
 		}
 
 	}
+	
+	public void startCorrection(){
+		odoCorrect.start();
+	}
+	
+	public void stopCorrection(){
+		odoCorrect.stop();
+	}
+	public void restartCorrection(){
+		odoCorrect.restart();
+	}
+	
 	public void sensorsOn(){
 		usStart();
 		lsStart();
@@ -181,7 +197,7 @@ public class Odometer extends Thread {
 			result = sensorRightDist;
 		}
 
-	return result;
+		return result;
 	}
 
 	public double getSensorColor() {
