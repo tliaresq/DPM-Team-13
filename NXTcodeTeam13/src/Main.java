@@ -5,27 +5,20 @@ public class Main{
 
 	static Exit exit;							// Listens to escape button to exit program at any time
 	static Robot robot;							// All the hardware Data
-	static Odometer odometer;					// Handles all data relative to location
 	static Navigate nav;						// Manages driving nxt to a given location
 	static LauncherController ballistics; 		//Handles launching PingPong Balls
-
-	static USLocalizer usl;						// perform the ultrasonic localization
-	static LightLocalizer lsl;					// perform the light sensor localization
-
+	static Localizer localizer;
+	
 /**
  * Starting point of program
  * @param args
  */
 	public static void main(String[] args) {
 		exit = new Exit();									
-		robot = new Robot();	
-		odometer = new Odometer(robot);					
-		nav = new Navigate(robot, odometer);			
+		robot = new Robot();					
+		nav = new Navigate(robot, robot.odometer);			
 		ballistics = new LauncherController(robot);		
-
-		usl = new USLocalizer(odometer, nav, robot, USLocalizer.LocalizationType.RISING_EDGE);
-		lsl = new LightLocalizer(odometer, nav, robot);	
-
+		localizer = new Localizer(robot.odometer, nav);
 		exit.start();
 		printMainMenu();
 	}
@@ -36,8 +29,8 @@ public class Main{
 	public static void fetchOption(String option){
 		switch (option){
 		case "ODOTEST":
-			odometer.start();
-			odometer.startCorrection();
+			robot.odometer.start();
+			robot.odometer.correctionOn();
 //			nav.travelTo(0, 15, false);
 //			nav.travelTo(150, 0, false);
 			nav.travelTo(-60, 180, false);
@@ -54,20 +47,19 @@ public class Main{
 			break;
 
 		case "goto (60;60)":
-			odometer.start();
+			robot.odometer.start();
 			nav.travelTo(60, 60, true);
 			break;
 
 		case "wall Localize":
-			odometer.start();
-			usl = new USLocalizer(odometer, nav, robot, USLocalizer.LocalizationType.FALLING_EDGE);
-			usl.doLocalization();
+			robot.odometer.start();
+			
 			break;
 
 
 		case "line localize":
-			odometer.start();
-			lsl.doLocalization();
+			robot.odometer.start();
+			
 			break;
 
 		case "map1":
@@ -155,7 +147,7 @@ public class Main{
 		//	============================================	
 		//		do whatever Test Or Stuff
 		//	============================================
-		odometer.start();
+		robot.odometer.start();
 		nav.travelTo(0,180,true);
 		
 	}
@@ -167,7 +159,7 @@ public class Main{
 		//	============================================	
 		//		do whatever Test Or Stuff
 		//	============================================
-		odometer.start();
+		robot.odometer.start();
 
 		nav.rotateClockwise(360);
 		try {

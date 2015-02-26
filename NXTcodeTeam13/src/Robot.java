@@ -12,26 +12,27 @@ public class Robot {
 
 	public ColorSensor cs = new ColorSensor(SensorPort.S3);
 
-	public LSController ls = new LSController(cs);
-	public USController usLeft = new USController(usLeftSensor), usRight = new USController(usRightSensor); 
-
-
 	public double wwDist = 15.5;// less turns less & more turns more
 	public double leftWradius = 2.07;//less travels more
 	public double rightWradius = leftWradius;
+	
 	public double lsDist = 9;
-
 	public double black = 380; 			// raw output of a black line being detected.
+	
 	public double wallDist = 14; 		// distance the robot has to be from a wall when following it.
 	public double odoCorBand = 5; 		//radius of the error accepted to correct the odometer
 
-	public int defAcc = 500;			// default acceleration
-	public int defSpeed = 250;			// default speed
+	public double acc = 500;			// default acceleration
+	public double speed = 250;			// default speed
+	
+	public int filterSize = 5;  		// how important is the filter for sensor values
+	
+	public Odometer odometer;			// Handles all data relative to location
 
 	public Robot (){
-		ls.start();
-		usLeft.start();
-		usRight.start();
+
+		odometer = new Odometer(this);
+		
 
 	}
 

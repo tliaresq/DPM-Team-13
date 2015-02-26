@@ -5,43 +5,36 @@ public class Navigate {
 	private NXTRegulatedMotor leftMotor;
 	private NXTRegulatedMotor rightMotor;
 	private Robot robot;
-	private double rightRadius;
-	private double leftRadius;
+
 	private double xDest;
 	private double yDest;
-	private double width;
-	private Odometer odometer;
-	private boolean isNavigating;
-	private double finalDestAngle;
-	private double objectDist;
-	private int defSpeed;
-	private int defAcc;
 
-	public Navigate(Robot r, Odometer odo) {
+	private Odometer odometer;
+	private double finalDestAngle;
+
+
+
+	public Navigate(Robot r, Odometer o) {
 		robot = r;
 		leftMotor = r.leftMotor;
 		rightMotor = r.rightMotor;
-		leftRadius = r.leftWradius;
-		rightRadius = r.rightWradius;
-		width = r.wwDist;
-		objectDist = r.wallDist;
-		odometer = odo;
-		isNavigating = false;
-		defSpeed = r.defSpeed;
-		defAcc = r.defAcc;
-		setAccSp(defSpeed,defAcc);
-
+		odometer = o;
 	}
 
 	public void travelTo(double x, double y,boolean follow) {
-		isNavigating = true;
-		if (follow){odometer.usStart();}
+
+		odometer.correctionOn();
+		if (follow){ odometer.usOn(); }
+		
 		xDest = x;
 		yDest = y;
-		setAccSp(defAcc,defSpeed);
+		
+		setAccSp(robot.acc,robot.speed);
+				
+		
 		double store = distToDest();;
 		// sets nxt pointing towards destination
-		odometer.restartCorrection();
+
 		pointToDest();
 
 		// keep navigating as long as destination isn't reached
@@ -49,9 +42,12 @@ public class Navigate {
 		while (distToDest() >= 1) {
 			int i = 0;
 			//while no obstacle and not arrived at destination
-			while (distToDest() >= 1 &&(!follow ||  odometer.getRightSensorDist() >= objectDist)) {
+			while (distToDest() >= 1 &&(!follow ||  odometer.getRightSensorDist() >= robot.wallDist)) {
 				if(distToDest()<robot.odoCorBand){
-					odometer.stopCorrection();
+					odometer.correctionOff();
+				}
+				if(distToDest()<robot.wallDist){
+					follow = false;
 				}
 				i++;
 				if (i % 2 == 0) { store = distToDest() ; } //stores the value of distance to destination
@@ -60,72 +56,68 @@ public class Navigate {
 			}
 			
 			// if obstacle implement wall follower
-			if (follow && distToDest() > 1 && odometer.getRightSensorDist() < objectDist) { 
+			if (follow && distToDest() > 1 && odometer.getRightSensorDist() < robot.wallDist) { 
 				follow() ;
 			}
-				setAccSp(defAcc,defSpeed);
+			setAccSp(robot.acc,robot.speed);
 			
 		}
 		Sound.beep();
 		stopMotors();
-		setAccSp(defAcc,defSpeed);
+		setAccSp(robot.acc,robot.speed);
 		
 
-		// Arrived at  final desti`nation;
+		// Arrived at  final destination;
 		pointTo(90);
-
 		stopMotors();
+		
 	//	odometer.sensorsOff();
-		isNavigating = false;
+
 	}
 
 	private void follow() {
 
 		double leftDistance = odometer.getLeftSensorDist();
-		double bandCenter = robot.wallDist;
 		double delta;
 		double tooRight;
 		double tooLeft ;
-		double speed = defSpeed;
+
 	
 		// initiating nxt wall following state
 		rotateClockwise(90);
 		updateDestAngle();
 		delta = deltaAngle(finalDestAngle);
-		setAccSp(8000,defSpeed);
+		setAccSp(8000,robot.speed);
 		// follow obstacle while theta isn't within 5 degrees of the angle needed to reach destination
 		while (Math.abs(delta) > 5) {
 			
 			try {Thread.sleep(20);} catch (Exception e) {}
+			tooRight = (Math.pow((odometer.getLeftSensorDist()/robot.wallDist),1));
+			tooLeft =(Math.pow((robot.wallDist/odometer.getLeftSensorDist()),2));
 			
-			tooRight = (Math.pow((odometer.getLeftSensorDist()/bandCenter),1));
-			tooLeft =(Math.pow((bandCenter/odometer.getLeftSensorDist()),2));
-
 			// checks for wall in front
-			if (odometer.getRightSensorDist()<objectDist){
+			if (odometer.getRightSensorDist()<robot.wallDist){
 				rotateClockwise(90);
 			}
-
-
 			//too left
-			else if (leftDistance < bandCenter) {
+			else if (leftDistance < robot.wallDist) {
 				goForth();
-				leftMotor.setSpeed((int) (speed*tooLeft));
-				rightMotor.setSpeed((int)speed);
+				leftMotor.setSpeed((int) (robot.speed*tooLeft));
+				rightMotor.setSpeed((int)robot.speed);
 			} 
 
 			//too right
-			else if (leftDistance > bandCenter && leftDistance < 81) {
+			else if (leftDistance > robot.wallDist && leftDistance < 81) {
 				goForth();
-				rightMotor.setSpeed((int) (speed*tooRight));
-				leftMotor.setSpeed((int)speed);
+				rightMotor.setSpeed((int) (robot.speed*tooRight));
+				leftMotor.setSpeed((int)robot.speed);
 			} 
 
 			// no more wall
 			else if (leftDistance > 80) {
 				goForth();
-				rightMotor.setSpeed((int) (speed));
-				leftMotor.setSpeed((int)(speed/tooRight));
+				rightMotor.setSpeed((int) (robot.speed));
+				leftMotor.setSpeed((int)(robot.speed/tooRight));
 			}
 			leftDistance = odometer.getLeftSensorDist();
 			updateDestAngle();
@@ -135,18 +127,17 @@ public class Navigate {
 		
 		goForth();
 		stopMotors();
-		Sound.beep();
-		setAccSp(defAcc,defSpeed);
+		setAccSp(robot.acc,robot.speed);
 		pointToDest();
 	}
 	
 	
 	//sets Acceleration and speed to both motors
-	public void setAccSp(int acc, int sp){
-		leftMotor.setAcceleration(acc);
-		rightMotor.setAcceleration(acc);
-		rightMotor.setSpeed(sp);
-		leftMotor.setSpeed(sp);
+	public void setAccSp(double acc, double sp){
+		leftMotor.setAcceleration((int)acc);
+		rightMotor.setAcceleration((int)acc);
+		rightMotor.setSpeed((int)sp);
+		leftMotor.setSpeed((int)sp);
 	}
 
 	// calculates distance between nxt and destination
@@ -158,15 +149,15 @@ public class Navigate {
 	}
 
 	public void rotateClockwise(double angle) {
-		leftMotor.rotate(convertAngle(leftRadius, width, angle), true);
-		rightMotor.rotate(-convertAngle(rightRadius, width, angle), false);
+		leftMotor.rotate(convertAngle(robot.leftWradius,robot.wwDist, angle), true);
+		rightMotor.rotate(-convertAngle(robot.rightWradius, robot.wwDist, angle), false);
 	}
 
 	// travels a given distance in a straight line
 	// never used in the final code but very useful in general
 	public void travelDist(double distance) {
-		leftMotor.rotate(convertDistance(leftRadius, distance), true);
-		rightMotor.rotate(convertDistance(rightRadius, distance), false);
+		leftMotor.rotate(convertDistance(robot.leftWradius, distance), true);
+		rightMotor.rotate(convertDistance(robot.rightWradius, distance), false);
 
 	}
 	public void goForth() {
@@ -201,16 +192,11 @@ public class Navigate {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);
 	}
 
-	// returns true if the nxt is currently driving to a destination
-	public boolean isNavigating() {
-		return isNavigating;
-	}
-
 	//the Nxt rotates an angle [-180;180] to point to an angle relative to the map (0 = east ; 90 = north; 180 = west ; 270 = south)
 	public void pointTo(double destAngle) {
 		double angle = deltaAngle(destAngle);
-		leftMotor.rotate(convertAngle(leftRadius, width, angle), true);
-		rightMotor.rotate(-convertAngle(rightRadius, width, angle), false);
+		leftMotor.rotate(convertAngle(robot.leftWradius,robot.wwDist, angle), true);
+		rightMotor.rotate(-convertAngle(robot.rightWradius, robot.wwDist, angle), false);
 	}
 
 
@@ -218,11 +204,9 @@ public class Navigate {
 	public void pointToDest() {
 		updateDestAngle();
 		double angle = deltaAngle(finalDestAngle);
-		leftMotor.rotate(convertAngle(leftRadius, width, angle), true);
-		rightMotor.rotate(-convertAngle(rightRadius, width, angle), false);
+		leftMotor.rotate(convertAngle(robot.leftWradius, robot.wwDist, angle), true);
+		rightMotor.rotate(-convertAngle(robot.rightWradius, robot.wwDist, angle), false);
 	}
-
-
 
 	// calculate the difference in angle between the current odometer's Theta's and a designated angle
 	// the angle is oriented correctly and given in range [-180; +180]

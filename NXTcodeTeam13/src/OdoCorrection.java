@@ -1,58 +1,44 @@
 import lejos.nxt.Sound;
 
 public class OdoCorrection extends Thread{
-	private Robot robot;
 	private Odometer odo;
 	private boolean stop;
 	private double[] lines = {0,30,60,90,120,150,180,210,240,270,300};
-	private double lsDist;
-	private double width;
 
 
-	public OdoCorrection(Robot r, Odometer o){
+	public OdoCorrection( Odometer o){
 		stop = true;
-
-		robot = r;
 		odo = o;
-		lsDist = r.lsDist;
-		width = r.odoCorBand;
 	}
 
 	public void run(){
+		stop = true;
 		while(true){
 			if(stop){
-				odo.lsStop();
+				odo.lsOff();
 				try {Thread.sleep(10);} catch (Exception e) {}
 				
 			}
 			else{
-				odo.lsStart();
+				odo.lsOn();
 				crossLine();
 				update();
 			}
 		}
 	}
 	private void crossLine() {
-		int counter = 0;
-		int maxCount = 5;
-		double black = robot.black;
+		double black = odo.robot.black;
 		double sensorColor = 500;
-		do {
-			sensorColor = odo.getSensorColor();
-			if (sensorColor < black && sensorColor> -1) {
-				counter++;
-			} else {
-				counter = 0;
-			}
+		 while (sensorColor > black ){
 			try { Thread.sleep(10); } catch (Exception e) {}
-		} while (counter < maxCount);
+		}
 
 		
 	}
 	
 	public void update(){
-		double dy = lsDist*Math.sin(odo.getTheta()*3.14159/180);
-		double dx = lsDist*Math.cos(odo.getTheta()*3.14159/180);
+		double dy = odo.robot.lsDist*Math.sin(odo.getTheta()*3.14159/180);
+		double dx = odo.robot.lsDist*Math.cos(odo.getTheta()*3.14159/180);
 
 		double xDetect = odo.getX()+dx;
 		double yDetect = odo.getY()+dy;
@@ -90,7 +76,7 @@ public class OdoCorrection extends Thread{
 
 
 	public boolean inBand(double d, double ref){
-		if(d < ref+width && d > ref-width ){
+		if(d < ref+odo.robot.odoCorBand && d > ref-odo.robot.odoCorBand ){
 			return true;
 		}
 		else {

@@ -5,21 +5,13 @@ public class Odometer extends Thread {
 	private static final long ODOMETER_PERIOD = 25;	// odometer update period, in ms
 	private Object lock;
 	private double x, y, theta;
-	private int nowTachoL;
-	private int nowTachoR;
-	private int lastTachoL;
-	private int lastTachoR;
-	private int sensorLeftDist;
-	private int sensorRightDist;
-	private int sensorColor;
-	private double wB;// nxt wheel to wheel distance
-	private double wR;// wheel radius
-	// displays all odometer data
+	private int nowTachoL, nowTachoR, lastTachoL, lastTachoR;
+	private int sensorLeftDist, sensorRightDist, sensorColor;
 
-	private OdometryDisplay odometryDisplay = new OdometryDisplay(this);
+	private OdometryDisplay odometryDisplay = new OdometryDisplay(this); // displays all odometer data
 	private OdoCorrection odoCorrect;
+	public Robot robot;
 
-	// controls ultrasonic sensor and provides distance measurement
 	private USController usLeftController;
 	private USController usRightController;
 	private LSController lsController;
@@ -27,23 +19,26 @@ public class Odometer extends Thread {
 	// default constructor
 	public Odometer(Robot r) {
 		lock = new Object();
-		
-		lsController = r.ls;
-		usLeftController = r.usLeft;
-		usRightController  = r.usRight;
+		robot = r;
+		lsController = new LSController(robot.cs, robot.filterSize);
+		odoCorrect = new OdoCorrection(this);
+		usLeftController = new USController(robot.usLeftSensor, robot.filterSize);
+		usRightController  = new USController(robot.usRightSensor,robot.filterSize);
+
 		x = 0.0;
 		y = 0.0;
 		theta = 90.0;
-		wB = r.wwDist; 
-		wR = r.leftWradius;
-		odoCorrect = new OdoCorrection(r, this);
-		
+
 	}
 
 	// run method (required for Thread)
 	public void run() {
 		long updateStart, updateEnd;
 		odometryDisplay.start();
+		lsController.start();
+		usLeftController.start();
+		usRightController.start();
+		odoCorrect.start();
 
 		while (true) {
 			updateStart = System.currentTimeMillis();
@@ -63,15 +58,15 @@ public class Odometer extends Thread {
 				nowTachoR = Motor.B.getTachoCount();
 				// getting distances travelled by the left and right wheel
 				// respectively
-				distL = 3.14159 * wR * (nowTachoL - lastTachoL) / 180;
-				distR = 3.14159 * wR * (nowTachoR - lastTachoR) / 180;
+				distL = 3.14159 * robot.leftWradius* (nowTachoL - lastTachoL) / 180;
+				distR = 3.14159 * robot.leftWradius* (nowTachoR - lastTachoR) / 180;
 				lastTachoL = nowTachoL;
 				lastTachoR = nowTachoR;
 				// getting the distance travelled by the nxt as a whole since
 				// last update
 				deltaD = 0.5 * (distL + distR);
 				// getting change in angle since last update
-				deltaT = Math.atan((distL - distR) / wB) * 360 / 6.2832;
+				deltaT = Math.atan((distL - distR) / robot.wwDist) * 360 / 6.2832;
 				theta -= deltaT;
 
 				// keeping theta in the interval [0-360]
@@ -81,8 +76,8 @@ public class Odometer extends Thread {
 					theta -= 360;
 				}
 				// incrementing x and y position with respect to theta
-				dX = deltaD * Math.cos(theta * 2 * 3.14159 / 360);
-				dY = deltaD * Math.sin(theta * 2 * 3.14159 / 360);
+				dX = deltaD * Math.cos(theta * 3.14159 / 180);
+				dY = deltaD * Math.sin(theta * 3.14159 / 180);
 				x = x + dX;
 				y = y + dY;
 
@@ -103,41 +98,38 @@ public class Odometer extends Thread {
 
 	}
 	
-	public void startCorrection(){
-		odoCorrect.start();
-	}
-	
-	public void stopCorrection(){
+
+	public void correctionOff(){
 		odoCorrect.stop();
 	}
-	public void restartCorrection(){
+	public void correctionOn(){
 		odoCorrect.restart();
 	}
 	
 	public void sensorsOn(){
-		usStart();
-		lsStart();
+		usOn();
+		lsOn();
 	}
 	public void sensorsOff(){
-		usStop();
-		lsStop();
+		usOff();
+		lsOff();
 	}
 
-	public void usStart() {
+	public void usOn() {
 		usLeftController.restartUS();
 		usRightController.restartUS();
 	}
 
-	public void lsStart() {
+	public void lsOn() {
 		lsController.restartLS();
 	}
 
-	public void usStop() {
+	public void usOff() {
 		usLeftController.stopUS();
 		usRightController.stopUS();
 	}
 
-	public void lsStop() {
+	public void lsOff() {
 		lsController.stopLS();
 	}
 
