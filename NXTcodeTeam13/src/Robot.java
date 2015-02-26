@@ -19,19 +19,20 @@ public class Robot {
 	public double wwDist = 15.5;// less turns less & more turns more
 	public double leftWradius = 2.07;//less travels more
 	public double rightWradius = leftWradius;
-	public double lsDist = 8;
+	public double lsDist = 9;
 
-	public double black = 300; 			// raw output of a black line being detected.
-	public double wallDist = 25; 		// distance the robot has to be from a wall when following it.
-	public double odoCorBand = 3; 		//radius of the error accepted to correct the odometer
+	public double black = 380; 			// raw output of a black line being detected.
+	public double wallDist = 14; 		// distance the robot has to be from a wall when following it.
+	public double odoCorBand = 5; 		//radius of the error accepted to correct the odometer
 
-	public int defAcc = 300;			// default acceleration
-	public int defSpeed = 200;			// default speed
+	public int defAcc = 500;			// default acceleration
+	public int defSpeed = 250;			// default speed
 
 	public Robot (){
 		ls.start();
 		usLeft.start();
 		usRight.start();
+
 	}
 
 }

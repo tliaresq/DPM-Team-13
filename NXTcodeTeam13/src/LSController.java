@@ -16,6 +16,7 @@ public class LSController extends Thread {
 		stop = true;
 		while (true) {
 			if (stop) {	
+				color = -1;
 				try {Thread.sleep(10);} catch (Exception e) {}
 			}
 			else{
@@ -33,7 +34,7 @@ public class LSController extends Thread {
 
 	public void restartLS(){
 		stop = false;
-		colorSensor.setFloodlight(10);
+		colorSensor.setFloodlight(0);
 	}
 
 	public int getColor() {

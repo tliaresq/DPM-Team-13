@@ -96,7 +96,7 @@ public class LightLocalizer {
 		} catch (Exception e) {
 		}
 
-		nav.travelTo(0, 0);
+		nav.travelTo(0, 0,true);
 		nav.pointTo(90.0);
 		odo.lsStop();
 

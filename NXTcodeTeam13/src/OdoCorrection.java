@@ -21,31 +21,33 @@ public class OdoCorrection extends Thread{
 	public void run(){
 		while(true){
 			if(stop){
+				odo.lsStop();
 				try {Thread.sleep(10);} catch (Exception e) {}
+				
 			}
 			else{
+				odo.lsStart();
 				crossLine();
 				update();
 			}
 		}
 	}
 	private void crossLine() {
-		odo.lsStart();
 		int counter = 0;
 		int maxCount = 5;
 		double black = robot.black;
 		double sensorColor = 500;
 		do {
 			sensorColor = odo.getSensorColor();
-			if (sensorColor < black) {
+			if (sensorColor < black && sensorColor> -1) {
 				counter++;
 			} else {
 				counter = 0;
 			}
 			try { Thread.sleep(10); } catch (Exception e) {}
 		} while (counter < maxCount);
-		Sound.beep();
-		odo.lsStop();
+
+		
 	}
 	
 	public void update(){
@@ -75,9 +77,12 @@ public class OdoCorrection extends Thread{
 		}
 		if(xCrossed!= -100 && yCrossed == -100){
 			odo.setX(xCrossed-dx);
+			Sound.beep();
 		}
 		if(xCrossed== -100 && yCrossed != -100){
+			
 			odo.setY(yCrossed - dy);
+			Sound.beep();
 		}
 
 	}

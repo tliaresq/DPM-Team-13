@@ -33,14 +33,15 @@ public class Navigate {
 
 	}
 
-	public void travelTo(double x, double y) {
+	public void travelTo(double x, double y,boolean follow) {
 		isNavigating = true;
-		odometer.sensorsOn();
+		if (follow){odometer.usStart();}
 		xDest = x;
 		yDest = y;
 		setAccSp(defAcc,defSpeed);
 		double store = distToDest();;
 		// sets nxt pointing towards destination
+		odometer.restartCorrection();
 		pointToDest();
 
 		// keep navigating as long as destination isn't reached
@@ -48,18 +49,23 @@ public class Navigate {
 		while (distToDest() >= 1) {
 			int i = 0;
 			//while no obstacle and not arrived at destination
-			while (distToDest() >= 1 && odometer.getRightSensorDist() >= objectDist) {
+			while (distToDest() >= 1 &&(!follow ||  odometer.getRightSensorDist() >= objectDist)) {
+				if(distToDest()<robot.odoCorBand){
+					odometer.stopCorrection();
+				}
 				i++;
 				if (i % 2 == 0) { store = distToDest() ; } //stores the value of distance to destination
 				goForth();
 				if (distToDest() > store) { pointToDest() ; }		// check if heading away from destination and correct angle(if no obstacle)
 			}
-
+			
 			// if obstacle implement wall follower
-			if ( distToDest() > 1 && odometer.getRightSensorDist() < objectDist) { follow() ; }
+			if (follow && distToDest() > 1 && odometer.getRightSensorDist() < objectDist) { 
+				follow() ;
+			}
+				setAccSp(defAcc,defSpeed);
+			
 		}
-		Sound.beep();
-		Sound.beep();
 		Sound.beep();
 		stopMotors();
 		setAccSp(defAcc,defSpeed);
@@ -80,6 +86,7 @@ public class Navigate {
 		double delta;
 		double tooRight;
 		double tooLeft ;
+		double speed = defSpeed;
 	
 		// initiating nxt wall following state
 		rotateClockwise(90);
@@ -92,7 +99,7 @@ public class Navigate {
 			try {Thread.sleep(20);} catch (Exception e) {}
 			
 			tooRight = (Math.pow((odometer.getLeftSensorDist()/bandCenter),1));
-			tooLeft =(Math.pow((bandCenter/odometer.getLeftSensorDist()),4));
+			tooLeft =(Math.pow((bandCenter/odometer.getLeftSensorDist()),2));
 
 			// checks for wall in front
 			if (odometer.getRightSensorDist()<objectDist){
@@ -103,28 +110,33 @@ public class Navigate {
 			//too left
 			else if (leftDistance < bandCenter) {
 				goForth();
-				leftMotor.setSpeed((int) (defSpeed*tooLeft));
-				rightMotor.setSpeed(defSpeed);
+				leftMotor.setSpeed((int) (speed*tooLeft));
+				rightMotor.setSpeed((int)speed);
 			} 
 
 			//too right
-			else if (leftDistance > bandCenter && leftDistance < 61) {
+			else if (leftDistance > bandCenter && leftDistance < 81) {
 				goForth();
-				rightMotor.setSpeed((int) (defSpeed*tooRight));
-				leftMotor.setSpeed(defSpeed);
+				rightMotor.setSpeed((int) (speed*tooRight));
+				leftMotor.setSpeed((int)speed);
 			} 
 
 			// no more wall
-			else if (leftDistance > 60) {
+			else if (leftDistance > 80) {
 				goForth();
-				rightMotor.setSpeed((int) (defSpeed*tooRight*tooRight));
-				leftMotor.setSpeed(defSpeed);
+				rightMotor.setSpeed((int) (speed));
+				leftMotor.setSpeed((int)(speed/tooRight));
 			}
 			leftDistance = odometer.getLeftSensorDist();
 			updateDestAngle();
 			delta = deltaAngle(finalDestAngle);
 		}
+		
+		
 		goForth();
+		stopMotors();
+		Sound.beep();
+		setAccSp(defAcc,defSpeed);
 		pointToDest();
 	}
 	

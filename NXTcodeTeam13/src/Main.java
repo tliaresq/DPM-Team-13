@@ -35,6 +35,16 @@ public class Main{
  */
 	public static void fetchOption(String option){
 		switch (option){
+		case "ODOTEST":
+			odometer.start();
+			odometer.startCorrection();
+//			nav.travelTo(0, 15, false);
+//			nav.travelTo(150, 0, false);
+			nav.travelTo(-60, 180, false);
+			
+
+			nav.travelTo(0, 0, false);
+			break;
 		case "shoot x1":
 			ballistics.shoot();
 			break;
@@ -45,7 +55,7 @@ public class Main{
 
 		case "goto (60;60)":
 			odometer.start();
-			nav.travelTo(60, 60);
+			nav.travelTo(60, 60, true);
 			break;
 
 		case "wall Localize":
@@ -90,7 +100,7 @@ public class Main{
  * handles the LIST MENU 
  */
 	public static void mainRight(){
-		String[] option = {"shoot x1","shoot x6","goto (60;60)", "wall Localize", "line localize", "map1", "map2", "map3", "map4", "map5"};//list of options
+		String[] option = {"ODOTEST","shoot x1","shoot x6","goto (60;60)", "wall Localize", "line localize", "map1", "map2", "map3", "map4", "map5"};//list of options
 
 		boolean display = true;
 
@@ -146,13 +156,8 @@ public class Main{
 		//		do whatever Test Or Stuff
 		//	============================================
 		odometer.start();
-		nav.rotateClockwise(360);
-		try {
-			Thread.sleep(2000);
-		} 
-		catch (Exception e) {
-		}
-		nav.travelDist(60);
+		nav.travelTo(0,180,true);
+		
 	}
 
 /**
@@ -162,6 +167,15 @@ public class Main{
 		//	============================================	
 		//		do whatever Test Or Stuff
 		//	============================================
+		odometer.start();
+
+		nav.rotateClockwise(360);
+		try {
+			Thread.sleep(2000);
+		} 
+		catch (Exception e) {
+		}
+		nav.travelDist(60);
 	}
 	
 /**
