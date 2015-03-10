@@ -28,6 +28,7 @@ public class USController extends Thread {
 				}
 				distances[0] = usSensor.getDistance();
 				distance = filter(distances);
+//				distance =   usSensor.getDistance();
 			try {Thread.sleep(10);} catch (Exception e) {}
 			}
 		}
@@ -64,7 +65,6 @@ public class USController extends Thread {
 	
 	public void restartUS(){
 		stop = false;
-		usSensor.continuous();
 	}
 
 	public int sensorDist() {

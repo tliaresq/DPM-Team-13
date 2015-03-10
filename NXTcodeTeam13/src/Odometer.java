@@ -10,17 +10,19 @@ public class Odometer extends Thread {
 
 	private OdometryDisplay odometryDisplay = new OdometryDisplay(this); // displays all odometer data
 	private OdoCorrection odoCorrect;
+	public CorrectionBeta betaCorrect;
 	public Robot robot;
 
 	private USController usLeftController;
 	private USController usRightController;
-	private LSController lsController;
+	public LSController lsC1,lsC2;
 
 	// default constructor
 	public Odometer(Robot r) {
 		lock = new Object();
 		robot = r;
-		lsController = new LSController(robot.cs, robot.filterSize);
+		lsC1 = new LSController(robot.cs1, robot.filterSize);
+		lsC2 = new LSController(robot.cs1, robot.filterSize);
 		odoCorrect = new OdoCorrection(this);
 		usLeftController = new USController(robot.usLeftSensor, robot.filterSize);
 		usRightController  = new USController(robot.usRightSensor,robot.filterSize);
@@ -34,11 +36,16 @@ public class Odometer extends Thread {
 	// run method (required for Thread)
 	public void run() {
 		long updateStart, updateEnd;
+		//=====================================================
+		//       start only the sensors available for run
+		//=====================================================
 		odometryDisplay.start();
-		lsController.start();
+		lsC1.start();
+		lsC2.start();
 		usLeftController.start();
 		usRightController.start();
 		odoCorrect.start();
+		betaCorrect.start();
 
 		while (true) {
 			updateStart = System.currentTimeMillis();
@@ -52,7 +59,7 @@ public class Odometer extends Thread {
 
 				sensorLeftDist = usLeftController.sensorDist();
 				sensorRightDist = usRightController.sensorDist();
-				sensorColor = lsController.getColor();
+				sensorColor = lsC1.getColor();
 
 				nowTachoL = Motor.A.getTachoCount();
 				nowTachoR = Motor.B.getTachoCount();
@@ -121,7 +128,7 @@ public class Odometer extends Thread {
 	}
 
 	public void lsOn() {
-		lsController.restartLS();
+		lsC1.restartLS();
 	}
 
 	public void usOff() {
@@ -130,7 +137,7 @@ public class Odometer extends Thread {
 	}
 
 	public void lsOff() {
-		lsController.stopLS();
+		lsC1.stopLS();
 	}
 
 	public void getPosition(double[] position, boolean[] update) {

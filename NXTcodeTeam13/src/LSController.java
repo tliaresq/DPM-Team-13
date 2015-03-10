@@ -2,7 +2,7 @@ import lejos.nxt.ColorSensor;
 
 public class LSController extends Thread {
 	
-	static ColorSensor colorSensor;
+	private ColorSensor colorSensor;
 	private int color;
 	private boolean stop;
 	private int[] colors;

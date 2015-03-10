@@ -18,7 +18,7 @@ public class Main{
 		robot = new Robot();					
 		nav = new Navigate(robot, robot.odometer);			
 		ballistics = new LauncherController(robot);		
-		localizer = new Localizer(robot.odometer, nav);
+		localizer = new Localizer(nav, robot);
 		exit.start();
 		printMainMenu();
 	}
@@ -28,16 +28,29 @@ public class Main{
  */
 	public static void fetchOption(String option){
 		switch (option){
-		case "ODOTEST":
+		case "betaCorrect Test":
 			robot.odometer.start();
-			robot.odometer.correctionOn();
-//			nav.travelTo(0, 15, false);
-//			nav.travelTo(150, 0, false);
-			nav.travelTo(-60, 180, false);
+			try {Thread.sleep(100);} catch (Exception e) {}
+			robot.odometer.betaCorrect.restart();
+			try {Thread.sleep(100);} catch (Exception e) {}
+			//================================
+			// BUILD YOUR ITINIRARY HERE
+			//================================
 			
-
+			nav.travelTo(-60, 180, false);
 			nav.travelTo(0, 0, false);
 			break;
+		case "odoCorrect test":
+			robot.odometer.start();
+
+			try {Thread.sleep(100);} catch (Exception e) {}
+			
+			robot.odometer.correctionOn();
+			try {Thread.sleep(100);} catch (Exception e) {}
+			nav.travelTo(-60, 180, false);
+			nav.travelTo(0, 0, false);
+			break;
+			
 		case "shoot x1":
 			ballistics.shoot();
 			break;
@@ -46,20 +59,26 @@ public class Main{
 			ballistics.shoot(6);
 			break;
 
-		case "goto (60;60)":
+		case "goto (0;60) with Follower":
 			robot.odometer.start();
-			nav.travelTo(60, 60, true);
+			nav.travelTo(0, 60, true);
 			break;
 
 		case "wall Localize":
 			robot.odometer.start();
-			
+			localizer.goToBtmLeftTile();
 			break;
-
 
 		case "line localize":
 			robot.odometer.start();
+			localizer.lineLocalize();
+			break;
 			
+		case "rotate Dist test":
+			nav.setAccSp(robot.acc, robot.speed);
+			nav.rotateClockwise(360);
+			try {Thread.sleep(3000);} catch (Exception e) {}
+			nav.travelDist(60);
 			break;
 
 		case "map1":
@@ -92,7 +111,7 @@ public class Main{
  * handles the LIST MENU 
  */
 	public static void mainRight(){
-		String[] option = {"ODOTEST","shoot x1","shoot x6","goto (60;60)", "wall Localize", "line localize", "map1", "map2", "map3", "map4", "map5"};//list of options
+		String[] option = { "betaCorrect Test","line localize","wall Localize","odoCorrect test","shoot x1","shoot x6","goto (0;60) with Follower", "rotate Dist test", "map1", "map2", "map3", "map4", "map5"};//list of options
 
 		boolean display = true;
 
@@ -147,8 +166,11 @@ public class Main{
 		//	============================================	
 		//		do whatever Test Or Stuff
 		//	============================================
+		nav.stopMotors();
 		robot.odometer.start();
-		nav.travelTo(0,180,true);
+		try {Thread.sleep(2000);} catch (Exception e) {}
+		robot.odometer.lsOn();
+		
 		
 	}
 
