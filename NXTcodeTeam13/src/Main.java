@@ -6,7 +6,8 @@ public class Main{
 	static Exit exit;							// Listens to escape button to exit program at any time
 	static Robot robot;							// All the hardware Data
 	static Navigate nav;						// Manages driving nxt to a given location
-	static LauncherController ballistics; 		//Handles launching PingPong Balls
+	//static LauncherController ballistics; 		//Handles launching PingPong Balls
+	static Crossbow crossbow;
 	static Localizer localizer;
 	
 /**
@@ -16,8 +17,9 @@ public class Main{
 	public static void main(String[] args) {
 		exit = new Exit();									
 		robot = new Robot();					
-		nav = new Navigate(robot, robot.odometer);			
-		ballistics = new LauncherController(robot);		
+		nav = new Navigate(robot, robot.odo);			
+		//ballistics = new LauncherController(robot);	
+		crossbow = new Crossbow(robot);
 		localizer = new Localizer(nav, robot);
 		exit.start();
 		printMainMenu();
@@ -29,9 +31,9 @@ public class Main{
 	public static void fetchOption(String option){
 		switch (option){
 		case "betaCorrect Test":
-			robot.odometer.start();
+			robot.odo.start();
 			try {Thread.sleep(100);} catch (Exception e) {}
-			robot.odometer.betaCorrect.restart();
+			robot.odo.betaCorrect.restart();
 			try {Thread.sleep(100);} catch (Exception e) {}
 			//================================
 			// BUILD YOUR ITINIRARY HERE
@@ -41,36 +43,36 @@ public class Main{
 			nav.travelTo(0, 0, false);
 			break;
 		case "odoCorrect test":
-			robot.odometer.start();
+			robot.odo.start();
 
 			try {Thread.sleep(100);} catch (Exception e) {}
 			
-			robot.odometer.correctionOn();
+			robot.odo.correctionOn();
 			try {Thread.sleep(100);} catch (Exception e) {}
 			nav.travelTo(-60, 180, false);
 			nav.travelTo(0, 0, false);
 			break;
 			
 		case "shoot x1":
-			ballistics.shoot();
+			crossbow.shoot(1);
 			break;
 
 		case "shoot x6":
-			ballistics.shoot(6);
+			crossbow.shoot(6);
 			break;
 
 		case "goto (0;60) with Follower":
-			robot.odometer.start();
+			robot.odo.start();
 			nav.travelTo(0, 60, true);
 			break;
 
 		case "wall Localize":
-			robot.odometer.start();
+			robot.odo.start();
 			localizer.goToBtmLeftTile();
 			break;
 
 		case "line localize":
-			robot.odometer.start();
+			robot.odo.start();
 			localizer.lineLocalize();
 			break;
 			
@@ -166,10 +168,7 @@ public class Main{
 		//	============================================	
 		//		do whatever Test Or Stuff
 		//	============================================
-		nav.stopMotors();
-		robot.odometer.start();
-		try {Thread.sleep(2000);} catch (Exception e) {}
-		robot.odometer.lsOn();
+
 		
 		
 	}
@@ -181,7 +180,7 @@ public class Main{
 		//	============================================	
 		//		do whatever Test Or Stuff
 		//	============================================
-		robot.odometer.start();
+		robot.odo.start();
 
 		nav.rotateClockwise(360);
 		try {

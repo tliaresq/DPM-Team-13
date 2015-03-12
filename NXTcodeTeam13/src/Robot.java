@@ -30,12 +30,12 @@ public class Robot {
 	
 	public int filterSize = 7;  		// how important is the filter for sensor values
 	
-	public Odometer odometer;			// Handles all data relative to location
+	public Odometer odo;			// Handles all data relative to location
 	
 
 	public Robot (){
 
-		odometer = new Odometer(this);
+		odo = new Odometer(this);
 		
 
 	}

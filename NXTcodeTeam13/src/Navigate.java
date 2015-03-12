@@ -9,7 +9,7 @@ public class Navigate {
 	private double xDest;
 	private double yDest;
 
-	private Odometer odometer;
+	private Odometer odo;
 	public double finalDestAngle;
 
 
@@ -18,14 +18,14 @@ public class Navigate {
 		robot = r;
 		leftMotor = r.leftMotor;
 		rightMotor = r.rightMotor;
-		odometer = o;
-		follower = new Follower(robot,this, odometer);
+		odo = o;
+		follower = new Follower(robot,this, odo);
 	}
 
 	public void travelTo(double x, double y,boolean follow) {
 
-		odometer.correctionOn();
-		if (follow){ odometer.usOn(); }
+		odo.correctionOn();
+		if (follow){ odo.usCfront.restartUS(); }
 
 		xDest = x;
 		yDest = y;
@@ -43,13 +43,13 @@ public class Navigate {
 		while (distToDest() >= 1) {
 			int i = 0;
 			//while no obstacle and not arrived at destination
-			while (distToDest() >= 1 &&(!follow ||  odometer.getRightSensorDist() >= robot.wallDist)) {
+			while (distToDest() >= 1 &&(!follow ||  odo.getFrontSensorDist() >= robot.wallDist)) {
 				if(distToDest()<robot.odoCorBand){
-					odometer.correctionOff();
+					odo.correctionOff();
 				}
 				if(distToDest()<robot.wallDist){
 					follow = false;
-					odometer.usOff();
+					odo.usCfront.stopUS();
 				}
 				i++;
 				if (i % 2 == 0) { store = distToDest() ; } //stores the value of distance to destination
@@ -58,7 +58,7 @@ public class Navigate {
 			}
 
 			// if obstacle implement wall follower
-			if (follow && distToDest() > 1 && odometer.getRightSensorDist() < robot.wallDist) { 
+			if (follow && distToDest() > 1 && odo.getFrontSensorDist() < robot.wallDist) { 
 				follower.destFollow() ;
 			}
 			setAccSp(robot.acc,robot.speed);
@@ -83,11 +83,11 @@ public class Navigate {
 
 
 	private void checkLocation(){
-		double tempX = odometer.getX();
-		double tempY = odometer.getY();
-		odometer.correctionOn();
+		double tempX = odo.getX();
+		double tempY = odo.getY();
+		odo.correctionOn();
 		rotateClockwise(360);
-		odometer.correctionOff();
+		odo.correctionOff();
 		xDest = tempX;
 		yDest = tempY;
 		pointToDest();
@@ -98,8 +98,8 @@ public class Navigate {
 
 	// calculates distance between nxt and destination
 	private double distToDest() {
-		double y = Math.abs(odometer.getY() - yDest);
-		double x = Math.abs(odometer.getX() - xDest);
+		double y = Math.abs(odo.getY() - yDest);
+		double x = Math.abs(odo.getX() - xDest);
 		double distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 		return distance;
 	}
@@ -142,7 +142,7 @@ public class Navigate {
 
 	public void findWAll(){
 		spinClockWise();
-		while (odometer.getRightSensorDist()< robot.findWallDist);{
+		while (odo.getFrontSensorDist()< robot.findWallDist);{
 			try {Thread.sleep(10);} catch (Exception e) {}
 		}
 
@@ -176,7 +176,7 @@ public class Navigate {
 	// the angle is oriented correctly and given in range [-180; +180]
 	public double deltaAngle(double destAngle) {
 		destAngle = (destAngle + 360) % 360;
-		double theta = odometer.getTheta();
+		double theta = odo.getTheta();
 		if (theta > 180) {
 			theta -= 360;
 		}
@@ -196,6 +196,6 @@ public class Navigate {
 	}
 
 	public void updateDestAngle(){
-		finalDestAngle = Math.atan2(yDest - odometer.getY(),xDest - odometer.getX()) * 180 / 3.14159;
+		finalDestAngle = Math.atan2(yDest - odo.getY(),xDest - odo.getX()) * 180 / 3.14159;
 	}
 }

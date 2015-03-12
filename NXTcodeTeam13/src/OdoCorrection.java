@@ -84,11 +84,11 @@ public class OdoCorrection extends Thread{
 
 	public void restart(){
 		stop = false;
-		odo.lsOn();
+		odo.lsC1.restartLS();
 	}
 	public void stop(){
 		stop = true;
-		odo.lsOff();
+		odo.lsC1.stopLS();
 	}
 
 

@@ -13,8 +13,7 @@ public class Odometer extends Thread {
 	public CorrectionBeta betaCorrect;
 	public Robot robot;
 
-	private USController usLeftController;
-	private USController usRightController;
+	public USController usCleft, usCfront;
 	public LSController lsC1,lsC2;
 
 	// default constructor
@@ -24,8 +23,8 @@ public class Odometer extends Thread {
 		lsC1 = new LSController(robot.cs1, robot.filterSize);
 		lsC2 = new LSController(robot.cs1, robot.filterSize);
 		odoCorrect = new OdoCorrection(this);
-		usLeftController = new USController(robot.usLeftSensor, robot.filterSize);
-		usRightController  = new USController(robot.usRightSensor,robot.filterSize);
+		usCleft = new USController(robot.usLeftSensor, robot.filterSize);
+		usCfront  = new USController(robot.usRightSensor,robot.filterSize);
 
 		x = 0.0;
 		y = 0.0;
@@ -42,9 +41,10 @@ public class Odometer extends Thread {
 		odometryDisplay.start();
 		lsC1.start();
 		lsC2.start();
-		usLeftController.start();
-		usRightController.start();
+		usCleft.start();
+		usCfront.start();
 		odoCorrect.start();
+		//use only one correction
 		betaCorrect.start();
 
 		while (true) {
@@ -57,8 +57,8 @@ public class Odometer extends Thread {
 
 				double distL, distR, deltaD, deltaT, dX, dY;
 
-				sensorLeftDist = usLeftController.sensorDist();
-				sensorRightDist = usRightController.sensorDist();
+				sensorLeftDist = usCleft.sensorDist();
+				sensorRightDist = usCfront.sensorDist();
 				sensorColor = lsC1.getColor();
 
 				nowTachoL = Motor.A.getTachoCount();
@@ -113,32 +113,6 @@ public class Odometer extends Thread {
 		odoCorrect.restart();
 	}
 	
-	public void sensorsOn(){
-		usOn();
-		lsOn();
-	}
-	public void sensorsOff(){
-		usOff();
-		lsOff();
-	}
-
-	public void usOn() {
-		usLeftController.restartUS();
-		usRightController.restartUS();
-	}
-
-	public void lsOn() {
-		lsC1.restartLS();
-	}
-
-	public void usOff() {
-		usLeftController.stopUS();
-		usRightController.stopUS();
-	}
-
-	public void lsOff() {
-		lsC1.stopLS();
-	}
 
 	public void getPosition(double[] position, boolean[] update) {
 		// ensure that the values don't change while the odometer is running
@@ -189,7 +163,7 @@ public class Odometer extends Thread {
 		}
 		return result;
 	}
-	public double getRightSensorDist() {
+	public double getFrontSensorDist() {
 		double result;
 
 		synchronized (lock) {

@@ -37,7 +37,6 @@ private LSController ls1,ls2;// ls1 is on port 3 and ls2 on port 4
 	}
 	public void stop(){
 		stop = true;
-		odo.lsOff();
 		ls1.stopLS();
 		ls2.stopLS();
 	}
