@@ -24,23 +24,21 @@ public class Main{
 		exit.start();
 		printMainMenu();
 	}
+	
+	
 /**
  * fetches the option requested in the list menu
  * @param option
  */
 	public static void fetchOption(String option){
 		switch (option){
-		case "betaCorrect Test":
+		case "LSfront Test":
 			robot.odo.start();
-			try {Thread.sleep(100);} catch (Exception e) {}
-			robot.odo.betaCorrect.restart();
-			try {Thread.sleep(100);} catch (Exception e) {}
-			//================================
-			// BUILD YOUR ITINIRARY HERE
-			//================================
-			
-			nav.travelTo(-60, 180, false);
-			nav.travelTo(0, 0, false);
+			robot.odo.lsC1.restartLS();
+			break;
+		case "USfront Test":
+			robot.odo.start();
+			robot.odo.usCfront.restartUS();
 			break;
 		case "odoCorrect test":
 			robot.odo.start();
@@ -53,8 +51,8 @@ public class Main{
 			nav.travelTo(0, 0, false);
 			break;
 			
-		case "shoot x1":
-			crossbow.shoot(1);
+		case "shoot infinit":
+			crossbow.shoot(Integer.MAX_VALUE);
 			break;
 
 		case "shoot x6":
@@ -111,9 +109,10 @@ public class Main{
 	
 /**
  * handles the LIST MENU 
+ * Displays the options and shifts them when left or right button is pressed 
  */
 	public static void mainRight(){
-		String[] option = { "betaCorrect Test","line localize","wall Localize","odoCorrect test","shoot x1","shoot x6","goto (0;60) with Follower", "rotate Dist test", "map1", "map2", "map3", "map4", "map5"};//list of options
+		String[] option = { "LSfront test","USfront test","shoot infinit","shoot x6","goto (0;60) with Follower", "line localize","wall Localize","odoCorrect test","rotate Dist test", "map1", "map2", "map3", "map4", "map5"};//list of options
 
 		boolean display = true;
 
@@ -162,37 +161,50 @@ public class Main{
 	}
 
 /**
- * does whatever Test Or Stuff
+ * does whatever Test Or Demo
  */
 	public static void mainEnter(){
 		//	============================================	
 		//		do whatever Test Or Stuff
 		//	============================================
 
-		
+		robot.odo.start();
+		qBreak(500);
+		robot.odo.usCfront.restartUS();
 		
 	}
 
 /**
- * do whatever Test Or Stuff
+ * does whatever Test Or Demo
  */
 	public static void mainLeft(){
 		//	============================================	
 		//		do whatever Test Or Stuff
 		//	============================================
+		Sound.beep();
 		robot.odo.start();
-
-		nav.rotateClockwise(360);
-		try {
-			Thread.sleep(2000);
-		} 
-		catch (Exception e) {
-		}
-		nav.travelDist(60);
+		qBreak(500);
+		Sound.beep();
+		localizer.betaLocalize();
+		
+		
+		
+		
+		
+//		nav.goForth();
+//		robot.odo.lsC1.restartLS();
+//		 try{Thread.sleep(200);} catch (Exception e) {}
+//		while(robot.odo.getSensorColor()>robot.black){
+//			try {Thread.sleep(20);} catch (Exception e) {}
+//		}
+//		qBreak(1000);
+//		nav.travelDist(robot.lsDist);
+		
+		
 	}
 	
 /**
- * prints main menu
+ * prints main menu (initial display)
  */
 	public static void printMainMenu(){
 		LCD.clear();
@@ -223,6 +235,15 @@ public class Main{
 			LCD.drawString("Error - invalid button", 0, 0);
 			break;
 		}
+	}
+	/**
+	 * stops the Robot for a short momment for test purpouses and so on 
+	 * 
+	 */
+	public static void qBreak(int milliseconds){
+		nav.stopMotors();
+		try {Thread.sleep(milliseconds);} catch (Exception e) {}
+		nav.setAccSp(robot.acc, robot.speed);
 	}
 }
 

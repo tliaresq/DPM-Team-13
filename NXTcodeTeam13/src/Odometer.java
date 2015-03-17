@@ -10,7 +10,7 @@ public class Odometer extends Thread {
 
 	private OdometryDisplay odometryDisplay = new OdometryDisplay(this); // displays all odometer data
 	private OdoCorrection odoCorrect;
-	public CorrectionBeta betaCorrect;
+	//public CorrectionBeta betaCorrect;
 	public Robot robot;
 
 	public USController usCleft, usCfront;
@@ -45,7 +45,7 @@ public class Odometer extends Thread {
 		usCfront.start();
 		odoCorrect.start();
 		//use only one correction
-		betaCorrect.start();
+		//betaCorrect.start();
 
 		while (true) {
 			updateStart = System.currentTimeMillis();

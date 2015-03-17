@@ -10,9 +10,9 @@ public class Robot {
 
 	public UltrasonicSensor usLeftSensor = new UltrasonicSensor(SensorPort.S1), usRightSensor = new UltrasonicSensor(SensorPort.S2);
 
-	public ColorSensor cs1 = new ColorSensor(SensorPort.S3), cs2 = new ColorSensor(SensorPort.S4);
+	public ColorSensor cs1 = new ColorSensor(SensorPort.S4), cs2 = new ColorSensor(SensorPort.S4);
 
-	public double wwDist = 15.5;// less turns less & more turns more
+	public double wwDist = 18.1;// less turns less & more turns more
 	public double leftWradius = 2.07;//less travels more
 	public double rightWradius = leftWradius;
 	
