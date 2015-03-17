@@ -39,7 +39,7 @@ public class Main{
 		case "USfront Test":
 			robot.odo.start();
 			robot.odo.usCfront.restartUS();
-			break;
+			break; 
 		case "odoCorrect test":
 			robot.odo.start();
 
