@@ -32,6 +32,18 @@ public class Main{
  */
 	public static void fetchOption(String option){
 		switch (option){
+		case "360":
+			robot.odo.start();
+			nav.stopMotors();
+			nav.setAccSp(robot.acc, robot.speed);
+			nav.rotateClockwise(360);
+			break;
+		case "360 x3":
+			robot.odo.start();
+			nav.stopMotors();
+			nav.setAccSp(robot.acc, robot.speed);
+			nav.rotateClockwise(360*3);
+			break; 
 		case "LSfront Test":
 			robot.odo.start();
 			robot.odo.lsC1.restartLS();
@@ -112,7 +124,7 @@ public class Main{
  * Displays the options and shifts them when left or right button is pressed 
  */
 	public static void mainRight(){
-		String[] option = { "LSfront test","USfront test","shoot infinit","shoot x6","goto (0;60) with Follower", "line localize","wall Localize","odoCorrect test","rotate Dist test", "map1", "map2", "map3", "map4", "map5"};//list of options
+		String[] option = {"360","360 x3", "LSfront test","USfront test","shoot infinit","shoot x6","goto (0;60) with Follower", "line localize","wall Localize","odoCorrect test","rotate Dist test", "map1", "map2", "map3", "map4", "map5"};//list of options
 
 		boolean display = true;
 
@@ -169,9 +181,9 @@ public class Main{
 		//	============================================
 
 		robot.odo.start();
-		qBreak(500);
-		robot.odo.usCfront.restartUS();
-		
+		nav.stopMotors();
+		nav.setAccSp(robot.acc, robot.speed);
+		nav.rotateClockwise(360);
 	}
 
 /**
