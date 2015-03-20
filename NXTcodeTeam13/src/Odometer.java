@@ -1,30 +1,35 @@
 import lejos.nxt.Motor;
-
+/**
+ * Basic odometer
+ * Also store all the sensor values for any class to call and use when necessary.
+ * @author Cedric
+ *
+ */
 public class Odometer extends Thread {
 
 	private static final long ODOMETER_PERIOD = 25;	// odometer update period, in ms
 	private Object lock;
 	private double x, y, theta;
 	private int nowTachoL, nowTachoR, lastTachoL, lastTachoR;
-	private int sensorLeftDist, sensorRightDist, sensorColor;
+	private int sensorLeftDist, sensorRightDist, sensorFrontDist, sensorColor;
+	
 
 	private OdometryDisplay odometryDisplay = new OdometryDisplay(this); // displays all odometer data
 	private OdoCorrection odoCorrect;
-	//public CorrectionBeta betaCorrect;
 	public Robot robot;
 
-	public USController usCleft, usCfront;
-	public LSController lsC1,lsC2;
+	public USController usCleft, usCfront,usCright;
+	public LSController lsC;//,lsC2;
 
-	// default constructor
+	
 	public Odometer(Robot r) {
 		lock = new Object();
 		robot = r;
-		lsC1 = new LSController(robot.cs1, robot.filterSize);
-		lsC2 = new LSController(robot.cs1, robot.filterSize);
+		lsC = new LSController(robot.cs1, robot.lsFilterSize);
 		odoCorrect = new OdoCorrection(this);
-		usCleft = new USController(robot.usLeftSensor, robot.filterSize);
-		usCfront  = new USController(robot.usRightSensor,robot.filterSize);
+		usCleft = new USController(robot.usLeftSensor, robot.usFilterSize);
+		usCfront  = new USController(robot.usFrontSensor,robot.usFilterSize);
+		usCright  = new USController(robot.usRightSensor,robot.usFilterSize);
 
 		x = 0.0;
 		y = 0.0;
@@ -32,20 +37,19 @@ public class Odometer extends Thread {
 
 	}
 
-	// run method (required for Thread)
+	
 	public void run() {
 		long updateStart, updateEnd;
 		//=====================================================
 		//       start only the sensors available for run
 		//=====================================================
 		odometryDisplay.start();
-		lsC1.start();
-		lsC2.start();
+		lsC.start();
 		usCleft.start();
 		usCfront.start();
+		usCright.start();
 		odoCorrect.start();
-		//use only one correction
-		//betaCorrect.start();
+		
 
 		while (true) {
 			updateStart = System.currentTimeMillis();
@@ -58,8 +62,9 @@ public class Odometer extends Thread {
 				double distL, distR, deltaD, deltaT, dX, dY;
 
 				sensorLeftDist = usCleft.sensorDist();
-				sensorRightDist = usCfront.sensorDist();
-				sensorColor = lsC1.getColor();
+				sensorFrontDist = usCfront.sensorDist();
+				sensorRightDist  = usCright.sensorDist();
+				sensorColor = lsC.getColor();
 
 				nowTachoL = Motor.A.getTachoCount();
 				nowTachoR = Motor.B.getTachoCount();
@@ -117,12 +122,9 @@ public class Odometer extends Thread {
 	public void getPosition(double[] position, boolean[] update) {
 		// ensure that the values don't change while the odometer is running
 		synchronized (lock) {
-			if (update[0])
-				position[0] = x;
-			if (update[1])
-				position[1] = y;
-			if (update[2])
-				position[2] = theta;
+			if (update[0]) position[0] = x;
+			if (update[1]) position[1] = y;
+			if (update[2]) position[2] = theta;
 		}
 	}
 
@@ -163,11 +165,18 @@ public class Odometer extends Thread {
 		}
 		return result;
 	}
+	public double getRightSensorDist() {
+		double result;
+		synchronized (lock) {
+			result = sensorRightDist;
+		}
+		return result;
+	}
 	public double getFrontSensorDist() {
 		double result;
 
 		synchronized (lock) {
-			result = sensorRightDist;
+			result = sensorFrontDist;
 		}
 
 		return result;
@@ -187,12 +196,9 @@ public class Odometer extends Thread {
 	public void setPosition(double[] position, boolean[] update) {
 		// ensure that the values don't change while the odometer is running
 		synchronized (lock) {
-			if (update[0])
-				x = position[0];
-			if (update[1])
-				y = position[1];
-			if (update[2])
-				theta = position[2];
+			if (update[0]) x = position[0];
+			if (update[1]) y = position[1];
+			if (update[2]) theta = position[2];
 		}
 	}
 

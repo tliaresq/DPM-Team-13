@@ -1,5 +1,9 @@
 import lejos.nxt.ColorSensor;
-
+/**
+ * Manages All the information coming from a light sensor by filtering it and returning a filtered value. 
+ * @author Cedric
+ *
+ */
 public class LSController extends Thread {
 	
 	private ColorSensor colorSensor;
@@ -32,7 +36,11 @@ public class LSController extends Thread {
 		}
 	}
 	
-
+	/**
+	 * Filters the sensor value by taking the mean value
+	 * @param c Number of most recent values to take the mean from
+	 * @return
+	 */
 	private int filter(int[] c) {
 		int[] temp = new int[c.length];
 		
@@ -55,18 +63,24 @@ public class LSController extends Thread {
 		}
 		return temp[(temp.length/2)+1];
 	}
-
+	/**
+	 * stops the light sensor
+	 * Does not stop the thread from running
+	 * This is mainly to save battery
+	 */
 	public void stopLS() {
 		stop = true;
 		colorSensor.setFloodlight(false);
 		color = -1;
 	}
-
+	/**
+	 * restarts sensor
+	 */
 	public void restartLS(){
 		stop = false;
 		colorSensor.setFloodlight(0);
 	}
-
+	
 	public int getColor() {
 		return color;
 	}

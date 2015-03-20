@@ -1,5 +1,10 @@
 import lejos.nxt.UltrasonicSensor;
 
+/**
+ * Manages All the information coming from an ultra sonic sensor by filtering it and returning a filtered value. 
+ * @author Cedric
+ *
+ */
 public class USController extends Thread {
 	UltrasonicSensor usSensor;
 	private int distance;
@@ -33,7 +38,11 @@ public class USController extends Thread {
 			}
 		}
 	}
-
+	/**
+	 * Filters the sensor value by taking the mean value
+	 * @param c Number of most recent values to take the mean from
+	 * @return
+	 */
 	private int filter(int[] c) {
 		int[] temp = new int[c.length];
 		
@@ -56,13 +65,19 @@ public class USController extends Thread {
 		}
 		return temp[(temp.length/2)+1];
 	}
-
+	/**
+	 * stops the US sensor
+	 * Does not stop the thread from running
+	 * This is mainly to save battery
+	 */
 	public void stopUS() {
 		stop = true;
 		usSensor.off();
 		distance = -1;
 	}
-	
+	/**
+	 * restarts sensor
+	 */
 	public void restartUS(){
 		stop = false;
 	}

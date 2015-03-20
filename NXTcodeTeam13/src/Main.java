@@ -1,169 +1,123 @@
 import lejos.nxt.*;
-
+/**
+ * Contains main method
+ * Displays menu and options
+ * Runs the Robot depending on selected option
+ * @author Cedric
+ *
+ */
 public class Main{
+
+	static String[] optionList = {"error","360","travel 60", "USfront test","LS test", "odoCorrect test","shoot 999", "travel to", "localize","follow test"}; 
+	/* 
+	 *  full List of available options
+	 * {"error","follow test","360","travel 60", "USfront test", "odoCorrect test","shoot 999", "travel to", "localize","map1","map2","map3","map4","map5"};
+	 * 
+	 * ===========Copy the commented list of tests you want to work from and paste it in the working "optionList"  
+	 * 
+	 * {"error","360","travel 60", "USfront test", "odoCorrect test","shoot 999", "travel to", "localize"};
+	 * 
+	 * 
+	*/
+	
+	//===========TO CREATE YOUR OWN TEST
+	/*
+	 * Go in the Test.java class
+	 * add the method for your test naming it like you want.
+	 * add a case to the runOption method. Carefully choose the string case.
+	 * add that String to the full list of available options in Main.
+	 * 
+	 * If you are working specificly on that set of instruction:
+	 * use mainEnter() and mainLeft to call that method directly 
+	 * 
+	 * Create your own list as a comment
+	 * 
+	 */
 
 
 	static Exit exit;							// Listens to escape button to exit program at any time
 	static Robot robot;							// All the hardware Data
 	static Navigate nav;						// Manages driving nxt to a given location
-	//static LauncherController ballistics; 		//Handles launching PingPong Balls
 	static Crossbow crossbow;
-	static Localizer localizer;
-	
+	static Tests test = new Tests();
+
 /**
- * Starting point of program
- * @param args
+ * Quick Access to Test Or Demo
  */
-	public static void main(String[] args) {
-		exit = new Exit();									
-		robot = new Robot();					
-		nav = new Navigate(robot, robot.odo);			
-		//ballistics = new LauncherController(robot);	
-		crossbow = new Crossbow(robot);
-		localizer = new Localizer(nav, robot);
-		exit.start();
-		printMainMenu();
+	public static void mainEnter(){
+		//input your string corresponding to the test you want to work on
+		test.runOption("localize");
+
+	}
+
+/**
+ * Quick Access to Test Or Demo
+ */
+	public static void mainLeft(){
+		//input your string corresponding to the test you want to work on
+		test.runOption("follow test");
 	}
 	
 	
-/**
- * fetches the option requested in the list menu
- * @param option
- */
-	public static void fetchOption(String option){
-		switch (option){
-		case "360":
-			robot.odo.start();
-			nav.stopMotors();
-			nav.setAccSp(robot.acc, robot.speed);
-			nav.rotateClockwise(360);
-			break;
-		case "360 x3":
-			robot.odo.start();
-			nav.stopMotors();
-			nav.setAccSp(robot.acc, robot.speed);
-			nav.rotateClockwise(360*3);
-			break; 
-		case "LSfront Test":
-			robot.odo.start();
-			robot.odo.lsC1.restartLS();
-			break;
-		case "USfront Test":
-			robot.odo.start();
-			robot.odo.usCfront.restartUS();
-			break; 
-		case "odoCorrect test":
-			robot.odo.start();
-
-			try {Thread.sleep(100);} catch (Exception e) {}
-			
-			robot.odo.correctionOn();
-			try {Thread.sleep(100);} catch (Exception e) {}
-			nav.travelTo(-60, 180, false);
-			nav.travelTo(0, 0, false);
-			break;
-			
-		case "shoot infinit":
-			crossbow.shoot(Integer.MAX_VALUE);
-			break;
-
-		case "shoot x6":
-			crossbow.shoot(6);
-			break;
-
-		case "goto (0;60) with Follower":
-			robot.odo.start();
-			nav.travelTo(0, 60, true);
-			break;
-
-		case "wall Localize":
-			robot.odo.start();
-			localizer.goToBtmLeftTile();
-			break;
-
-		case "line localize":
-			robot.odo.start();
-			localizer.lineLocalize();
-			break;
-			
-		case "rotate Dist test":
-			nav.setAccSp(robot.acc, robot.speed);
-			nav.rotateClockwise(360);
-			try {Thread.sleep(3000);} catch (Exception e) {}
-			nav.travelDist(60);
-			break;
-
-		case "map1":
-			//fill in with itinerary corresponding to maps
-			break;
-		case "map2":
-			break;
-		case "map3":
-			break;
-		case "map4":
-			break;
-		case "map5":
-			break;
-
-		default: 
-			LCD.clear();
-			LCD.drawString("error", 0, 0);
-			LCD.drawString("option does not exist", 0, 1);
-			try {
-				Thread.sleep(3000);
-			} 
-			catch (Exception e) {
-			}
-			mainRight();
-			break;
+	
+	
+	/**
+	 * Starting point of program
+	 * Initializes instances of all needed objects
+	 * @param args
+	 */
+		public static void main(String[] args) {
+			exit = new Exit();									
+			exit.start();
+			objectsIni();
+			printMainMenu();
 		}
-	}
+		private static void objectsIni(){
+			robot = new Robot();					
+			nav = new Navigate(robot, robot.odo);			
+			crossbow = new Crossbow(robot);
+		}
 	
 /**
  * handles the LIST MENU 
  * Displays the options and shifts them when left or right button is pressed 
  */
 	public static void mainRight(){
-		String[] option = {"360","360 x3", "LSfront test","USfront test","shoot infinit","shoot x6","goto (0;60) with Follower", "line localize","wall Localize","odoCorrect test","rotate Dist test", "map1", "map2", "map3", "map4", "map5"};//list of options
-
 		boolean display = true;
-
+		String storeOption;
 		while(display){
 			int bPressed = 0;
 			LCD.clear();
-
-			for (int i = 0; i< 8; i++ ){
-				LCD.drawString(option[i], 0, i);
+			storeOption = optionList[0];
+			optionList[0] = ">>"+optionList[0];
+			for (int i = 0; i< optionList.length && i <8; i++ ){
+				LCD.drawString(optionList[i], 0, i);
 			}
-
-
 			while (bPressed == 0) {
 				bPressed = Button.waitForAnyPress();
 			}
-			
 			switch (bPressed) {
-			
 			case Button.ID_LEFT:
-				String temp = option[option.length-1];
-				for (int i = 0 ; i < option.length-1; i++){
-					option[i+1] = option[i];
+				optionList[0] = storeOption;
+				String temp = optionList[optionList.length-1];
+				for (int i = optionList.length-1 ; i >0 ; i--){
+					optionList[i] = optionList[i-1];
 				}
-				option[0] = temp;
+				optionList[0] = temp;
 				break;
-				
 			case Button.ID_RIGHT:
-				String temp2 = option[0];
-				for (int i = 0 ; i < option.length-1; i++){
-					option[i] = option[i+1];
+				optionList[0] = storeOption;
+				String temp2 = optionList[0];
+				for (int i = 0 ; i < optionList.length-1; i++){
+					optionList[i] = optionList[i+1];
 				}
-				option[option.length-1] = temp2;
+				optionList[optionList.length-1] = temp2;
 				break;
-
 			case Button.ID_ENTER:
+				optionList[0] = storeOption;
 				display = false;
-				fetchOption(option[0]);
+				test.runOption(optionList[0]);
 				break;
-
 			default:
 				System.out.println("Error - invalid button");
 				System.exit(-1);
@@ -172,48 +126,6 @@ public class Main{
 		}		
 	}
 
-/**
- * does whatever Test Or Demo
- */
-	public static void mainEnter(){
-		//	============================================	
-		//		do whatever Test Or Stuff
-		//	============================================
-
-		robot.odo.start();
-		nav.stopMotors();
-		nav.setAccSp(robot.acc, robot.speed);
-		nav.rotateClockwise(360);
-	}
-
-/**
- * does whatever Test Or Demo
- */
-	public static void mainLeft(){
-		//	============================================	
-		//		do whatever Test Or Stuff
-		//	============================================
-		Sound.beep();
-		robot.odo.start();
-		qBreak(500);
-		Sound.beep();
-		localizer.betaLocalize();
-		
-		
-		
-		
-		
-//		nav.goForth();
-//		robot.odo.lsC1.restartLS();
-//		 try{Thread.sleep(200);} catch (Exception e) {}
-//		while(robot.odo.getSensorColor()>robot.black){
-//			try {Thread.sleep(20);} catch (Exception e) {}
-//		}
-//		qBreak(1000);
-//		nav.travelDist(robot.lsDist);
-		
-		
-	}
 	
 /**
  * prints main menu (initial display)
@@ -223,9 +135,7 @@ public class Main{
 		LCD.drawString("Enter = Full Demo", 0, 0);
 		LCD.drawString("left = Some Test", 0, 1);
 		LCD.drawString("right = list of options", 0, 2);
-
 		int option = 0;
-
 		while (option == 0) {
 			option = Button.waitForAnyPress();
 		}
@@ -233,29 +143,17 @@ public class Main{
 		case Button.ID_LEFT:
 			mainLeft();
 			break;
-
 		case Button.ID_RIGHT:
 			mainRight();
 			break;
-
 		case Button.ID_ENTER:
 			mainEnter();
 			break;
-
 		default:
 			LCD.clear();
 			LCD.drawString("Error - invalid button", 0, 0);
 			break;
 		}
-	}
-	/**
-	 * stops the Robot for a short momment for test purpouses and so on 
-	 * 
-	 */
-	public static void qBreak(int milliseconds){
-		nav.stopMotors();
-		try {Thread.sleep(milliseconds);} catch (Exception e) {}
-		nav.setAccSp(robot.acc, robot.speed);
 	}
 }
 

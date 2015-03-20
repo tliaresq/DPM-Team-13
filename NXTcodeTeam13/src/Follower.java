@@ -1,4 +1,10 @@
+import lejos.nxt.Sound;
 
+/**
+ * Implements Obstacle avoidance
+ * @author Cedric
+ *
+ */
 public class Follower {
 
 	private Navigate nav;
@@ -10,62 +16,60 @@ public class Follower {
 	private double leftDistance;
 
 
-	public Follower(Robot r, Navigate n, Odometer o){
+	public Follower(Robot r, Navigate n){
 		robot = r;
 		nav = n;
-		odo = o;
+		odo = robot.odo;
 	}
 
 
-	public void destFollow() {
+	public void follow(boolean withDest) {
+
 		
-		leftDistance = odo.getLeftSensorDist();
-		// initiating nxt wall following state
-		nav.rotateClockwise(90);
-		nav.updateDestAngle();
-		delta = nav.deltaAngle(nav.finalDestAngle);
+		robot.odo.usCleft.restartUS();
+		if(withDest){
+			delta = nav.deltaAngle(nav.finalDestAngle);
+		}
 		nav.setAccSp(8000,robot.speed);
 		// follow obstacle while theta isn't within 5 degrees of the angle needed to reach destination
-		while (Math.abs(delta) > 5) {
-
-			try {Thread.sleep(20);} catch (Exception e) {}
-			tooRight = (Math.pow((odo.getLeftSensorDist()/robot.wallDist),1));
-			tooLeft =(Math.pow((robot.wallDist/odo.getLeftSensorDist()),2));
+		while (Math.abs(delta)>5 || !withDest) {
+			leftDistance = odo.getLeftSensorDist();
+			try {Thread.sleep(15);} catch (Exception e) {}
+			tooRight = (Math.pow((odo.getLeftSensorDist()/robot.followerSideDist),1));
+			tooLeft =(Math.pow((robot.followerSideDist/odo.getLeftSensorDist()),2));
 
 			// checks for wall in front
-			if (odo.getFrontSensorDist()<robot.wallDist){
+			if (odo.getFrontSensorDist()<robot.minFrontWallDist){
 				nav.rotateClockwise(90);
 			}
 			//too left
-			else if (leftDistance < robot.wallDist) {
+			else if (leftDistance < robot.followerSideDist) {
 				nav.goForth();
 				nav.leftMotor.setSpeed((int) (robot.speed*tooLeft));
 				nav.rightMotor.setSpeed((int)robot.speed);
 			} 
-
+			
 			//too right
-			else if (leftDistance > robot.wallDist && leftDistance < 81) {
+			else if (leftDistance > robot.followerSideDist && leftDistance < 81) {
 				nav.goForth();
 				nav.rightMotor.setSpeed((int) (robot.speed*tooRight));
 				nav.leftMotor.setSpeed((int)robot.speed);
 			} 
 
 			// no more wall
-			else if (leftDistance > 80) {
-				nav.goForth();
-				nav.rightMotor.setSpeed((int) (robot.speed));
-				nav.leftMotor.setSpeed((int)(robot.speed/tooRight));
+			else if (leftDistance > 80){
+				Sound.beep();
+				nav.setAccSp(robot.acc, robot.speed);
+				nav.travelDist(20);
+				nav.rotateClockwise(-90);
+				nav.travelDist(20);
+				nav.setAccSp(8000,robot.speed);
 			}
-			leftDistance = odo.getLeftSensorDist();
+			
 			nav.updateDestAngle();
 			delta = nav.deltaAngle(nav.finalDestAngle);
 		}
-
-
-		nav.goForth();
-		nav.stopMotors();
-		nav.setAccSp(robot.acc,robot.speed);
-		nav.pointToDest();
+		robot.odo.usCleft.stopUS();
 	}
 	public void followUntillWall(){
 
@@ -73,20 +77,20 @@ public class Follower {
 		nav.rotateClockwise(90);
 		nav.setAccSp(8000,robot.speed);
 		// follow obstacle while theta isn't within 5 degrees of the angle needed to reach destination
-		while (odo.getFrontSensorDist()>robot.wallDist) {
+		while (odo.getFrontSensorDist()>robot.minFrontWallDist) {
 			try {Thread.sleep(20);} catch (Exception e) {}
-			tooRight = (Math.pow((odo.getLeftSensorDist()/robot.wallDist),1));
-			tooLeft =(Math.pow((robot.wallDist/odo.getLeftSensorDist()),2));
+			tooRight = (Math.pow((odo.getLeftSensorDist()/robot.minFrontWallDist),1));
+			tooLeft =(Math.pow((robot.minFrontWallDist/odo.getLeftSensorDist()),2));
 
 			//too left
-			if (leftDistance < robot.wallDist) {
+			if (leftDistance < robot.minFrontWallDist) {
 				nav.goForth();
 				nav.leftMotor.setSpeed((int) (robot.speed*tooLeft));
 				nav.rightMotor.setSpeed((int)robot.speed);
 			} 
 
 			//too right
-			else if (leftDistance > robot.wallDist/2) {
+			else if (leftDistance > robot.minFrontWallDist/2) {
 				nav.goForth();
 				nav.rightMotor.setSpeed((int) (robot.speed*tooRight));
 				nav.leftMotor.setSpeed((int)robot.speed);

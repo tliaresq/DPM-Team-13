@@ -1,5 +1,9 @@
 import lejos.nxt.Sound;
-
+/**
+ * Corrects the odometer each time a line is crossed if conditions are right
+ * @author Cedric
+ *
+ */
 public class OdoCorrection extends Thread{
 	private Odometer odo;
 	private boolean stop;
@@ -33,7 +37,11 @@ public class OdoCorrection extends Thread{
 
 
 	}
-
+	/**
+	 * 
+	 * once a line is crossed at a given point, checks what different lines it could be
+	 * if that point is far from any line intersection and close enough to a line it will update x and y accordingly 
+	 */
 	public void update(){
 		double dy = odo.robot.lsDist*Math.sin(odo.getTheta()*3.14159/180);
 		double dx = odo.robot.lsDist*Math.cos(odo.getTheta()*3.14159/180);
@@ -72,7 +80,12 @@ public class OdoCorrection extends Thread{
 	}
 
 
-
+	/**
+	 * check if a certain value "d" is within a certain range of a reference value
+	 * @param d
+	 * @param ref
+	 * @return
+	 */
 	public boolean inBand(double d, double ref){
 		if(d < ref+odo.robot.odoCorBand && d > ref-odo.robot.odoCorBand ){
 			return true;
@@ -81,14 +94,20 @@ public class OdoCorrection extends Thread{
 			return false;
 		}
 	}
-
+/**
+ * restarts the odometry correction
+ */
 	public void restart(){
 		stop = false;
-		odo.lsC1.restartLS();
+		odo.lsC.restartLS();
 	}
+	/**
+	 * Stops odometry correction
+	 * Does not stop the thread from running
+	 */
 	public void stop(){
 		stop = true;
-		odo.lsC1.stopLS();
+		odo.lsC.stopLS();
 	}
 
 
