@@ -16,7 +16,7 @@ public class Tests extends Main {
 		case "LS test":lsTest();break;
 		case "odoCorrect test":odoCorrectTest();break;
 		case "shoot 999": shoot999();break;
-		case "travel to": travelToTest(60,60);break;
+		case "travel to": travelToTest(60,0);break;
 		case "localize": localize();break;
 		case "opt test": printMsg();
 		case "follow test": followerTest();break;

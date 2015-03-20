@@ -1,4 +1,6 @@
-import lejos.nxt.Motor;
+import lejos.nxt.LCD;
+
+
 /**
  * Basic odometer
  * Also store all the sensor values for any class to call and use when necessary.
@@ -60,18 +62,18 @@ public class Odometer extends Thread {
 				// don't use the variables x, y, or theta anywhere but here!
 
 				double distL, distR, deltaD, deltaT, dX, dY;
-
+			
 				sensorLeftDist = usCleft.sensorDist();
 				sensorFrontDist = usCfront.sensorDist();
 				sensorRightDist  = usCright.sensorDist();
 				sensorColor = lsC.getColor();
-
-				nowTachoL = Motor.A.getTachoCount();
-				nowTachoR = Motor.B.getTachoCount();
+				nowTachoL = (robot.leftMotor.getTachoCount());
+				nowTachoR = (robot.rightMotor.getTachoCount());
 				// getting distances travelled by the left and right wheel
 				// respectively
-				distL = 3.14159 * robot.leftWradius* (nowTachoL - lastTachoL) / 180;
-				distR = 3.14159 * robot.leftWradius* (nowTachoR - lastTachoR) / 180;
+				distL = 3.14159 *robot.leftWradius* (nowTachoL - lastTachoL) / 180;
+				distR = 3.14159 *robot.leftWradius* (nowTachoR - lastTachoR) / 180;
+				
 				lastTachoL = nowTachoL;
 				lastTachoR = nowTachoR;
 				// getting the distance travelled by the nxt as a whole since

@@ -26,7 +26,7 @@ public class Localizer {
 		double fd = odo.getFrontSensorDist();
 		double ld = odo.getLeftSensorDist();
 		double rd = odo.getRightSensorDist();
-		while(!(Math.abs(fd-rd)<3 && rd<15 && ld< 15)){
+		while(!(Math.abs(fd-rd)<5 && rd<15 && ld< 15)){
 			nav.spinClockWise();
 			while(!(rd<60 && ld<60 &&(fd>ld||fd>rd))){
 				try {Thread.sleep(20);} catch (Exception e) {}

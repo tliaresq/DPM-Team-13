@@ -1,12 +1,13 @@
 import lejos.nxt.NXTRegulatedMotor;
+import lejos.robotics.RegulatedMotor;
 /**
  * The Complete set of methods that allow robot mobility at a low level of complexity
  * @author Cedric
  *
  */
 public class Navigate {
-	public NXTRegulatedMotor leftMotor;
-	public NXTRegulatedMotor rightMotor;
+	public RegulatedMotor leftMotor;
+	public RegulatedMotor rightMotor;
 	private Robot robot;
 	public Follower follower;
 	public Localizer localizer;
@@ -26,6 +27,7 @@ public class Navigate {
 		odo = o;
 		follower = new Follower(robot,this);
 		localizer  = new Localizer(this, robot);
+		setAccSp(robot.acc, robot.speed);
 	}
 /**
  * travels to a specific location
