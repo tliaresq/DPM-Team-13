@@ -21,13 +21,11 @@ public class Tests extends Main {
 		case "opt test": printMsg();
 		case "follow test": followerTest();break;
 
-
 		case "map1":			break;
 		case "map2":			break;
 		case "map3":			break;
 		case "map4":			break;
 		case "map5":			break;
-
 
 		default:
 			printMsg();
@@ -36,10 +34,6 @@ public class Tests extends Main {
 			break;
 		}
 	}
-
-
-
-
 
 
 	private void followerTest() {
@@ -82,27 +76,24 @@ public class Tests extends Main {
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		robot.odo.lsC.restartLS();
-		//qBreak(1000);
 	}
 	public void odoCorrectTest(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		robot.odo.correctionOn();
-		//try {Thread.sleep(100);} catch (Exception e) {}
 		nav.travelTo(-60, 180, false);
 		nav.travelTo(0, 0, false);
 	}
 	public void shoot999(){
 		crossbow.shoot(999);
 	}
-
 	public void localize(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		nav.localizer.alphaLocalize();
 	}
-	
-	
+
+
 	public void map1(){
 
 	}
@@ -124,10 +115,10 @@ public class Tests extends Main {
 		LCD.drawString("no such option", 0, 1);
 	}
 
-/**
- * beeps and stops the Robot for a short moment for test purposes
- * @param milliseconds
- */
+	/**
+	 * beeps and stops the Robot for a short moment for test purposes
+	 * @param milliseconds
+	 */
 	public static void qBreak(int milliseconds){
 		Sound.beep();
 		nav.stopMotors();

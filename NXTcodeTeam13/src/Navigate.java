@@ -1,4 +1,3 @@
-import lejos.nxt.NXTRegulatedMotor;
 import lejos.robotics.RegulatedMotor;
 /**
  * The Complete set of methods that allow robot mobility at a low level of complexity
@@ -29,12 +28,12 @@ public class Navigate {
 		localizer  = new Localizer(this, robot);
 		setAccSp(robot.acc, robot.speed);
 	}
-/**
- * travels to a specific location
- * @param x coordinate
- * @param y coordinate
- * @param follow : whether to implement wall follower or not going to the location
- */
+	/**
+	 * travels to a specific location
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @param follow : whether to implement wall follower or not going to the location
+	 */
 	public void travelTo(double x, double y,boolean follow) {
 
 		odo.correctionOn();
@@ -63,6 +62,11 @@ public class Navigate {
 				if (distToDest() > store) { pointToDest() ; }		// check if heading away from destination and correct angle(if no obstacle)
 			}
 			// if obstacle implement wall follower
+			/*
+			 * ========================================
+			 *	CHECK SYNC IN IF STATEMENT BELOW
+			 * ======================================== 
+			 */
 			if (follow && distToDest() > 1 && odo.getFrontSensorDist() < robot.minFrontWallDist) { 
 				rotateClockwise(90);
 				updateDestAngle();
@@ -158,7 +162,7 @@ public class Navigate {
 	private static int convertDistance(double radius, double distance) {
 		return (int) ((180.0 * distance) / (Math.PI * radius));
 	}
-	
+
 	private static int convertAngle(double radius, double width, double angle) {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);
 	}
@@ -184,7 +188,7 @@ public class Navigate {
 		rightMotor.rotate(-convertAngle(robot.rightWradius, robot.wwDist, angle), false);
 	}
 
-	
+
 	/**
 	 * calculate the difference in angle between the current odometer's Theta's and a designated angle
 	 * the angle is oriented correctly and given in range [-180; +180]
@@ -200,7 +204,6 @@ public class Navigate {
 		if (destAngle > 180) {
 			destAngle -= 360;
 		}
-
 		double deltaAngle = theta - destAngle;
 
 		if (deltaAngle > 180) {

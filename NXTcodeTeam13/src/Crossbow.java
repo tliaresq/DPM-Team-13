@@ -11,8 +11,8 @@ public class Crossbow {
 	public Crossbow(Robot r){
 		motor = r.armMotor;	
 	}
-	
-	
+
+
 	/**
 	 * Makes the motor rotate "n" revolutions to shoot "n" times
 	 * @param n
@@ -22,8 +22,8 @@ public class Crossbow {
 			shoot();
 		}
 	}
-	
-	
+
+
 	/**
 	 * Makes the motor rotate "1" revolutions to shoot "1" times
 	 */
@@ -31,7 +31,7 @@ public class Crossbow {
 		motor.setAcceleration(6000);
 		motor.setSpeed(150);
 		motor.rotate(360);
-	
+
 	}
 
 }

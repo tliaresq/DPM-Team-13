@@ -9,7 +9,6 @@ public class OdoCorrection extends Thread{
 	private boolean stop;
 	private double[] lines = {0,30,60,90,120,150,180,210,240,270,300};
 
-
 	public OdoCorrection( Odometer o){
 		stop = true;
 		odo = o;
@@ -19,9 +18,7 @@ public class OdoCorrection extends Thread{
 		stop = true;
 		while(true){
 			if(stop){
-				
 				try {Thread.sleep(10);} catch (Exception e) {}
-
 			}
 			else{
 				crossLine();
@@ -29,26 +26,25 @@ public class OdoCorrection extends Thread{
 			}
 		}
 	}
+	/**
+	 * does nothing untill line is crossed
+	 */
 	private void crossLine() {
-		double sensorColor = 500;
+		double sensorColor = 600;
 		while (sensorColor >  odo.robot.black ){
 			try { Thread.sleep(10); } catch (Exception e) {}
 		}
-
-
 	}
 	/**
 	 * 
 	 * once a line is crossed at a given point, checks what different lines it could be
 	 * if that point is far from any line intersection and close enough to a line it will update x and y accordingly 
 	 */
-	public void update(){
+	private void update(){
 		double dy = odo.robot.lsDist*Math.sin(odo.getTheta()*3.14159/180);
 		double dx = odo.robot.lsDist*Math.cos(odo.getTheta()*3.14159/180);
-
 		double xDetect = odo.getX()+dx;
 		double yDetect = odo.getY()+dy;
-
 		double yCrossed = -100;
 		double xCrossed = -100;
 
@@ -56,7 +52,6 @@ public class OdoCorrection extends Thread{
 			if(inBand(yDetect, lines[i])){yCrossed = lines[i];}
 			if(inBand(xDetect, lines[i])){xCrossed = lines[i];}
 		}
-
 		if(xCrossed== -100 && yCrossed == -100){
 			//Error 
 			// or the odometer is too off for apropriate correction
@@ -65,18 +60,15 @@ public class OdoCorrection extends Thread{
 		if(xCrossed!= -100 && yCrossed != -100){
 			// the robot is close to a line intersection
 			// we will not take the risk to update since we don't know wether to update x or y;
-
 		}
 		if(xCrossed!= -100 && yCrossed == -100){
 			odo.setX(xCrossed-dx);
 			Sound.beep();
 		}
 		if(xCrossed== -100 && yCrossed != -100){
-
 			odo.setY(yCrossed - dy);
 			Sound.beep();
 		}
-
 	}
 
 
@@ -86,7 +78,7 @@ public class OdoCorrection extends Thread{
 	 * @param ref
 	 * @return
 	 */
-	public boolean inBand(double d, double ref){
+	private boolean inBand(double d, double ref){
 		if(d < ref+odo.robot.odoCorBand && d > ref-odo.robot.odoCorBand ){
 			return true;
 		}
@@ -94,9 +86,9 @@ public class OdoCorrection extends Thread{
 			return false;
 		}
 	}
-/**
- * restarts the odometry correction
- */
+	/**
+	 * restarts the odometry correction
+	 */
 	public void restart(){
 		stop = false;
 		odo.lsC.restartLS();

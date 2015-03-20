@@ -6,7 +6,6 @@ import lejos.nxt.Button;
  *
  */
 public class Exit extends Thread {
-	
 	public void run() {
 		//if escape button pressed exit all running program;
 		while (true) {

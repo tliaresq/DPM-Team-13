@@ -41,6 +41,10 @@ public class Main{
 	static Crossbow crossbow;
 	static Tests test = new Tests();
 
+	
+	
+	
+	
 /**
  * Quick Access to Test Or Demo
  */
@@ -48,10 +52,13 @@ public class Main{
 		//input your string corresponding to the test you want to work on
 		test.runOption("localize");
 		//
-		
 		//test.runOption("360");
 	}
 
+	
+	
+	
+	
 /**
  * Quick Access to Test Or Demo
  */
@@ -59,6 +66,22 @@ public class Main{
 		//input your string corresponding to the test you want to work on
 		test.runOption("follow test");
 	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -128,7 +151,6 @@ public class Main{
 		}		
 	}
 
-	
 /**
  * prints main menu (initial display)
  */

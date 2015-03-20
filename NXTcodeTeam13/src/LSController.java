@@ -43,7 +43,6 @@ public class LSController extends Thread {
 	 */
 	private int filter(int[] c) {
 		int[] temp = new int[c.length];
-		
 		//copying the array not to affect the oder of C
 		for(int i = 0; i<c.length; i++ ){
 			temp[i] = c[i];

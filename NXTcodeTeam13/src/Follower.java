@@ -1,4 +1,3 @@
-import lejos.nxt.Sound;
 
 /**
  * Implements Obstacle avoidance
@@ -15,17 +14,16 @@ public class Follower {
 	private double closeHigh ;
 	private double leftDistance;
 
-
 	public Follower(Robot r, Navigate n){
 		robot = r;
 		nav = n;
 		odo = robot.odo;
 	}
-
-
+	/**
+	 * This method follows a wall on the left of a robot
+	 * @param withDest if true, the method will check whether the robot is pointing towards the navigation's destination and stop the wall follower if it is the case
+	 */
 	public void follow(boolean withDest) {
-
-		
 		robot.odo.usCleft.restartUS();
 		if(withDest){
 			delta = nav.deltaAngle(nav.finalDestAngle);
@@ -42,15 +40,14 @@ public class Follower {
 			if (odo.getFrontSensorDist()<robot.minFrontWallDist){
 				nav.rotateClockwise(90);
 			}
+
 			//too left
 			else if (leftDistance < robot.followerSideDist) {
 				nav.goForth();
 				nav.leftMotor.setSpeed((int) (robot.speed*closeHigh));
 				nav.rightMotor.setSpeed((int)(robot.speed/closeHigh));
 			} 
-			
-			
-			
+
 			//too right
 			else if (leftDistance > robot.followerSideDist && leftDistance <= robot.noWallDistance) {
 				nav.goForth();
@@ -60,25 +57,21 @@ public class Follower {
 
 			// no more wall
 			else if (noWall(robot.noWallDistance)){
-				Sound.beep();
-
-					nav.rightMotor.setSpeed((int) (robot.speed*2.5));
-					nav.leftMotor.setSpeed((int)robot.speed);
-				
-				//nav.setAccSp(robot.wallFollowAcc,robot.speed);
+				nav.rightMotor.setSpeed((int) (robot.speed*2.5));
+				nav.leftMotor.setSpeed((int)robot.speed);
 			}
-			
+
 			nav.updateDestAngle();
 			delta = nav.deltaAngle(nav.finalDestAngle);
 		}
 		robot.odo.usCleft.stopUS();
 	}
-/**
- * Makes sure there is no wall at  distance by adding to the filter
- * We can't afford to mess up thinking there is n wall when there is one 
- * @param dist
- * @return
- */
+	/**
+	 * Makes sure there is no wall at  distance by adding to the filter
+	 * We can't afford to mess up thinking there is n wall when there is one 
+	 * @param dist
+	 * @return
+	 */
 	private boolean noWall(double dist){
 		int counter = 0;
 		for (int i = 0; i<3; i++){
@@ -93,38 +86,7 @@ public class Follower {
 		else {
 			return false;
 		}
-		
+
 	}
 
-
-	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	public void followUntillWall(){
-
-		leftDistance = odo.getLeftSensorDist();
-		nav.rotateClockwise(90);
-		nav.setAccSp(8000,robot.speed);
-		// follow obstacle while theta isn't within 5 degrees of the angle needed to reach destination
-		while (odo.getFrontSensorDist()>robot.minFrontWallDist) {
-			try {Thread.sleep(20);} catch (Exception e) {}
-			farHigh = (Math.pow((odo.getLeftSensorDist()/robot.minFrontWallDist),1));
-			closeHigh =(Math.pow((robot.minFrontWallDist/odo.getLeftSensorDist()),2));
-
-			//too left
-			if (leftDistance < robot.minFrontWallDist) {
-				nav.goForth();
-				nav.leftMotor.setSpeed((int) (robot.speed*closeHigh));
-				nav.rightMotor.setSpeed((int)robot.speed);
-			} 
-
-			//too right
-			else if (leftDistance > robot.minFrontWallDist/2) {
-				nav.goForth();
-				nav.rightMotor.setSpeed((int) (robot.speed*farHigh));
-				nav.leftMotor.setSpeed((int)robot.speed);
-			} 
-			leftDistance = odo.getLeftSensorDist();
-		}
-		nav.stopMotors();
-	}
 }

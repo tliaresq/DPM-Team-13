@@ -10,7 +10,7 @@ public class USController extends Thread {
 	private int distance;
 	private boolean stop;
 	private int[] distances;
-	
+
 
 	public USController( UltrasonicSensor us, int filterSize) {
 		usSensor = us;
@@ -22,7 +22,6 @@ public class USController extends Thread {
 	public void run() {
 		stop = true;
 		while (true) {
-			
 			if (stop) {
 				distance = -1;
 				try {Thread.sleep(10);} catch (Exception e) {}
@@ -33,8 +32,8 @@ public class USController extends Thread {
 				}
 				distances[0] = usSensor.getDistance();
 				distance = filter(distances);
-//				distance =   usSensor.getDistance();
-			try {Thread.sleep(10);} catch (Exception e) {}
+				//				distance =   usSensor.getDistance();
+				try {Thread.sleep(10);} catch (Exception e) {}
 			}
 		}
 	}
@@ -45,7 +44,7 @@ public class USController extends Thread {
 	 */
 	private int filter(int[] c) {
 		int[] temp = new int[c.length];
-		
+
 		//copying the array not to affect the oder of C
 		for(int i = 0; i<c.length; i++ ){
 			temp[i] = c[i];

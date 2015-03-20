@@ -13,43 +13,70 @@ import lejos.robotics.RegulatedMotor;
  *
  */
 public class Robot {
-	//public NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.B, armMotor = Motor.C;
 	public RegulatedMotor leftMotor =  MirrorMotor.invertMotor(Motor.A);
 	public RegulatedMotor rightMotor = MirrorMotor.invertMotor(Motor.B);
 	public NXTRegulatedMotor armMotor = Motor.C;
-	
 	public UltrasonicSensor usLeftSensor = new UltrasonicSensor(SensorPort.S1), usFrontSensor = new UltrasonicSensor(SensorPort.S2),usRightSensor = new UltrasonicSensor(SensorPort.S3);;
-
-	
 	public ColorSensor cs1 = new ColorSensor(SensorPort.S4), cs2 = new ColorSensor(SensorPort.S4);
-
+	public Odometer odo;			// Handles all data relative to location
+	/*
+	 * ===============================================
+	 * 				HARDWARE
+	 *  ==============================================
+	 */
 	public double wwDist = 14.5;// less turns less & more turns more
 	public double leftWradius = 2.07;//less travels more
 	public double rightWradius = leftWradius;
-	
 	public double lsDist = 9;
-	public double black = 500; 			// raw output of a black line being detected.
-	
+
+	/*
+	 * ===============================================
+	 * 				WALL FOLLOWER
+	 *  ==============================================
+	 */
 	public double wallFollowAcc = 6000;
 	public double noWallDistance = 40;
 	public double minFrontWallDist = 11; 		// distance the robot has to be from a wall when following it.
 	public double followerSideDist = 20;
+
+	/*
+	 * ===============================================
+	 * 				ODOMETRY CORRECTION
+	 *  ==============================================
+	 */
 	public double odoCorBand = 6; 		//radius of the error accepted to correct the odometer
-	public double findWallDist = 40;	//
+
+
+	/*
+	 * ===============================================
+	 * 				TARGETTING
+	 *  ==============================================
+	 */
 	public double shootAngle1 = 90;
 	public double shootAngle2 = 0;
 
+	/*
+	 * ===============================================
+	 * 				NAVIGATION
+	 *  ==============================================
+	 */
 	public double acc = 300;			// default acceleration
 	public double speed = 200;			// default speed
-	
+	/*
+	 * ===============================================
+	 * 				FILTERS
+	 *  ==============================================
+	 */
 	public int usFilterSize = 20;  		// how important is the filter for sensor values
 	public int lsFilterSize = 10;
-	public Odometer odo;			// Handles all data relative to location
-	
+	public double black = 500; 			// this value needs to be in between the raw output of black and wood of the color sensor
+
+
+
 
 	public Robot (){
 		//leftMotor = MirrorMotor.invertMotor(Motor.A);
-		
+
 		odo = new Odometer(this);
 	}
 
