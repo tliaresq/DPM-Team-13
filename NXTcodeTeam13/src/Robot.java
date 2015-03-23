@@ -24,9 +24,9 @@ public class Robot {
 	 * 				HARDWARE
 	 *  ==============================================
 	 */
-	public double wwDist = 14.5;// less turns less & more turns more
-	public double leftWradius = 2.07;//less travels more
-	public double rightWradius = leftWradius;
+	public double wwDist = 15.40;// less turns less & more turns more
+	public double leftWradius = 2.09;//less travels more
+	public double rightWradius = 2.07;
 	public double lsDist = 9;
 
 	/*
@@ -68,7 +68,7 @@ public class Robot {
 	 *  ==============================================
 	 */
 	public int usFilterSize = 20;  		// how important is the filter for sensor values
-	public int lsFilterSize = 10;
+	public int lsFilterSize = 5;
 	public double black = 500; 			// this value needs to be in between the raw output of black and wood of the color sensor
 
 

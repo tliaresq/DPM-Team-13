@@ -7,7 +7,7 @@ import lejos.nxt.Sound;
 public class OdoCorrection extends Thread{
 	private Odometer odo;
 	private boolean stop;
-	private double[] lines = {0,30,60,90,120,150,180,210,240,270,300};
+	private double[] lines = {0,30.48,60.96,91.44,121.92,152.40,182.88,213.36,243.84,274.32,304.8,335.28,365.76,396.24,426.72,457.20,487.68};
 
 	public OdoCorrection( Odometer o){
 		stop = true;
