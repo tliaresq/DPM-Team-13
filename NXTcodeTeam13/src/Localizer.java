@@ -1,3 +1,5 @@
+import lejos.nxt.Sound;
+
 
 
 /**
@@ -26,31 +28,41 @@ public class Localizer {
 		double fd = odo.getFrontSensorDist();
 		double ld = odo.getLeftSensorDist();
 		double rd = odo.getRightSensorDist();
-		while(!(Math.abs(fd-rd)<5 && rd<15 && ld< 15)){
+		try {Thread.sleep(20);} catch (Exception e) {}
+		while(!(Math.abs(ld-rd)<8 && rd<15 && ld< 15 && (fd>ld||fd>rd))){
 			nav.spinClockWise();
 			while(!(rd<60 && ld<60 &&(fd>ld||fd>rd))){
 				try {Thread.sleep(20);} catch (Exception e) {}
 				fd = odo.getFrontSensorDist();
 				ld = odo.getLeftSensorDist();
 				rd = odo.getRightSensorDist();
+				
 			}
 			nav.stopMotors();
 			odo.setTheta(135);
 			odo.setX(0);
 			odo.setY(0);
-			nav.pointTo(90+Math.atan((ld)/(rd)));
+			nav.pointTo(90+Math.toDegrees(Math.atan((ld)/(rd))));
 			nav.goForth();
+			ld = odo.getLeftSensorDist();
+			rd = odo.getRightSensorDist();
 			fd = odo.getFrontSensorDist();
-			while(fd>10){
+			while(!(rd<robot.followerSideDist && ld< robot.followerSideDist || fd<8)){
 				try {Thread.sleep(20);} catch (Exception e) {}
+				ld = odo.getLeftSensorDist();
+				rd = odo.getRightSensorDist();
 				fd = odo.getFrontSensorDist();
 			}
 			nav.stopMotors();
 			fd = odo.getFrontSensorDist();
 			ld = odo.getLeftSensorDist();
 			rd = odo.getRightSensorDist();
+			Sound.beep();
 		}
+		qBreak(1000);
+		Sound.beep();
 		nav.rotateClockwise(135);
+		
 		lineLocalize();
 	}
 	/**
@@ -128,9 +140,9 @@ public class Localizer {
 	/**
 	 * stops the Robot for a short momment for test purpouses and so on 
 	 */
-	private void qBreak(){
+	private void qBreak(int time){
 		nav.stopMotors();
-		try {Thread.sleep(500);} catch (Exception e) {}
+		try {Thread.sleep(time);} catch (Exception e) {}
 		nav.setAccSp(robot.acc, robot.speed);
 	}
 }

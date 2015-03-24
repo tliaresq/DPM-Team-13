@@ -34,7 +34,8 @@ public class Robot {
 	 * 				WALL FOLLOWER
 	 *  ==============================================
 	 */
-	public double wallFollowAcc = 6000;
+	public double wallFollowAcc = 2000;
+	public double wallFollowSpeed = 150;
 	public double noWallDistance = 40;
 	public double minFrontWallDist = 11; 		// distance the robot has to be from a wall when following it.
 	public double followerSideDist = 20;
@@ -69,7 +70,7 @@ public class Robot {
 	 */
 	public int usFilterSize = 20;  		// how important is the filter for sensor values
 	public int lsFilterSize = 5;
-	public double black = 500; 			// this value needs to be in between the raw output of black and wood of the color sensor
+	public double black = 460; 			// this value needs to be in between the raw output of black and wood of the color sensor
 
 
 

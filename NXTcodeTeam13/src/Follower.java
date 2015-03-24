@@ -28,7 +28,7 @@ public class Follower {
 		if(withDest){
 			delta = nav.deltaAngle(nav.finalDestAngle);
 		}
-		nav.setAccSp(robot.wallFollowAcc,robot.speed);
+		nav.setAccSp(robot.wallFollowAcc,robot.wallFollowSpeed);
 		// follow obstacle while theta isn't within 5 degrees of the angle needed to reach destination
 		while (Math.abs(delta)>5 || !withDest) {
 			leftDistance = odo.getLeftSensorDist();
@@ -65,6 +65,7 @@ public class Follower {
 			delta = nav.deltaAngle(nav.finalDestAngle);
 		}
 		robot.odo.usCleft.stopUS();
+		nav.setAccSp(robot.acc, robot.speed);
 	}
 	/**
 	 * Makes sure there is no wall at  distance by adding to the filter
