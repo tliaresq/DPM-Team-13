@@ -98,10 +98,7 @@ public class Localizer {
 	 * @return
 	 */
 	private void crossLine() {
-
-		double black = odo.robot.black;
-		while (odo.getSensorColor()> black ){
-
+		while (odo.getLSState()==false){
 			try { Thread.sleep(10); } catch (Exception e) {}
 		}
 	}

@@ -70,7 +70,7 @@ public class Robot {
 	 */
 	public int usFilterSize = 20;  		// how important is the filter for sensor values
 	public int lsFilterSize = 5;
-	public double black = 460; 			// this value needs to be in between the raw output of black and wood of the color sensor
+	 			// this value needs to be in between the raw output of black and wood of the color sensor
 
 
 

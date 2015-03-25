@@ -31,9 +31,7 @@ public class OdoCorrection extends Thread{
 	 * does nothing untill line is crossed
 	 */
 	private void crossLine() {
-		double sensorColor = 600;
-		while (sensorColor >  odo.robot.black ){
-			sensorColor = odo.getSensorColor();
+		while (odo.getLSState()==false){
 			try { Thread.sleep(10); } catch (Exception e) {}
 		}
 	}
@@ -103,6 +101,4 @@ public class OdoCorrection extends Thread{
 		stop = true;
 		odo.lsC.stopLS();
 	}
-
-
 }

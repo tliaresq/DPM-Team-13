@@ -7,13 +7,18 @@ import lejos.nxt.ColorSensor;
 public class LSController extends Thread {
 	
 	private ColorSensor colorSensor;
+	private int prevColor;
 	private int color;
+	private boolean line;
 	private boolean stop;
 	private int[] colors;
+	
+	private final int lineDer = -20;
 
 	public LSController(ColorSensor cs, int filterSize) {
 		colorSensor = cs;
-		color = -1;
+		prevColor = 0;
+		line = false;
 		stop = true;
 		colors = new int[filterSize];
 	}
@@ -22,7 +27,7 @@ public class LSController extends Thread {
 		stop = true;
 		while (true) {
 			if (stop) {	
-				color = -1;
+				line = false;
 				try {Thread.sleep(10);} catch (Exception e) {}
 			}
 			else{
@@ -30,7 +35,7 @@ public class LSController extends Thread {
 					colors[i+1]  = colors[i];
 				}
 				colors[0] = colorSensor.getRawLightValue();
-				color=filter(colors);
+				filter(colors);
 				try {Thread.sleep(10);} catch (Exception e) {}
 			}
 		}
@@ -41,7 +46,7 @@ public class LSController extends Thread {
 	 * @param c Number of most recent values to take the mean from
 	 * @return
 	 */
-	private int filter(int[] c) {
+	private void filter(int[] c) {
 		int[] temp = new int[c.length];
 		//copying the array not to affect the oder of C
 		for(int i = 0; i<c.length; i++ ){
@@ -60,7 +65,20 @@ public class LSController extends Thread {
 			}
 			if(count == 0){loop = false;}
 		}
-		return temp[(temp.length/2)+1];
+		if(prevColor==0)
+		{
+			prevColor=temp[(temp.length/2)+1];
+		}
+		prevColor = color;
+		color = temp[(temp.length/2)+1];
+		if(color-prevColor<lineDer)
+		{
+			line = true;
+		}
+		else
+		{
+			line = false;
+		}
 	}
 	/**
 	 * stops the light sensor
@@ -70,7 +88,7 @@ public class LSController extends Thread {
 	public void stopLS() {
 		stop = true;
 		colorSensor.setFloodlight(false);
-		color = -1;
+		line = false;
 	}
 	/**
 	 * restarts sensor
@@ -80,8 +98,8 @@ public class LSController extends Thread {
 		colorSensor.setFloodlight(0);
 	}
 	
-	public int getColor() {
-		return color;
+	public boolean getLS() {
+		return line;
 	}
 
 
