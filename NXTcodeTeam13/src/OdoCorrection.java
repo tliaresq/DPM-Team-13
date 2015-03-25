@@ -22,6 +22,7 @@ public class OdoCorrection extends Thread{
 			}
 			else{
 				crossLine();
+				//found a line
 				update();
 			}
 		}
@@ -32,6 +33,7 @@ public class OdoCorrection extends Thread{
 	private void crossLine() {
 		double sensorColor = 600;
 		while (sensorColor >  odo.robot.black ){
+			sensorColor = odo.getSensorColor();
 			try { Thread.sleep(10); } catch (Exception e) {}
 		}
 	}

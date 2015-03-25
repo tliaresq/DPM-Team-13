@@ -29,7 +29,7 @@ public class Localizer {
 		double ld = odo.getLeftSensorDist();
 		double rd = odo.getRightSensorDist();
 		try {Thread.sleep(20);} catch (Exception e) {}
-		while(!(Math.abs(ld-rd)< 5 && rd<15 && ld< 15 && (fd>ld||fd>rd))){
+		while(!(Math.abs(ld-rd)< 4 && rd<15 && ld< 15 && (fd>ld||fd>rd))){
 			nav.spinClockWise();
 			while(!(rd<60 && ld<60 &&(fd>ld||fd>rd))){
 				try {Thread.sleep(20);} catch (Exception e) {}
@@ -47,7 +47,7 @@ public class Localizer {
 			ld = odo.getLeftSensorDist();
 			rd = odo.getRightSensorDist();
 			fd = odo.getFrontSensorDist();
-			while(!(rd<robot.followerSideDist && ld< robot.followerSideDist || fd< 9)){
+			while(fd< 80 && !(rd<robot.followerSideDist || ld< robot.followerSideDist || fd< 5)){
 				try {Thread.sleep(20);} catch (Exception e) {}
 				ld = odo.getLeftSensorDist();
 				rd = odo.getRightSensorDist();
@@ -59,6 +59,9 @@ public class Localizer {
 			rd = odo.getRightSensorDist();
 			Sound.beep();
 		}
+		odo.usCleft.stopUS();
+		odo.usCright.stopUS();
+		odo.usCfront.stopUS();
 		qBreak(1000);
 		Sound.beep();
 		nav.rotateClockwise(135);
@@ -69,9 +72,10 @@ public class Localizer {
 	 * Last step of localization.
 	 */
 	public void lineLocalize() {
+		nav.setAccSp(9000, 100);
 		odo.lsC.restartLS();;
 		try {Thread.sleep(1000);} catch (Exception e) {}
-		nav.setAccSp(robot.acc, robot.speed);
+		
 		nav.goForth();
 		crossLine();
 		nav.travelDist(robot.lsDist);
@@ -86,7 +90,8 @@ public class Localizer {
 		crossLine();
 		nav.travelDist(robot.lsDist);
 		odo.setX(0);
-		odo.lsC.restartLS();;
+		odo.lsC.stopLS();;
+		nav.setAccSp(robot.acc, robot.speed);
 	}
 	/**
 	 * Keeps the thread running until a line is detected

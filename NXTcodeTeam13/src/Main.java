@@ -64,7 +64,7 @@ public class Main{
  */
 	public static void mainLeft(){
 		//input your string corresponding to the test you want to work on
-		test.runOption("travel 60");
+		test.runOption("travel 61");
 	}
 
 	
