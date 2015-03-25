@@ -11,7 +11,7 @@ public class Tests extends Main {
 	public void runOption(String option){
 		switch (option){
 		case "360": do360();break;
-		case "travel 60": travelDist(61);
+		case "travel 61": travelDist(61);
 		case "USfront test": usTest(); break;
 		case "LS test":lsTest();break;
 		case "odoCorrect test":odoCorrectTest();break;
@@ -53,16 +53,16 @@ public class Tests extends Main {
 	public void do360(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.rotateClockwise(3600);
-		nav.pointTo(90);
+		nav.rotateClockwise(360);
+		//nav.pointTo(90);
 	}
 	public void travelDist(int dist){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		nav.travelDist(dist);
-		nav.rotateClockwise(180);
-		nav.travelDist(dist);
-		nav.rotateClockwise(180);
+//		nav.rotateClockwise(180);
+//		nav.travelDist(dist);
+//		nav.rotateClockwise(180);
 	}
 	public void travelToTest(int x ,int y){
 		robot.odo.start();

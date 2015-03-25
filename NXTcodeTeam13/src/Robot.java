@@ -26,7 +26,7 @@ public class Robot {
 	 */
 	public double wwDist = 15.4; // less turns less & more turns more
 	public double leftWradius = 2.09;//less travels more  
-	public double rightWradius = 2.09;    
+	public double rightWradius = leftWradius;    
 	public double lsDist = 9;
 
 	/*
@@ -61,8 +61,8 @@ public class Robot {
 	 * 				NAVIGATION
 	 *  ==============================================
 	 */
-	public double acc = 300;			// default acceleration
-	public double speed = 200;			// default speed
+	public double acc = 500;			// default acceleration
+	public double speed = 300;			// default speed
 	/*
 	 * ===============================================
 	 * 				FILTERS

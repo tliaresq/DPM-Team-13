@@ -22,6 +22,7 @@ public class OdoCorrection extends Thread{
 			}
 			else{
 				crossLine();
+				//found a line
 				update();
 			}
 		}
