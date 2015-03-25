@@ -24,9 +24,9 @@ public class Robot {
 	 * 				HARDWARE
 	 *  ==============================================
 	 */
-	public double wwDist = 15.40;// less turns less & more turns more
-	public double leftWradius = 2.09;//less travels more
-	public double rightWradius = 2.07;
+	public double wwDist = 15.4; // less turns less & more turns more
+	public double leftWradius = 2.09;//less travels more  
+	public double rightWradius = 2.09;    
 	public double lsDist = 9;
 
 	/*

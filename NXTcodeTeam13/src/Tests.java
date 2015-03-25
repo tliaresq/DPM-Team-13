@@ -54,6 +54,7 @@ public class Tests extends Main {
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		nav.rotateClockwise(3600);
+		nav.pointTo(90);
 	}
 	public void travelDist(int dist){
 		robot.odo.start();

@@ -29,7 +29,7 @@ public class Localizer {
 		double ld = odo.getLeftSensorDist();
 		double rd = odo.getRightSensorDist();
 		try {Thread.sleep(20);} catch (Exception e) {}
-		while(!(Math.abs(ld-rd)<8 && rd<15 && ld< 15 && (fd>ld||fd>rd))){
+		while(!(Math.abs(ld-rd)< 5 && rd<15 && ld< 15 && (fd>ld||fd>rd))){
 			nav.spinClockWise();
 			while(!(rd<60 && ld<60 &&(fd>ld||fd>rd))){
 				try {Thread.sleep(20);} catch (Exception e) {}
@@ -47,7 +47,7 @@ public class Localizer {
 			ld = odo.getLeftSensorDist();
 			rd = odo.getRightSensorDist();
 			fd = odo.getFrontSensorDist();
-			while(!(rd<robot.followerSideDist && ld< robot.followerSideDist || fd<8)){
+			while(!(rd<robot.followerSideDist && ld< robot.followerSideDist || fd< 9)){
 				try {Thread.sleep(20);} catch (Exception e) {}
 				ld = odo.getLeftSensorDist();
 				rd = odo.getRightSensorDist();
