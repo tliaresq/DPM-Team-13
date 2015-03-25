@@ -12,7 +12,8 @@ public class Odometer extends Thread {
 	private Object lock;
 	private double x, y, theta;
 	private int nowTachoL, nowTachoR, lastTachoL, lastTachoR;
-	private int sensorLeftDist, sensorRightDist, sensorFrontDist, sensorColor;
+	private int sensorLeftDist, sensorRightDist, sensorFrontDist;
+	private boolean isLine;
 
 
 	private OdometryDisplay odometryDisplay = new OdometryDisplay(this); // displays all odometer data
@@ -58,7 +59,7 @@ public class Odometer extends Thread {
 				sensorLeftDist = usCleft.sensorDist();
 				sensorFrontDist = usCfront.sensorDist();
 				sensorRightDist  = usCright.sensorDist();
-				sensorColor = lsC.getColor();
+				isLine = lsC.getLS();
 				nowTachoL = (robot.leftMotor.getTachoCount());
 				nowTachoR = (robot.rightMotor.getTachoCount());
 				// getting distances traveled by the left and right wheel respectively
@@ -155,10 +156,10 @@ public class Odometer extends Thread {
 		}
 		return result;
 	}
-	public double getSensorColor() {
-		double result;
+	public boolean getLSState() {
+		boolean result;
 		synchronized (lock) {
-			result = sensorColor;
+			result = isLine;
 		}
 		return result;
 	}
