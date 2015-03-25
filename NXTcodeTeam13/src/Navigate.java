@@ -117,8 +117,9 @@ public class Navigate {
 	 * @param distance
 	 */
 	public void travelDist(double distance) {
-		leftMotor.rotate(convertDistance(robot.leftWradius, distance), true);
-		rightMotor.rotate(convertDistance(robot.rightWradius, distance), false);
+		rightMotor.rotate(convertDistance(robot.rightWradius, distance), true);
+
+		leftMotor.rotate(convertDistance(robot.leftWradius, distance), false);
 
 	}
 	/**

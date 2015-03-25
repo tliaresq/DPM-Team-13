@@ -11,12 +11,12 @@ public class Tests extends Main {
 	public void runOption(String option){
 		switch (option){
 		case "360": do360();break;
-		case "travel 61": travelDist(61);
+		case "travel 61": travelDist(91);
 		case "USfront test": usTest(); break;
 		case "LS test":lsTest();break;
 		case "odoCorrect test":odoCorrectTest();break;
 		case "shoot 999": shoot999();break;
-		case "travel to": travelToTest(60,0);break;
+		case "travel to": travelToTest(61,0);break;
 		case "localize": localize();break;
 		case "opt test": printMsg();
 		case "follow test": followerTest();break;
@@ -54,12 +54,14 @@ public class Tests extends Main {
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		nav.rotateClockwise(360);
+		nav.stopMotors();
 		//nav.pointTo(90);
 	}
 	public void travelDist(int dist){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		nav.travelDist(dist);
+		try {Thread.sleep(10000);} catch (Exception e) {}
 //		nav.rotateClockwise(180);
 //		nav.travelDist(dist);
 //		nav.rotateClockwise(180);

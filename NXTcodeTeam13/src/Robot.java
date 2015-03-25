@@ -13,9 +13,9 @@ import lejos.robotics.RegulatedMotor;
  *
  */
 public class Robot {
-	public RegulatedMotor leftMotor =  MirrorMotor.invertMotor(Motor.A);
-	public RegulatedMotor rightMotor = MirrorMotor.invertMotor(Motor.B);
-	public NXTRegulatedMotor armMotor = Motor.C;
+	public RegulatedMotor leftMotor =  MirrorMotor.invertMotor(Motor.B);
+	public RegulatedMotor rightMotor = MirrorMotor.invertMotor(Motor.C);
+	public NXTRegulatedMotor armMotor = Motor.A;
 	public UltrasonicSensor usLeftSensor = new UltrasonicSensor(SensorPort.S1), usFrontSensor = new UltrasonicSensor(SensorPort.S2),usRightSensor = new UltrasonicSensor(SensorPort.S3);;
 	public ColorSensor cs1 = new ColorSensor(SensorPort.S4), cs2 = new ColorSensor(SensorPort.S4);
 	public Odometer odo;			// Handles all data relative to location
@@ -26,7 +26,7 @@ public class Robot {
 	 */
 	public double wwDist = 15.4; // less turns less & more turns more
 	public double leftWradius = 2.09;//less travels more  
-	public double rightWradius = leftWradius;    
+	public double rightWradius = 2.09 ;    
 	public double lsDist = 9;
 
 	/*
@@ -61,8 +61,8 @@ public class Robot {
 	 * 				NAVIGATION
 	 *  ==============================================
 	 */
-	public double acc = 500;			// default acceleration
-	public double speed = 300;			// default speed
+	public double acc = 100;			// default acceleration
+	public double speed = 100;			// default speed
 	/*
 	 * ===============================================
 	 * 				FILTERS
