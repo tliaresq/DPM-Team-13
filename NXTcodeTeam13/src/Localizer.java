@@ -109,7 +109,7 @@ public class Localizer {
 	 */
 	public void lineLocalize(double x, double y) {
 		nav.setAccSp(9000, 100);
-		odo.lsC.restartLS();;
+		//odo.lsC.restartLS();;
 		try {Thread.sleep(100);} catch (Exception e) {}
 
 		nav.goForth();
@@ -120,13 +120,13 @@ public class Localizer {
 		crossLine();
 		odo.setTheta(180);
 		nav.rotateClockwise(90);
-		nav.travelDist(1);
+		nav.travelDist(2);
 		nav.rotateClockwise(90);
 		nav.goForth();
 		crossLine();
 		nav.travelDist(robot.lsDist);
 		odo.setX(x);
-		odo.lsC.stopLS();;
+		//odo.lsC.stopLS();;
 		nav.setAccSp(robot.acc, robot.speed);
 	}
 	

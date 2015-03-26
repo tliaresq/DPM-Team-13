@@ -1,5 +1,6 @@
 import lejos.nxt.ColorSensor;
 import lejos.nxt.Sound;
+import lejos.robotics.Color;
 
 /**
  * Manages All the information coming from a light sensor by filtering it and returning a filtered value. 
@@ -27,16 +28,16 @@ public class LSController extends Thread {
 	}
 
 	public void run() {
-		stop = true;
+	
 		int counter=0;
 		while (true) {
-			if (stop) {	
-				line = false;
+//			if(stop) {	
+//				line = false;
+//				try {Thread.sleep(30);} catch (Exception e) {}
+//			}
+//			else{
 				try {Thread.sleep(10);} catch (Exception e) {}
-			}
-			else{
-				try {Thread.sleep(10);} catch (Exception e) {}
-				if(colorSensor.getRawLightValue()<black){counter ++;}
+				if(colorSensor.getRawLightValue()<black && colorSensor.getFloodlight()==0){counter ++;}
 				else{
 					line = false;
 					counter = 0;
@@ -46,10 +47,10 @@ public class LSController extends Thread {
 					Sound.beep();
 					try {Thread.sleep(100);} catch (Exception e) {}
 				}
+//			}
 				
 				
 				
-			}
 		}
 	}
 	
@@ -84,7 +85,7 @@ public class LSController extends Thread {
 	 * Does not stop the thread from running
 	 * This is mainly to save battery
 	 */
-	public void stopLS() {
+	public void stopL() {
 		stop = true;
 		colorSensor.setFloodlight(false);
 		line = false;
@@ -94,7 +95,9 @@ public class LSController extends Thread {
 	 */
 	public void restartLS(){
 		stop = false;
+		colorSensor.setFloodlight(true);
 		colorSensor.setFloodlight(0);
+		
 	}
 	
 	public boolean getLS() {

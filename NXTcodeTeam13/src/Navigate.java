@@ -37,11 +37,10 @@ public class Navigate {
 	 */
 	public void travelTo(double x, double y,boolean follow) {
 		
-		odo.lsC.restartLS();
-		qBreak(100);
-		qBreak(5000);
+		//odo.lsC.restartLS();
+
 		odo.correction.restart();
-		qBreak(3000);
+		qBreak(50);
 		if (follow){ odo.usCfront.restartUS(); }
 		xDest = x;
 		yDest = y;
