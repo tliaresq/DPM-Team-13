@@ -1,0 +1,32 @@
+private double findCorrectLine(){
+		double[] linePos = new double[4];
+		for(int i=0 ; i< linePos.length; i++){
+			nav.spinCounterClockWise();
+			crossLine();
+			linePos[i] = odo.getTheta();
+			nav.rotateClockwise(-5);
+		}
+		nav.stopMotors();
+		if(Math.abs(linePos[0]-linePos[2])<3){
+			return linePos[0];
+		}
+		for(int i=0 ; i< linePos.length; i++){
+			linePos[i] +=360;
+		}
+		if (Math.abs(180-Math.abs(linePos[0]-linePos[2]))<3){
+			if (Math.abs(linePos[0]-linePos[1])>90 || Math.abs(linePos[0]-linePos[3])>90){
+				return linePos[0];
+			}
+			else{
+				return linePos[2];
+			}
+		}
+		else{
+			if (Math.abs(linePos[1]-linePos[0])>90 || Math.abs(linePos[1]-linePos[2])>90){
+				return linePos[1];
+			}
+			else{
+				return linePos[3];
+			}
+		}
+	}

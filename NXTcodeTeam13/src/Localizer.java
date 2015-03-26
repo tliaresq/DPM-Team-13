@@ -68,12 +68,15 @@ public class Localizer {
 //		Sound.beep();
 		nav.rotateClockwise(135);
 
-		lineLocalize();
+		lineLocalize(0,0);
 	}
+
 	/**
-	 * Last step of localization.
+	 * to work the robot needs to be pointing north
+	 * @param x	line directly east of the light sensor
+	 * @param y line directly north of the light sensor
 	 */
-	public void lineLocalize() {
+	public void lineLocalize(double x, double y) {
 		nav.setAccSp(9000, 100);
 		odo.lsC.restartLS();;
 		try {Thread.sleep(1000);} catch (Exception e) {}
@@ -81,7 +84,7 @@ public class Localizer {
 		nav.goForth();
 		crossLine();
 		nav.travelDist(robot.lsDist);
-		odo.setY(0);
+		odo.setY(y);
 		nav.spinCounterClockWise();
 		crossLine();
 		odo.setTheta(180);
@@ -91,10 +94,14 @@ public class Localizer {
 		nav.goForth();
 		crossLine();
 		nav.travelDist(robot.lsDist);
-		odo.setX(0);
+		odo.setX(x);
 		odo.lsC.stopLS();;
 		nav.setAccSp(robot.acc, robot.speed);
 	}
+	
+	
+	
+	
 	/**
 	 * Keeps the thread running until a line is detected
 	 * @return
@@ -104,43 +111,7 @@ public class Localizer {
 			try { Thread.sleep(10); } catch (Exception e) {}
 		}
 	}
-	/**
-	 * When placed on a line, the odometer rotates 360 which means the LS will cross 2 to 4 lines (4 if an intersection is in its radius)
-	 * the method then calculates which one to place the light sensor on to be sure to have the same line as the one the robot is centered on.
-	 * @return
-	 */
-	private double findCorrectLine(){
-		double[] linePos = new double[4];
-		for(int i=0 ; i< linePos.length; i++){
-			nav.spinCounterClockWise();
-			crossLine();
-			linePos[i] = odo.getTheta();
-			nav.rotateClockwise(-5);
-		}
-		nav.stopMotors();
-		if(Math.abs(linePos[0]-linePos[2])<3){
-			return linePos[0];
-		}
-		for(int i=0 ; i< linePos.length; i++){
-			linePos[i] +=360;
-		}
-		if (Math.abs(180-Math.abs(linePos[0]-linePos[2]))<3){
-			if (Math.abs(linePos[0]-linePos[1])>90 || Math.abs(linePos[0]-linePos[3])>90){
-				return linePos[0];
-			}
-			else{
-				return linePos[2];
-			}
-		}
-		else{
-			if (Math.abs(linePos[1]-linePos[0])>90 || Math.abs(linePos[1]-linePos[2])>90){
-				return linePos[1];
-			}
-			else{
-				return linePos[3];
-			}
-		}
-	}
+	
 
 	
 }

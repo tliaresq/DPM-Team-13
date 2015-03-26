@@ -138,7 +138,25 @@ public class Tests extends Main {
 	}
 
 	
-
+	public void demoMain(){
+		robot.odo.start();
+		try {Thread.sleep(100);} catch (Exception e) {}
+		nav.localizer.alphaLocalize();
+		nav.travelTo(176.88, 165.88, true);
+		nav.pointTo(90);
+		nav.localizer.lineLocalize(182.88, 182.88);
+		nav.travelTo(182.88, 182.88, false);
+		nav.pointTo(45);
+		nav.stopMotors();
+		nav.qBreak(300);
+		nav.qBreak(300);
+		nav.qBreak(300);
+		crossbow.shoot(8);
+		nav.qBreak(300);
+		nav.qBreak(300);
+		nav.qBreak(300);
+		nav.qBreak(30000);	
+	}
 
 
 }
