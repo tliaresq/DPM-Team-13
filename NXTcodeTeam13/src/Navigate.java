@@ -37,30 +37,29 @@ public class Navigate {
 	 */
 	public void travelTo(double x, double y,boolean follow) {
 
-		//odo.correctionOn();
+		odo.correctionOn();
+		qBreak(30);
 		if (follow){ odo.usCfront.restartUS(); }
 		xDest = x;
 		yDest = y;
-		setAccSp(9000,robot.speed);
+		setAccSp(robot.acc,robot.speed);
+		goForth();
 		double store = distToDest();
 		// sets nxt pointing towards destination
 		pointToDest();
 		// keep navigating as long as destination isn't reached
-		while (distToDest() >= 1) {
-			int i = 0;
+		while (distToDest() >= 3) {
 			//while no obstacle and not arrived at destination
-			while (distToDest() >= 1 &&(!follow ||  odo.getFrontSensorDist() >= robot.minFrontWallDist)) {
-				if(distToDest()<robot.odoCorBand){
-					odo.correctionOff();
-				}
-				if(distToDest()<robot.minFrontWallDist){
+			while (follow && odo.getFrontSensorDist() > robot.minFrontWallDist) {
+				if(distToDest()<robot.minFrontWallDist+1){
 					follow = false;
 					odo.usCfront.stopUS();
+					odo.correctionOff();
 				}
-				i++;
-				if (i % 5 == 0) { store = distToDest() ; } //stores the value of distance to destination
+				 store = distToDest() ; 
 				goForth();
-				if (distToDest() > store) { pointToDest() ;Sound.beep(); }		// check if heading away from destination and correct angle(if no obstacle)
+				try {Thread.sleep(300);} catch (Exception e) {}
+				if (distToDest() > store) { pointToDest();}		// check if heading away from destination and correct angle(if no obstacle)
 			}
 			// if obstacle implement wall follower
 			/*
@@ -68,16 +67,24 @@ public class Navigate {
 			 *	CHECK SYNC IN IF STATEMENT BELOW
 			 * ======================================== 
 			 */
-			if (follow && distToDest() > 1 && odo.getFrontSensorDist() < robot.minFrontWallDist) { 
+			if (follow && odo.getFrontSensorDist() < robot.minFrontWallDist) { 
 				rotateClockwise(90);
 				follower.follow(true) ;
 			}
-			setAccSp(9000,robot.speed);
+			if(deltaAngle(destAngle())>1){
+			 pointToDest();
+			 }
+			 goForth();
 		}
 		stopMotors();
-		setAccSp(robot.acc,robot.speed);
-		pointTo(90);
+		pointToDest();
+		travelDist(distToDest());
+		stopMotors();
+		pointTo(0);
 		// Arrived at  final destination;
+		stopMotors();
+		qBreak(300);
+		qBreak(300);
 		stopMotors();
 	}
 	/**
@@ -173,7 +180,7 @@ public class Navigate {
 	 */
 	public void pointTo(double destAngle) {
 		double angle = deltaAngle(destAngle);
-		rotateClockwise(angle);
+		rotateClockwise(-angle);
 	}
 
 
@@ -182,7 +189,7 @@ public class Navigate {
 	 */
 	public void pointToDest() {
 		double angle = deltaAngle(destAngle());
-		rotateClockwise(angle);
+		rotateClockwise(-angle);
 	}
 
 
@@ -201,7 +208,7 @@ public class Navigate {
 		if (destAngle > 180) {
 			destAngle -= 360;
 		}
-		double deltaAngle = theta - destAngle;
+		double deltaAngle = destAngle - theta;
 
 		if (deltaAngle > 180) {
 			deltaAngle -= 360;
@@ -215,8 +222,28 @@ public class Navigate {
 	 * updates the angle at which the destination is relative to the robot
 	 */
 	public double destAngle(){
-		double destAngle = Math.atan((yDest - odo.getY())/(xDest - odo.getX()));
+		double destAngle;
+		destAngle =Math.atan2(yDest - odo.getY(),xDest - odo.getX());
 		destAngle = Math.toDegrees(destAngle);
+//		destAngle = Math.atan2(yDest - odo.getY(), xDest - odo.getX()) ;
+//		if(xDest - odo.getX()>0){
+//		destAngle = Math.atan((yDest - odo.getY())/(xDest - odo.getX()));
+//		destAngle = 180 - Math.toDegrees(destAngle);
+//		}
+//		
+//		else{
+//			destAngle =  Math.atan((yDest - odo.getY())/(xDest - odo.getX()));
+//			destAngle =  - Math.toDegrees(destAngle);
+//		}
 		return destAngle;
+	}
+	/**
+	 * stops the Robot for a short moment for test purposes and so on 
+	 */
+	public void qBreak(int time){
+		Sound.beep();
+		stopMotors();
+		try {Thread.sleep(time);} catch (Exception e) {}
+		setAccSp(robot.acc, robot.speed);
 	}
 }

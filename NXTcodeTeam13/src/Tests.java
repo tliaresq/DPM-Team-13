@@ -16,7 +16,7 @@ public class Tests extends Main {
 		case "LS test":lsTest();break;
 		case "odoCorrect test":odoCorrectTest();break;
 		case "shoot 999": shoot999();break;
-		case "travel to": travelToTest(61,0);break;
+		case "travel to": travelToTest(61,61);break;
 		case "localize": localize();break;
 		case "opt test": printMsg();
 		case "follow test": followerTest();break;
@@ -69,7 +69,7 @@ public class Tests extends Main {
 	public void travelToTest(int x ,int y){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.travelTo(x, y, false);
+		nav.travelTo(x, y, true);
 	}
 	public void usTest(){
 		robot.odo.start();
@@ -77,11 +77,23 @@ public class Tests extends Main {
 		robot.odo.usCfront.restartUS();
 		robot.odo.usCleft.restartUS();
 		robot.odo.usCright.restartUS();
+		nav.qBreak(500);
+		robot.odo.usCfront.stopUS();
+		robot.odo.usCleft.stopUS();
+		robot.odo.usCright.stopUS();
+		nav.qBreak(500);
+		robot.odo.usCfront.restartUS();
+		robot.odo.usCleft.restartUS();
+		robot.odo.usCright.restartUS();
+		
 	}
 	public void lsTest(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		qBreak(2000);
+		robot.odo.lsC.restartLS();
+		nav.qBreak(500);
+		robot.odo.lsC.stopLS();
+		nav.qBreak(500);
 		robot.odo.lsC.restartLS();
 		try {Thread.sleep(300);} catch (Exception e) {}
 		Sound.beep();
@@ -90,8 +102,9 @@ public class Tests extends Main {
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		robot.odo.correctionOn();
-		nav.travelTo(-60, 180, false);
-		nav.travelTo(0, 0, false);
+		nav.travelTo(61, 61, true);
+		nav.qBreak(15000);
+		nav.travelTo(0, 0, true);
 	}
 	public void shoot999(){
 		crossbow.shoot(999);
@@ -124,16 +137,7 @@ public class Tests extends Main {
 		LCD.drawString("no such option", 0, 1);
 	}
 
-	/**
-	 * beeps and stops the Robot for a short moment for test purposes
-	 * @param milliseconds
-	 */
-	public static void qBreak(int milliseconds){
-		Sound.beep();
-		nav.stopMotors();
-		try {Thread.sleep(milliseconds);} catch (Exception e) {}
-		nav.setAccSp(robot.acc, robot.speed);
-	}
+	
 
 
 

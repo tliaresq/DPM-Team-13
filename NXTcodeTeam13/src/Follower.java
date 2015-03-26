@@ -9,7 +9,6 @@ public class Follower {
 	private Navigate nav;
 	private Robot robot;
 	private Odometer odo;
-	private double delta;
 	private double farHigh;
 	private double closeHigh ;
 	private double leftDistance;
@@ -26,11 +25,10 @@ public class Follower {
 	public void follow(boolean withDest) {
 		robot.odo.usCleft.restartUS();
 		if(withDest){
-			delta = nav.deltaAngle(nav.destAngle());
 		}
 		nav.setAccSp(robot.wallFollowAcc,robot.wallFollowSpeed);
 		// follow obstacle while theta isn't within 5 degrees of the angle needed to reach destination
-		while (Math.abs(delta)>5 || !withDest) {
+		while (Math.abs( nav.deltaAngle(nav.destAngle()))>4 || !withDest) {
 			leftDistance = odo.getLeftSensorDist();
 			try {Thread.sleep(15);} catch (Exception e) {}
 			farHigh = (Math.pow((odo.getLeftSensorDist()/robot.followerSideDist),1.4));
@@ -56,12 +54,12 @@ public class Follower {
 			} 
 
 			// no more wall
-			else if (noWall(robot.noWallDistance)){
-				nav.rightMotor.setSpeed((int) (robot.speed*2.5));
-				nav.leftMotor.setSpeed((int)robot.speed);
+			else if (robot.odo.getLeftSensorDist()>robot.noWallDistance){
+				nav.goForth();
+				nav.rightMotor.setSpeed((int) (robot.speed*1.5));
+				nav.leftMotor.setSpeed((int)(robot.speed*0.6));
 			}
 
-			delta = nav.deltaAngle(nav.destAngle());
 		}
 		robot.odo.usCleft.stopUS();
 		nav.setAccSp(robot.acc, robot.speed);
@@ -74,13 +72,13 @@ public class Follower {
 	 */
 	private boolean noWall(double dist){
 		int counter = 0;
-		for (int i = 0; i<3; i++){
-			try {Thread.sleep(15);} catch (Exception e) {}
+		for (int i = 0; i<2; i++){
+			//try {Thread.sleep(5);} catch (Exception e) {}
 			if(dist<odo.getLeftSensorDist()){
 				counter++;
 			}
 		}
-		if (counter > 2){ 
+		if (counter > 1){ 
 			return true;
 		}
 		else {

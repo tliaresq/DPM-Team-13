@@ -37,6 +37,7 @@ public class OdometryDisplay extends Thread {
 			LCD.drawString("Left: "+formattedDoubleToString(odometer.getLeftSensorDist(),2), 0, 4);
 			LCD.drawString("Right: "+formattedDoubleToString(odometer.getRightSensorDist(),2), 0, 5);
 			LCD.drawString("color: "+formattedBooleanToString(odometer.getLSState()), 0, 6);
+			LCD.drawString("color: "+formattedDoubleToString(odometer.lsC.colorSensor.getRawLightValue(),2), 0, 7);
 			
 			
 			// throttle the OdometryDisplay

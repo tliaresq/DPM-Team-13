@@ -8,14 +8,15 @@ import lejos.nxt.Sound;
  */
 public class LSController extends Thread {
 	
-	private ColorSensor colorSensor;
+	public ColorSensor colorSensor;
 	private int prevColor;
 	private int color;
 	private boolean line;
 	private boolean stop;
 	private int[] colors;
-	
-	private final int lineDer = -20;
+	private int black = 500;
+	//private final int lineDer = -20;
+	private int fSize;
 
 	public LSController(ColorSensor cs, int filterSize) {
 		colorSensor = cs;
@@ -23,22 +24,31 @@ public class LSController extends Thread {
 		line = false;
 		stop = true;
 		colors = new int[filterSize];
+		fSize = filterSize;
 	}
 
 	public void run() {
 		stop = true;
+		int counter=0;
 		while (true) {
 			if (stop) {	
 				line = false;
 				try {Thread.sleep(10);} catch (Exception e) {}
 			}
 			else{
-				for(int i = 0 ; i< colors.length-1; i ++){
-					colors[i+1]  = colors[i];
-				}
-				colors[0] = colorSensor.getRawLightValue();
-				filter(colors);
 				try {Thread.sleep(10);} catch (Exception e) {}
+				if(colorSensor.getRawLightValue()<black){counter ++;}
+				else{
+					line = false;
+					counter = 0;
+				}
+				if (counter>fSize ){
+					line = true;
+					try {Thread.sleep(100);} catch (Exception e) {}
+				}
+				
+				
+				
 			}
 		}
 	}
@@ -48,31 +58,27 @@ public class LSController extends Thread {
 	 * @param c Number of most recent values to take the mean from
 	 * @return
 	 */
-	private void filter(int[] c) {
-		int sum = 0;
-		for(int i = 0; i<c.length; i++ ){
-			sum += colors[i];
-		}
-		if(prevColor==0)
-		{
-			prevColor=(sum/c.length);
-		}
-		else
-		{
-			prevColor = color;
-		}
-		color = sum/c.length;
-		if(color-prevColor<lineDer)
-		{
-			line = true;
-			Sound.beep();
-			try {Thread.sleep(80);} catch (Exception e) {}
-		}
-		else
-		{
-			line = false;
-		}
-	}
+	private int getMedian() {
+ 		int[] temp = new int[colors.length];
+ 		//copying the array not to affect the oder of C
+ 		for(int i = 0; i<colors.length; i++ ){
+ 			temp[i] = colors[i];
+ 		}
+ 		//Sorting the array
+ 		boolean loop = true;
+ 		while(loop){
+ 			int count = 0;
+ 			for(int i = 0 ; i < temp.length-1; i++){
+ 				if(temp[i]>temp[i+1]){
+ 					int t = temp[i];
+ 					temp[i] = temp[i+1];
+ 					temp[i+1] = t;
+ 				}
+ 			}
+ 			if(count == 0){loop = false;}
+ 		}
+ 		return temp[(temp.length/2)+1];
+ 	}
 	/**
 	 * stops the light sensor
 	 * Does not stop the thread from running

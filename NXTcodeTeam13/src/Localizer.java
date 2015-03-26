@@ -36,7 +36,7 @@ public class Localizer {
 		odo.usCfront.restartUS();
 		updateDists();
 		try {Thread.sleep(20);} catch (Exception e) {}
-		while(!(Math.abs(ld-rd)< 3 && rd<10 && ld< 10 && (fd>ld && fd>rd))){
+		while(!(Math.abs(ld-rd)< 3.5 && rd<15 && ld< 15 && (fd>ld && fd>rd))){
 			nav.spinClockWise();
 			while(!(rd<55 && ld<55 &&(fd>ld && fd>rd))){
 				try {Thread.sleep(20);} catch (Exception e) {}
@@ -48,10 +48,10 @@ public class Localizer {
 				Sound.beep();
 				odo.setTheta(135);
 			}
-			nav.pointTo(90+Math.toDegrees(Math.atan((ld-6)/(rd-6))));
+			nav.pointTo(90+Math.toDegrees(Math.atan((ld-7)/(rd-7))));
 			nav.goForth();
 			updateDists();
-			while(fd< 90 && !(rd<7 || ld< 7 || fd< 12)){
+			while(fd< 90 && !(rd<8 || ld< 8 || fd< 12)){
 			//while(fd< 90 && !( fd< 10)){
 						try {Thread.sleep(20);} catch (Exception e) {}
 				updateDists();
@@ -141,12 +141,6 @@ public class Localizer {
 			}
 		}
 	}
-	/**
-	 * stops the Robot for a short momment for test purpouses and so on 
-	 */
-	private void qBreak(int time){
-		nav.stopMotors();
-		try {Thread.sleep(time);} catch (Exception e) {}
-		nav.setAccSp(robot.acc, robot.speed);
-	}
+
+	
 }

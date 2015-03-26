@@ -78,6 +78,7 @@ public class USController extends Thread {
 	 * restarts sensor
 	 */
 	public void restartUS(){
+		usSensor.continuous();
 		stop = false;
 	}
 

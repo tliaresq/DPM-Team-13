@@ -50,10 +50,10 @@ public class Main{
  */
 	public static void mainEnter(){
 		//input your string corresponding to the test you want to work on
-		//test.runOption("localize");
+		test.runOption("localize");
 		//
 		//test.runOption("LS test");
-		test.runOption("travel to");
+		
 	}
 
 	
@@ -66,7 +66,7 @@ public class Main{
 	public static void mainLeft(){
 		//input your string corresponding to the test you want to work on
 		//test.runOption("LS test");
-		test.travelDist(122);
+		test.runOption("travel to");
 	}
 
 	

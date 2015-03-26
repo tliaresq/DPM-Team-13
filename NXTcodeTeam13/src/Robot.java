@@ -45,7 +45,7 @@ public class Robot {
 	 * 				ODOMETRY CORRECTION
 	 *  ==============================================
 	 */
-	public double odoCorBand = 6; 		//radius of the error accepted to correct the odometer
+	public double odoCorBand = 3; 		//radius of the error accepted to correct the odometer
 
 
 	/*
@@ -69,7 +69,7 @@ public class Robot {
 	 *  ==============================================
 	 */
 	public int usFilterSize = 20;  		// how important is the filter for sensor values
-	public int lsFilterSize = 10;
+	public int lsFilterSize = 4;
 	 			// this value needs to be in between the raw output of black and wood of the color sensor
 
 

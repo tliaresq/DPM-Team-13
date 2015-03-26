@@ -41,8 +41,8 @@ public class OdoCorrection extends Thread{
 	 * if that point is far from any line intersection and close enough to a line it will update x and y accordingly 
 	 */
 	private void update(){
-		double dy = odo.robot.lsDist*Math.sin(odo.getTheta()*3.14159/180);
-		double dx = odo.robot.lsDist*Math.cos(odo.getTheta()*3.14159/180);
+		double dy = odo.robot.lsDist*Math.sin(Math.toRadians(odo.getTheta()));
+		double dx = odo.robot.lsDist*Math.cos(Math.toRadians(odo.getTheta()));
 		double xDetect = odo.getX()+dx;
 		double yDetect = odo.getY()+dy;
 		double yCrossed = -100;
