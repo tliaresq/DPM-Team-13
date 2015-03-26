@@ -59,7 +59,7 @@ public class Navigate {
 				 store = distToDest() ; 
 				goForth();
 				try {Thread.sleep(300);} catch (Exception e) {}
-				if (distToDest() > store) { pointToDest();}		// check if heading away from destination and correct angle(if no obstacle)
+				if (distToDest() > store) { pointToDest();}		// check if heading away from destination and correct  angle(if no obstacle)
 			}
 			// if obstacle implement wall follower
 			/*
@@ -67,7 +67,7 @@ public class Navigate {
 			 *	CHECK SYNC IN IF STATEMENT BELOW
 			 * ======================================== 
 			 */
-			if (follow && odo.getFrontSensorDist() < robot.minFrontWallDist) { 
+			if (follow && (odo.getFrontSensorDist() < robot.minFrontWallDist  )) { 
 				rotateClockwise(90);
 				follower.follow(true) ;
 			}
