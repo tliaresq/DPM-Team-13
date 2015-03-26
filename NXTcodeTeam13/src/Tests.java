@@ -149,6 +149,7 @@ public class Tests extends Main {
 		nav.travelTo(-15, 1, false);
 		nav.travelTo(-15, 168, false);
 		nav.travelTo(46, 168, false);
+		nav.travelTo(46, 198, false);
 		nav.travelTo(138, 198, false);
 		nav.travelTo(183, 183, false);
 		nav.pointTo(45.0);
