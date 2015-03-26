@@ -144,7 +144,7 @@ public class Tests extends Main {
 		robot.odo.lsC.restartLS();
 		nav.localizer.alphaLocalize();
 		//nav.travelTo(176.88, 165.88, true);
-		nav.travelTo( 2*30.48-10, 1*30.48, true);
+		nav.travelTo( 2*30.48-10, 2*30.48 - 20, true);
 		nav.pointTo(90);
 		nav.localizer.lineLocalize(182.88, 182.88);
 		nav.travelTo(182.88, 182.88, false);
