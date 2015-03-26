@@ -59,7 +59,7 @@ public class Follower {
 			}
 
 		}
-		robot.odo.usCleft.stopUS();
+		//robot.odo.usCleft.stopUS();
 		nav.setAccSp(robot.acc, robot.speed);
 	}
 	/**

@@ -29,6 +29,13 @@ public class Navigate {
 		localizer  = new Localizer(this, robot);
 		setAccSp(robot.acc, robot.speed);
 	}
+
+	public void travelToRelocalizeCross(int x, int y){
+		travelTo( x*30.48-10, y*30.48 - 20, true);
+		pointTo(90);
+		localizer.lineLocalize(x*30.48, y*30.48);
+	}
+
 	/**
 	 * travels to a specific location
 	 * @param x coordinate
@@ -36,7 +43,7 @@ public class Navigate {
 	 * @param follow : whether to implement wall follower or not going to the location
 	 */
 	public void travelTo(double x, double y,boolean follow) {
-		
+
 		//odo.lsC.restartLS();
 
 		odo.correction.restart();
@@ -57,14 +64,14 @@ public class Navigate {
 		while (distToDest() >= 3) {
 			//while no obstacle and not arrived at destination
 			while (follow && (odo.getFrontSensorDist() > robot.minFrontWallDist 
-					|| odo.getLeftSensorDist()>robot.minFrontWallDist || odo.getRightSensorDist()>robot.minFrontWallDist)) {
+					&& odo.getLeftSensorDist()>robot.followerSideDist && odo.getRightSensorDist()>robot.followerSideDist)) {
 				if(distToDest()<robot.minFrontWallDist+1){
 					follow = false;
 					odo.usCfront.stopUS();
 					odo.usCleft.stopUS();
 					odo.usCright.stopUS();
 				}
-				 store = distToDest() ; 
+				store = distToDest() ; 
 				goForth();
 				try {Thread.sleep(300);} catch (Exception e) {}
 				if (distToDest() > store) { pointToDest();}		// check if heading away from destination and correct  angle(if no obstacle)
@@ -76,14 +83,14 @@ public class Navigate {
 			 * ======================================== 
 			 */
 			if (follow && (odo.getFrontSensorDist() < robot.minFrontWallDist 
-					|| odo.getLeftSensorDist()<robot.minFrontWallDist || odo.getRightSensorDist()<robot.minFrontWallDist)) { 
+					|| odo.getLeftSensorDist()<robot.followerSideDist || odo.getRightSensorDist()<robot.followerSideDist)) { 
 				rotateClockwise(90);
 				follower.follow(true) ;
 			}
 			if(deltaAngle(destAngle())>1){
-			 pointToDest();
-			 }
-			 goForth();
+				pointToDest();
+			}
+			goForth();
 		}
 		stopMotors();
 		pointToDest();
@@ -233,16 +240,16 @@ public class Navigate {
 		double destAngle;
 		destAngle =Math.atan2(yDest - odo.getY(),xDest - odo.getX());
 		destAngle = Math.toDegrees(destAngle);
-//		destAngle = Math.atan2(yDest - odo.getY(), xDest - odo.getX()) ;
-//		if(xDest - odo.getX()>0){
-//		destAngle = Math.atan((yDest - odo.getY())/(xDest - odo.getX()));
-//		destAngle = 180 - Math.toDegrees(destAngle);
-//		}
-//		
-//		else{
-//			destAngle =  Math.atan((yDest - odo.getY())/(xDest - odo.getX()));
-//			destAngle =  - Math.toDegrees(destAngle);
-//		}
+		//		destAngle = Math.atan2(yDest - odo.getY(), xDest - odo.getX()) ;
+		//		if(xDest - odo.getX()>0){
+		//		destAngle = Math.atan((yDest - odo.getY())/(xDest - odo.getX()));
+		//		destAngle = 180 - Math.toDegrees(destAngle);
+		//		}
+		//		
+		//		else{
+		//			destAngle =  Math.atan((yDest - odo.getY())/(xDest - odo.getX()));
+		//			destAngle =  - Math.toDegrees(destAngle);
+		//		}
 		return destAngle;
 	}
 	/**

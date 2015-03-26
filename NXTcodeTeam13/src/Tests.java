@@ -143,10 +143,11 @@ public class Tests extends Main {
 		try {Thread.sleep(100);} catch (Exception e) {}
 		robot.odo.lsC.restartLS();
 		nav.localizer.alphaLocalize();
+		nav.qBreak(300);
+		nav.qBreak(300);
+		nav.qBreak(300);
 		//nav.travelTo(176.88, 165.88, true);
-		nav.travelTo( 2*30.48-10, 2*30.48 - 20, true);
-		nav.pointTo(90);
-		nav.localizer.lineLocalize(182.88, 182.88);
+		nav.travelToRelocalizeCross(6, 6);
 		nav.travelTo(182.88, 182.88, false);
 		nav.pointTo(45);
 		nav.stopMotors();
