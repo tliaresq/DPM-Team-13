@@ -36,8 +36,12 @@ public class Navigate {
 	 * @param follow : whether to implement wall follower or not going to the location
 	 */
 	public void travelTo(double x, double y,boolean follow) {
-		odo.correctionOn();
-		qBreak(30);
+		
+		odo.lsC.restartLS();
+		qBreak(100);
+		qBreak(5000);
+		odo.correction.restart();
+		qBreak(3000);
 		if (follow){ odo.usCfront.restartUS(); }
 		xDest = x;
 		yDest = y;
@@ -53,7 +57,7 @@ public class Navigate {
 				if(distToDest()<robot.minFrontWallDist+1){
 					follow = false;
 					odo.usCfront.stopUS();
-					odo.correctionOff();
+					
 				}
 				 store = distToDest() ; 
 				goForth();

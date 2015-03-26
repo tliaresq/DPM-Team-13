@@ -27,7 +27,7 @@ public class Robot {
 	public double wwDist = 15.5; // less turns less & more turns more
 	public double leftWradius = 2.06;//less travels more  
 	public double rightWradius = leftWradius ;    
-	public double lsDist = 9;
+	public double lsDist = 8;
 
 	/*
 	 * ===============================================
