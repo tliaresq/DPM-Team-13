@@ -53,7 +53,7 @@ public class Tests extends Main {
 	public void do360(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.rotateClockwise(90);
+		nav.rotateClockwise(720);
 		nav.stopMotors();
 		//nav.pointTo(90);
 	}
@@ -69,7 +69,7 @@ public class Tests extends Main {
 	public void travelToTest(int x ,int y){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.travelTo(x, y, true);
+		nav.travelTo(60, 90, true);
 	}
 	public void usTest(){
 		robot.odo.start();
@@ -92,6 +92,7 @@ public class Tests extends Main {
 		try {Thread.sleep(100);} catch (Exception e) {}
 		robot.odo.lsC.restartLS();
 		nav.qBreak(500);
+		nav.travelTo(60, 0, true);
 		robot.odo.lsC.stopLS();
 		nav.qBreak(500);
 		robot.odo.lsC.restartLS();
@@ -102,7 +103,7 @@ public class Tests extends Main {
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		robot.odo.correctionOn();
-		nav.travelTo(61, 61, true);
+		nav.travelTo(60, 60, true);
 		nav.qBreak(15000);
 		nav.travelTo(0, 0, true);
 	}
@@ -137,7 +138,7 @@ public class Tests extends Main {
 		LCD.drawString("no such option", 0, 1);
 	}
 
-	
+
 	public void demoMain(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
@@ -157,6 +158,27 @@ public class Tests extends Main {
 		nav.qBreak(300);
 		nav.qBreak(30000);	
 	}
+
+	public static void mapDemo()
+	{
+		robot.odo.start();
+		try {Thread.sleep(100);} catch (Exception e) {}
+		nav.localizer.alphaLocalize();
+		try {Thread.sleep(100);} catch (Exception e) {}
+		nav.qBreak(500);
+		nav.qBreak(500);
+		nav.travelTo(-15, 1, false);
+		nav.travelTo(-15, 168, false);
+		nav.travelTo(46, 168, false);
+		nav.travelTo(46, 198, false);
+		nav.travelTo(138, 198, false);
+		nav.travelTo(183, 183, false);
+		nav.pointTo(45.0);
+		nav.qBreak(500);
+		nav.qBreak(500);
+		crossbow.shoot(6);
+	}
+
 
 
 }

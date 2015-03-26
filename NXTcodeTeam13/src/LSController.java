@@ -7,14 +7,13 @@ import lejos.nxt.Sound;
  *
  */
 public class LSController extends Thread {
-	
 	public ColorSensor colorSensor;
 	private int prevColor;
 	private int color;
 	private boolean line;
 	private boolean stop;
 	private int[] colors;
-	private int black = 500;
+	private int black = 490;
 	//private final int lineDer = -20;
 	private int fSize;
 
@@ -44,6 +43,7 @@ public class LSController extends Thread {
 				}
 				if (counter>fSize ){
 					line = true;
+					Sound.beep();
 					try {Thread.sleep(100);} catch (Exception e) {}
 				}
 				
@@ -100,5 +100,4 @@ public class LSController extends Thread {
 	public boolean getLS() {
 		return line;
 	}
-
 }

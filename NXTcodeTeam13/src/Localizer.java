@@ -36,14 +36,15 @@ public class Localizer {
 		odo.usCfront.restartUS();
 		updateDists();
 		try {Thread.sleep(20);} catch (Exception e) {}
-		while(!(Math.abs(ld-rd)< 3.5 && rd<15 && ld< 15 && (fd>ld && fd>rd))){
+		while(!(Math.abs(ld-rd)< 3.5 && rd<15 && ld< 15 && (fd>ld && fd>rd)))
+		{
 			nav.spinClockWise();
-			while(!(rd<55 && ld<55 &&(fd>ld && fd>rd))){
+			while(!(rd<55 && ld<55 && (fd>ld && fd>rd) && (Math.abs(Math.sqrt(rd*rd+ld*ld)-fd))<10)){
 				try {Thread.sleep(20);} catch (Exception e) {}
 				updateDists();		
 			}
-			
 			nav.stopMotors();
+			
 			if(fd>ld||fd>rd){
 				Sound.beep();
 				odo.setTheta(135);
@@ -69,6 +70,36 @@ public class Localizer {
 		nav.rotateClockwise(135);
 
 		lineLocalize(0,0);
+	}
+
+	
+	public void beta()
+	{
+		boolean loop = true;
+		while(loop)
+		{
+				nav.spinClockWise();
+				while(!(rd<55 && ld<55 && fd>ld && fd>rd && (Math.abs(Math.sqrt(rd*rd+ld*ld)-fd))<5)){
+					try {Thread.sleep(20);} catch (Exception e) {}
+					updateDists();
+				}
+				nav.stopMotors();
+				
+				odo.setTheta(Math.toDegrees(Math.tan(ld/rd))+45);
+				try {Thread.sleep(20);} catch (Exception e) {}
+				
+				nav.pointTo(135);
+				try {Thread.sleep(1000);} catch (Exception e) {}
+				
+				while(rd>20 || ld>20)
+				{
+					nav.goForth();
+					updateDists();
+					try {Thread.sleep(20);} catch (Exception e) {}
+				}
+				nav.pointTo(0.0);
+		}
+		
 	}
 
 	/**

@@ -36,7 +36,6 @@ public class Navigate {
 	 * @param follow : whether to implement wall follower or not going to the location
 	 */
 	public void travelTo(double x, double y,boolean follow) {
-
 		odo.correctionOn();
 		qBreak(30);
 		if (follow){ odo.usCfront.restartUS(); }
@@ -59,7 +58,7 @@ public class Navigate {
 				 store = distToDest() ; 
 				goForth();
 				try {Thread.sleep(300);} catch (Exception e) {}
-				if (distToDest() > store) { pointToDest();}		// check if heading away from destination and correct angle(if no obstacle)
+				if (distToDest() > store) { pointToDest();}		// check if heading away from destination and correct  angle(if no obstacle)
 			}
 			// if obstacle implement wall follower
 			/*
@@ -67,7 +66,7 @@ public class Navigate {
 			 *	CHECK SYNC IN IF STATEMENT BELOW
 			 * ======================================== 
 			 */
-			if (follow && odo.getFrontSensorDist() < robot.minFrontWallDist) { 
+			if (follow && (odo.getFrontSensorDist() < robot.minFrontWallDist  )) { 
 				rotateClockwise(90);
 				follower.follow(true) ;
 			}
@@ -80,7 +79,6 @@ public class Navigate {
 		pointToDest();
 		travelDist(distToDest());
 		stopMotors();
-		pointTo(0);
 		// Arrived at  final destination;
 		stopMotors();
 		qBreak(300);
