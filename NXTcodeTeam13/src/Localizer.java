@@ -110,7 +110,7 @@ public class Localizer {
 	public void lineLocalize(double x, double y) {
 		nav.setAccSp(9000, 100);
 		odo.lsC.restartLS();;
-		try {Thread.sleep(1000);} catch (Exception e) {}
+		try {Thread.sleep(100);} catch (Exception e) {}
 
 		nav.goForth();
 		crossLine();

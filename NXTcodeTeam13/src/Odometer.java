@@ -17,9 +17,9 @@ public class Odometer extends Thread {
 
 
 	private OdometryDisplay odometryDisplay = new OdometryDisplay(this); // displays all odometer data
-	private OdoCorrection odoCorrect;
+	public OdoCorrection correction;
 	public Robot robot;
-
+	
 	public USController usCleft, usCfront,usCright;
 	public LSController lsC;
 
@@ -28,7 +28,7 @@ public class Odometer extends Thread {
 		lock = new Object();
 		robot = r;
 		lsC = new LSController(robot.cs1, robot.lsFilterSize);
-		odoCorrect = new OdoCorrection(this);
+		correction = new OdoCorrection(this);
 		usCleft = new USController(robot.usLeftSensor, robot.usFilterSize);
 		usCfront  = new USController(robot.usFrontSensor,robot.usFilterSize);
 		usCright  = new USController(robot.usRightSensor,robot.usFilterSize);
@@ -49,7 +49,7 @@ public class Odometer extends Thread {
 		usCleft.start();
 		usCfront.start();
 		usCright.start();
-		odoCorrect.start();
+		correction.start();
 
 
 		while (true) {
@@ -100,12 +100,7 @@ public class Odometer extends Thread {
 	}
 
 
-	public void correctionOff(){
-		odoCorrect.stop();
-	}
-	public void correctionOn(){
-		odoCorrect.restart();
-	}
+
 
 	public void getPosition(double[] position, boolean[] update) {
 		// ensure that the values don't change while the odometer is running

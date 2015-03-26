@@ -102,7 +102,7 @@ public class Tests extends Main {
 	public void odoCorrectTest(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		robot.odo.correctionOn();
+		//robot.odo.correctionOn();
 		nav.travelTo(60, 60, true);
 		nav.qBreak(15000);
 		nav.travelTo(0, 0, true);
@@ -143,6 +143,7 @@ public class Tests extends Main {
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		nav.localizer.alphaLocalize();
+		nav.qBreak(2000);
 		nav.travelTo(176.88, 165.88, true);
 		nav.pointTo(90);
 		nav.localizer.lineLocalize(182.88, 182.88);

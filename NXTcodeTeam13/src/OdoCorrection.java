@@ -91,7 +91,6 @@ public class OdoCorrection extends Thread{
 	 */
 	public void restart(){
 		stop = false;
-		odo.lsC.restartLS();
 	}
 	/**
 	 * Stops odometry correction
@@ -99,6 +98,5 @@ public class OdoCorrection extends Thread{
 	 */
 	public void stop(){
 		stop = true;
-		odo.lsC.stopLS();
 	}
 }
