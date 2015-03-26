@@ -36,7 +36,6 @@ public class Navigate {
 	 * @param follow : whether to implement wall follower or not going to the location
 	 */
 	public void travelTo(double x, double y,boolean follow) {
-
 		odo.correctionOn();
 		qBreak(30);
 		if (follow){ odo.usCfront.restartUS(); }
@@ -80,7 +79,6 @@ public class Navigate {
 		pointToDest();
 		travelDist(distToDest());
 		stopMotors();
-		pointTo(0);
 		// Arrived at  final destination;
 		stopMotors();
 		qBreak(300);

@@ -138,7 +138,24 @@ public class Tests extends Main {
 		LCD.drawString("no such option", 0, 1);
 	}
 
-	
+	public static void mapDemo()
+	{
+		robot.odo.start();
+		try {Thread.sleep(100);} catch (Exception e) {}
+		nav.localizer.alphaLocalize();
+		try {Thread.sleep(100);} catch (Exception e) {}
+		nav.qBreak(500);
+		nav.qBreak(500);
+		nav.travelTo(-15, 1, false);
+		nav.travelTo(-15, 168, false);
+		nav.travelTo(46, 168, false);
+		nav.travelTo(138, 198, false);
+		nav.travelTo(183, 183, false);
+		nav.pointTo(45.0);
+		nav.qBreak(500);
+		nav.qBreak(500);
+		crossbow.shoot(6);
+	}
 
 
 
