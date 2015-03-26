@@ -1,3 +1,4 @@
+import lejos.nxt.Sound;
 import lejos.robotics.RegulatedMotor;
 /**
  * The Complete set of methods that allow robot mobility at a low level of complexity
@@ -15,7 +16,7 @@ public class Navigate {
 	private double yDest;
 
 	private Odometer odo;
-	public double finalDestAngle;
+
 
 
 
@@ -36,12 +37,12 @@ public class Navigate {
 	 */
 	public void travelTo(double x, double y,boolean follow) {
 
-		odo.correctionOn();
+		//odo.correctionOn();
 		if (follow){ odo.usCfront.restartUS(); }
 		xDest = x;
 		yDest = y;
-		setAccSp(robot.acc,robot.speed);
-		double store = distToDest();;
+		setAccSp(9000,robot.speed);
+		double store = distToDest();
 		// sets nxt pointing towards destination
 		pointToDest();
 		// keep navigating as long as destination isn't reached
@@ -57,9 +58,9 @@ public class Navigate {
 					odo.usCfront.stopUS();
 				}
 				i++;
-				if (i % 2 == 0) { store = distToDest() ; } //stores the value of distance to destination
+				if (i % 5 == 0) { store = distToDest() ; } //stores the value of distance to destination
 				goForth();
-				if (distToDest() > store) { pointToDest() ; }		// check if heading away from destination and correct angle(if no obstacle)
+				if (distToDest() > store) { pointToDest() ;Sound.beep(); }		// check if heading away from destination and correct angle(if no obstacle)
 			}
 			// if obstacle implement wall follower
 			/*
@@ -69,10 +70,9 @@ public class Navigate {
 			 */
 			if (follow && distToDest() > 1 && odo.getFrontSensorDist() < robot.minFrontWallDist) { 
 				rotateClockwise(90);
-				updateDestAngle();
 				follower.follow(true) ;
 			}
-			setAccSp(robot.acc,robot.speed);
+			setAccSp(9000,robot.speed);
 		}
 		stopMotors();
 		setAccSp(robot.acc,robot.speed);
@@ -118,7 +118,6 @@ public class Navigate {
 	 */
 	public void travelDist(double distance) {
 		rightMotor.rotate(convertDistance(robot.rightWradius, distance), true);
-
 		leftMotor.rotate(convertDistance(robot.leftWradius, distance), false);
 
 	}
@@ -174,8 +173,7 @@ public class Navigate {
 	 */
 	public void pointTo(double destAngle) {
 		double angle = deltaAngle(destAngle);
-		leftMotor.rotate(convertAngle(robot.leftWradius,robot.wwDist, angle), true);
-		rightMotor.rotate(-convertAngle(robot.rightWradius, robot.wwDist, angle), false);
+		rotateClockwise(angle);
 	}
 
 
@@ -183,10 +181,8 @@ public class Navigate {
 	 * the nxt spins minimum angle to point towards current destination
 	 */
 	public void pointToDest() {
-		updateDestAngle();
-		double angle = deltaAngle(finalDestAngle);
-		leftMotor.rotate(convertAngle(robot.leftWradius, robot.wwDist, angle), true);
-		rightMotor.rotate(-convertAngle(robot.rightWradius, robot.wwDist, angle), false);
+		double angle = deltaAngle(destAngle());
+		rotateClockwise(angle);
 	}
 
 
@@ -218,7 +214,9 @@ public class Navigate {
 	/**
 	 * updates the angle at which the destination is relative to the robot
 	 */
-	public void updateDestAngle(){
-		finalDestAngle = Math.atan2(yDest - odo.getY(),xDest - odo.getX()) * 180 / 3.14159;
+	public double destAngle(){
+		double destAngle = Math.atan((yDest - odo.getY())/(xDest - odo.getX()));
+		destAngle = Math.toDegrees(destAngle);
+		return destAngle;
 	}
 }

@@ -60,18 +60,20 @@ public class Odometer extends Thread {
 				sensorFrontDist = usCfront.sensorDist();
 				sensorRightDist  = usCright.sensorDist();
 				isLine = lsC.getLS();
+				
 				nowTachoL = (robot.leftMotor.getTachoCount());
 				nowTachoR = (robot.rightMotor.getTachoCount());
+				
 				// getting distances traveled by the left and right wheel respectively
-				distL = 3.14159 *robot.leftWradius* (nowTachoL - lastTachoL) / 180;
-				distR = 3.14159 *robot.leftWradius* (nowTachoR - lastTachoR) / 180;
+				distL = Math.PI *robot.leftWradius* (nowTachoL - lastTachoL) / 180;
+				distR = Math.PI *robot.leftWradius* (nowTachoR - lastTachoR) / 180;
 				lastTachoL = nowTachoL;
 				lastTachoR = nowTachoR;
 				// getting the distance traveled by the nxt as a whole since last update
 				deltaD = 0.5 * (distL + distR);
 				// getting change in angle since last update
-				deltaT = Math.atan((distL - distR) / robot.wwDist) * 360 / 6.2832;
-				theta -= deltaT;
+				deltaT = Math.toDegrees(Math.atan((distR-distL) / robot.wwDist));
+				theta += deltaT;
 				// keeping theta in the interval [0-360]
 				if (theta < 0) {
 					theta += 360;

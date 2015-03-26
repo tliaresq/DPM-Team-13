@@ -1,4 +1,6 @@
 import lejos.nxt.ColorSensor;
+import lejos.nxt.Sound;
+
 /**
  * Manages All the information coming from a light sensor by filtering it and returning a filtered value. 
  * @author Cedric
@@ -47,33 +49,24 @@ public class LSController extends Thread {
 	 * @return
 	 */
 	private void filter(int[] c) {
-		int[] temp = new int[c.length];
-		//copying the array not to affect the oder of C
+		int sum = 0;
 		for(int i = 0; i<c.length; i++ ){
-			temp[i] = c[i];
-		}
-		//Sorting the array
-		boolean loop = true;
-		while(loop){
-			int count = 0;
-			for(int i = 0 ; i < temp.length-1; i++){
-				if(temp[i]>temp[i+1]){
-					int t = temp[i];
-					temp[i] = temp[i+1];
-					temp[i+1] = t;
-				}
-			}
-			if(count == 0){loop = false;}
+			sum += colors[i];
 		}
 		if(prevColor==0)
 		{
-			prevColor=temp[(temp.length/2)+1];
+			prevColor=(sum/c.length);
 		}
-		prevColor = color;
-		color = temp[(temp.length/2)+1];
+		else
+		{
+			prevColor = color;
+		}
+		color = sum/c.length;
 		if(color-prevColor<lineDer)
 		{
 			line = true;
+			Sound.beep();
+			try {Thread.sleep(80);} catch (Exception e) {}
 		}
 		else
 		{
@@ -101,7 +94,5 @@ public class LSController extends Thread {
 	public boolean getLS() {
 		return line;
 	}
-
-
 
 }

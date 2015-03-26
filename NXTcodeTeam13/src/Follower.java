@@ -26,7 +26,7 @@ public class Follower {
 	public void follow(boolean withDest) {
 		robot.odo.usCleft.restartUS();
 		if(withDest){
-			delta = nav.deltaAngle(nav.finalDestAngle);
+			delta = nav.deltaAngle(nav.destAngle());
 		}
 		nav.setAccSp(robot.wallFollowAcc,robot.wallFollowSpeed);
 		// follow obstacle while theta isn't within 5 degrees of the angle needed to reach destination
@@ -61,8 +61,7 @@ public class Follower {
 				nav.leftMotor.setSpeed((int)robot.speed);
 			}
 
-			nav.updateDestAngle();
-			delta = nav.deltaAngle(nav.finalDestAngle);
+			delta = nav.deltaAngle(nav.destAngle());
 		}
 		robot.odo.usCleft.stopUS();
 		nav.setAccSp(robot.acc, robot.speed);

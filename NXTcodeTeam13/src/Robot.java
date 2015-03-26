@@ -16,8 +16,8 @@ public class Robot {
 	public RegulatedMotor leftMotor =  MirrorMotor.invertMotor(Motor.B);
 	public RegulatedMotor rightMotor = MirrorMotor.invertMotor(Motor.C);
 	public NXTRegulatedMotor armMotor = Motor.A;
-	public UltrasonicSensor usLeftSensor = new UltrasonicSensor(SensorPort.S1), usFrontSensor = new UltrasonicSensor(SensorPort.S2),usRightSensor = new UltrasonicSensor(SensorPort.S3);;
-	public ColorSensor cs1 = new ColorSensor(SensorPort.S4), cs2 = new ColorSensor(SensorPort.S4);
+	public UltrasonicSensor usLeftSensor = new UltrasonicSensor(SensorPort.S1), usFrontSensor = new UltrasonicSensor(SensorPort.S2),usRightSensor = new UltrasonicSensor(SensorPort.S4);;
+	public ColorSensor cs1 = new ColorSensor(SensorPort.S3);
 	public Odometer odo;			// Handles all data relative to location
 	/*
 	 * ===============================================
@@ -25,8 +25,8 @@ public class Robot {
 	 *  ==============================================
 	 */
 	public double wwDist = 15.4; // less turns less & more turns more
-	public double leftWradius = 2.09;//less travels more  
-	public double rightWradius = 2.09 ;    
+	public double leftWradius = 2.06;//less travels more  
+	public double rightWradius = leftWradius ;    
 	public double lsDist = 9;
 
 	/*
@@ -61,15 +61,15 @@ public class Robot {
 	 * 				NAVIGATION
 	 *  ==============================================
 	 */
-	public double acc = 100;			// default acceleration
-	public double speed = 100;			// default speed
+	public double acc = 500;			// default acceleration
+	public double speed = 200;			// default speed
 	/*
 	 * ===============================================
 	 * 				FILTERS
 	 *  ==============================================
 	 */
 	public int usFilterSize = 20;  		// how important is the filter for sensor values
-	public int lsFilterSize = 5;
+	public int lsFilterSize = 10;
 	 			// this value needs to be in between the raw output of black and wood of the color sensor
 
 

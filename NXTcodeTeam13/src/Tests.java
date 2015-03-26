@@ -53,7 +53,7 @@ public class Tests extends Main {
 	public void do360(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.rotateClockwise(360);
+		nav.rotateClockwise(90);
 		nav.stopMotors();
 		//nav.pointTo(90);
 	}
@@ -69,7 +69,7 @@ public class Tests extends Main {
 	public void travelToTest(int x ,int y){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.travelTo(x, y, true);
+		nav.travelTo(x, y, false);
 	}
 	public void usTest(){
 		robot.odo.start();
@@ -81,7 +81,10 @@ public class Tests extends Main {
 	public void lsTest(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
+		qBreak(2000);
 		robot.odo.lsC.restartLS();
+		try {Thread.sleep(300);} catch (Exception e) {}
+		Sound.beep();
 	}
 	public void odoCorrectTest(){
 		robot.odo.start();

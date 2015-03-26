@@ -8,7 +8,7 @@ import lejos.nxt.*;
  */
 public class Main{
 
-	static String[] optionList = {"travel to","error","360","travel 60", "USfront test","LS test", "odoCorrect test","shoot 999",  "localize","follow test"}; 
+	static String[] optionList = {"travel to","error","360","travel 61", "USfront test","LS test", "odoCorrect test","shoot 999",  "localize","follow test"}; 
 	/* 
 	 *  full List of available options
 	 * {"error","follow test","360","travel 60", "USfront test", "odoCorrect test","shoot 999", "travel to", "localize","map1","map2","map3","map4","map5"};
@@ -50,9 +50,10 @@ public class Main{
  */
 	public static void mainEnter(){
 		//input your string corresponding to the test you want to work on
-		test.runOption("localize");
+		//test.runOption("localize");
 		//
-		//test.runOption("360");
+		//test.runOption("LS test");
+		test.runOption("travel to");
 	}
 
 	
@@ -64,7 +65,8 @@ public class Main{
  */
 	public static void mainLeft(){
 		//input your string corresponding to the test you want to work on
-		test.runOption("travel 61");
+		//test.runOption("LS test");
+		test.travelDist(122);
 	}
 
 	

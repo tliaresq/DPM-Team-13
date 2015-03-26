@@ -12,6 +12,9 @@ public class Localizer {
 	private Odometer odo;
 	private Navigate nav;
 	private Robot robot;
+	double fd ;
+	double ld ;
+	double rd ;
 
 	public Localizer( Navigate n, Robot r) {
 		odo = r.odo;
@@ -21,51 +24,50 @@ public class Localizer {
 	/**
 	 * Localizes completely when place anywhere in Zone 1
 	 */
+	public void updateDists(){
+		fd = odo.getFrontSensorDist();
+		ld = odo.getLeftSensorDist();
+		rd = odo.getRightSensorDist();
+	}
+
 	public void alphaLocalize() {
 		odo.usCleft.restartUS();
 		odo.usCright.restartUS();
 		odo.usCfront.restartUS();
-		double fd = odo.getFrontSensorDist();
-		double ld = odo.getLeftSensorDist();
-		double rd = odo.getRightSensorDist();
+		updateDists();
 		try {Thread.sleep(20);} catch (Exception e) {}
-		while(!(Math.abs(ld-rd)< 4 && rd<15 && ld< 15 && (fd>ld||fd>rd))){
+		while(!(Math.abs(ld-rd)< 3 && rd<10 && ld< 10 && (fd>ld && fd>rd))){
 			nav.spinClockWise();
-			while(!(rd<60 && ld<60 &&(fd>ld||fd>rd))){
+			while(!(rd<55 && ld<55 &&(fd>ld && fd>rd))){
 				try {Thread.sleep(20);} catch (Exception e) {}
-				fd = odo.getFrontSensorDist();
-				ld = odo.getLeftSensorDist();
-				rd = odo.getRightSensorDist();
-				
+				updateDists();		
 			}
+			
 			nav.stopMotors();
-			odo.setTheta(135);
-			odo.setX(0);
-			odo.setY(0);
-			nav.pointTo(90+Math.toDegrees(Math.atan((ld)/(rd))));
+			if(fd>ld||fd>rd){
+				Sound.beep();
+				odo.setTheta(135);
+			}
+			nav.pointTo(90+Math.toDegrees(Math.atan((ld-6)/(rd-6))));
 			nav.goForth();
-			ld = odo.getLeftSensorDist();
-			rd = odo.getRightSensorDist();
-			fd = odo.getFrontSensorDist();
-			while(fd< 80 && !(rd<robot.followerSideDist || ld< robot.followerSideDist || fd< 5)){
-				try {Thread.sleep(20);} catch (Exception e) {}
-				ld = odo.getLeftSensorDist();
-				rd = odo.getRightSensorDist();
-				fd = odo.getFrontSensorDist();
+			updateDists();
+			while(fd< 90 && !(rd<7 || ld< 7 || fd< 12)){
+			//while(fd< 90 && !( fd< 10)){
+						try {Thread.sleep(20);} catch (Exception e) {}
+				updateDists();
 			}
 			nav.stopMotors();
-			fd = odo.getFrontSensorDist();
-			ld = odo.getLeftSensorDist();
-			rd = odo.getRightSensorDist();
-			Sound.beep();
+			try {Thread.sleep(50);} catch (Exception e) {}
+			updateDists();
+			try {Thread.sleep(50);} catch (Exception e) {}
 		}
 		odo.usCleft.stopUS();
 		odo.usCright.stopUS();
 		odo.usCfront.stopUS();
-		qBreak(1000);
-		Sound.beep();
+//		qBreak(1000);
+//		Sound.beep();
 		nav.rotateClockwise(135);
-		
+
 		lineLocalize();
 	}
 	/**
@@ -75,7 +77,7 @@ public class Localizer {
 		nav.setAccSp(9000, 100);
 		odo.lsC.restartLS();;
 		try {Thread.sleep(1000);} catch (Exception e) {}
-		
+
 		nav.goForth();
 		crossLine();
 		nav.travelDist(robot.lsDist);
