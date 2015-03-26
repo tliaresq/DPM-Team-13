@@ -91,13 +91,12 @@ public class Tests extends Main {
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		robot.odo.lsC.restartLS();
-		nav.qBreak(500);
-		nav.travelTo(60, 0, true);
-		robot.odo.lsC.stopLS();
-		nav.qBreak(500);
+		nav.qBreak(3000);
+		//robot.odo.lsC.stopLS();
+		nav.qBreak(2000);
 		robot.odo.lsC.restartLS();
-		try {Thread.sleep(300);} catch (Exception e) {}
-		Sound.beep();
+		try {Thread.sleep(50000);} catch (Exception e) {}
+		
 	}
 	public void odoCorrectTest(){
 		robot.odo.start();
@@ -142,9 +141,10 @@ public class Tests extends Main {
 	public void demoMain(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
+		robot.odo.lsC.restartLS();
 		nav.localizer.alphaLocalize();
-		nav.qBreak(2000);
-		nav.travelTo(176.88, 165.88, true);
+		//nav.travelTo(176.88, 165.88, true);
+		nav.travelTo( 2*30.48-10, 1*30.48, true);
 		nav.pointTo(90);
 		nav.localizer.lineLocalize(182.88, 182.88);
 		nav.travelTo(182.88, 182.88, false);
