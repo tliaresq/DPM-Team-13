@@ -41,7 +41,11 @@ public class Navigate {
 
 		odo.correction.restart();
 		qBreak(50);
-		if (follow){ odo.usCfront.restartUS(); }
+		if (follow){
+			odo.usCfront.restartUS();
+			odo.usCleft.restartUS();
+			odo.usCright.restartUS();
+		}
 		xDest = x;
 		yDest = y;
 		setAccSp(robot.acc,robot.speed);
@@ -52,11 +56,13 @@ public class Navigate {
 		// keep navigating as long as destination isn't reached
 		while (distToDest() >= 3) {
 			//while no obstacle and not arrived at destination
-			while (follow && odo.getFrontSensorDist() > robot.minFrontWallDist) {
+			while (follow && (odo.getFrontSensorDist() > robot.minFrontWallDist 
+					|| odo.getLeftSensorDist()>robot.minFrontWallDist || odo.getRightSensorDist()>robot.minFrontWallDist)) {
 				if(distToDest()<robot.minFrontWallDist+1){
 					follow = false;
 					odo.usCfront.stopUS();
-					
+					odo.usCleft.stopUS();
+					odo.usCright.stopUS();
 				}
 				 store = distToDest() ; 
 				goForth();
@@ -69,7 +75,8 @@ public class Navigate {
 			 *	CHECK SYNC IN IF STATEMENT BELOW
 			 * ======================================== 
 			 */
-			if (follow && (odo.getFrontSensorDist() < robot.minFrontWallDist  )) { 
+			if (follow && (odo.getFrontSensorDist() < robot.minFrontWallDist 
+					|| odo.getLeftSensorDist()<robot.minFrontWallDist || odo.getRightSensorDist()<robot.minFrontWallDist)) { 
 				rotateClockwise(90);
 				follower.follow(true) ;
 			}
