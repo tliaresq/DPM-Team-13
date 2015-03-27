@@ -69,17 +69,8 @@ public class Main{
 		test.mapDemo();
 	}
 
-	
-	
-	//quick
-	
-	
-	
-	
-	
-	
-	
 
+	
 
 	
 	
