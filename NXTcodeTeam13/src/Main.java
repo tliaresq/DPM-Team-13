@@ -70,9 +70,8 @@ public class Main{
 	}
 
 	
-	// just a quick comment
 	
-	
+	//quick
 	
 	
 	
