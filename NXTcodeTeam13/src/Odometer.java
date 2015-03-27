@@ -45,7 +45,6 @@ public class Odometer extends Thread {
 		//       start only the sensors available for run
 		//=====================================================
 		odometryDisplay.start();
-		lsC.start();
 		usCleft.start();
 		usCfront.start();
 		usCright.start();

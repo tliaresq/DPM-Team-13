@@ -1,5 +1,4 @@
 import lejos.nxt.LCD;
-import lejos.nxt.Sound;
 /**
  * Stores all the set of instructions to run specific tests
  * This class is mainly present to structure the code and give easy access
@@ -62,14 +61,14 @@ public class Tests extends Main {
 		try {Thread.sleep(100);} catch (Exception e) {}
 		nav.travelDist(dist);
 		try {Thread.sleep(10000);} catch (Exception e) {}
-//		nav.rotateClockwise(180);
-//		nav.travelDist(dist);
-//		nav.rotateClockwise(180);
+		//		nav.rotateClockwise(180);
+		//		nav.travelDist(dist);
+		//		nav.rotateClockwise(180);
 	}
 	public void travelToTest(int x ,int y){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.travelTo(60, 90, true);
+		nav.travelTo(60, 90, true,true);
 	}
 	public void usTest(){
 		robot.odo.start();
@@ -85,26 +84,23 @@ public class Tests extends Main {
 		robot.odo.usCfront.restartUS();
 		robot.odo.usCleft.restartUS();
 		robot.odo.usCright.restartUS();
-		
+
 	}
 	public void lsTest(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		robot.odo.lsC.restartLS();
-		nav.qBreak(3000);
-		//robot.odo.lsC.stopLS();
-		nav.qBreak(2000);
-		robot.odo.lsC.restartLS();
+		robot.odo.lsC.start();
+
 		try {Thread.sleep(50000);} catch (Exception e) {}
-		
+
 	}
 	public void odoCorrectTest(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		//robot.odo.correctionOn();
-		nav.travelTo(60, 60, true);
+		nav.travelTo(60, 60, true,true);
 		nav.qBreak(15000);
-		nav.travelTo(0, 0, true);
+		nav.travelTo(0, 0, true,true);
 	}
 	public void shoot999(){
 		crossbow.shoot(999);
@@ -112,7 +108,7 @@ public class Tests extends Main {
 	public void localize(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.localizer.alphaLocalize();
+		nav.localizer.wallLocalize();
 	}
 
 
@@ -139,54 +135,42 @@ public class Tests extends Main {
 
 
 	public void demoMain(){
+		robot.speed = 200;
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		robot.odo.lsC.restartLS();
-		nav.localizer.alphaLocalize();
-		nav.qBreak(300);
-		nav.qBreak(300);
-		nav.qBreak(300);
-		nav.travelTo(187.88, 150.88, true);
-		nav.pointTo(90);
-		nav.localizer.lineLocalize(182.88, 182.88);
-		nav.travelTo(182.88, 182.88, false);
-//		nav.travelTo(50.96, 45.96, true);
-//		nav.pointTo(90);
-//		nav.localizer.lineLocalize(60.96, 60.96);
-//		nav.travelTo(60.96, 60.96, false);
+		nav.localizer.wallLocalize();
+		robot.odo.lsC.start();
+		nav.qBreak(100);
+		nav.localizer.lineLocalize(0, 0);
+		nav.qBreak(300); nav.qBreak(300); nav.qBreak(300);
+		robot.speed = 200;
+		nav.travelToRelocalizeCross(6,6);
+		robot.speed = 200;
+		nav.travelTo(6*30.48, 6*30.48, false, false);
 		nav.pointTo(45);
 		nav.stopMotors();
-		nav.qBreak(300);
-		nav.qBreak(300);
-		nav.qBreak(300);
+		nav.qBreak(300);nav.qBreak(300);nav.qBreak(300);
 		crossbow.shoot(8);
-		nav.qBreak(300);
-		nav.qBreak(300);
-		nav.qBreak(300);
-		nav.qBreak(30000);	
-		
-//		nav.travelTo(54.96, 165.88, true);
-		
-		//ignore for now
-//		nav.travelToRelocalizeCross(6, 6);
-//		nav.travelTo(182.88, 182.88, false);
+		nav.qBreak(300);nav.qBreak(300);nav.qBreak(300);nav.qBreak(30000);	
 	}
 
 	public static void mapDemo()
 	{
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		robot.odo.lsC.restartLS();
-		nav.localizer.alphaLocalize();
+
+		nav.localizer.wallLocalize();
+		robot.odo.lsC.start();
+		nav.localizer.lineLocalize(0, 0);
 		try {Thread.sleep(100);} catch (Exception e) {}
 		nav.qBreak(500);
 		nav.qBreak(500);
-		nav.travelTo(-10, 1, false);
-		nav.travelTo(-10, 168, false);
-		nav.travelTo(46, 168, false);
-		nav.travelTo(46, 198, false);
-		nav.travelTo(138, 198, false);
-		nav.travelTo(172.88, 167.88, true);
+		nav.travelTo(-10, 1, false,true);
+		nav.travelTo(-10, 168, false,true);
+		nav.travelTo(46, 168, false,true);
+		nav.travelTo(46, 198, false,true);
+		nav.travelTo(138, 198, false,true);
+		nav.travelTo(172.88, 167.88, true,true);
 		nav.pointTo(90);
 		nav.localizer.lineLocalize(182.88, 182.88);
 		nav.pointTo(45.0);

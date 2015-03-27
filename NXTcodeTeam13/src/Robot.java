@@ -34,18 +34,18 @@ public class Robot {
 	 * 				WALL FOLLOWER
 	 *  ==============================================
 	 */
-	public double wallFollowAcc = 2000;
-	public double wallFollowSpeed = 150;
+	public double followAcc = 1000;
+	public double followSpeed = 100;
 	public double noWallDistance = 40;
 	public double minFrontWallDist = 11; 		// distance the robot has to be from a wall when following it.
-	public double followerSideDist = 20;
+	public double followerSideDist = 18;
 
 	/*
 	 * ===============================================
 	 * 				ODOMETRY CORRECTION
 	 *  ==============================================
 	 */
-	public double odoCorBand = 3; 		//radius of the error accepted to correct the odometer
+	public double odoCorBand = 5; 		//radius of the error accepted to correct the odometer
 
 
 	/*
@@ -61,15 +61,15 @@ public class Robot {
 	 * 				NAVIGATION
 	 *  ==============================================
 	 */
-	public double acc = 500;			// default acceleration
-	public double speed = 200;			// default speed
+	public double acc = 700;			// default acceleration
+	public double speed = 150;			// default speed
 	/*
 	 * ===============================================
 	 * 				FILTERS
 	 *  ==============================================
 	 */
 	public int usFilterSize = 10;  		// how important is the filter for sensor values
-	public int lsFilterSize = 2;
+	public int lsFilterSize = 4;
 	 			// this value needs to be in between the raw output of black and wood of the color sensor
 
 

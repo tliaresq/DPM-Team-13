@@ -31,7 +31,7 @@ public class Navigate {
 	}
 
 	public void travelToRelocalizeCross(int x, int y){
-		travelTo( x*30.48-10, y*30.48 - 20, true);
+		travelTo( x*30.48-10, y*30.48 - 20, true,true);
 		pointTo(90);
 		localizer.lineLocalize(x*30.48, y*30.48);
 	}
@@ -42,11 +42,11 @@ public class Navigate {
 	 * @param y coordinate
 	 * @param follow : whether to implement wall follower or not going to the location
 	 */
-	public void travelTo(double x, double y,boolean follow) {
+	public void travelTo(double x, double y,boolean follow, boolean correct) {
 
-		//odo.lsC.restartLS();
-
+		if (correct){
 		odo.correction.restart();
+		}
 		qBreak(50);
 		if (follow){
 			odo.usCfront.restartUS();
@@ -73,7 +73,7 @@ public class Navigate {
 				}
 				store = distToDest() ; 
 				goForth();
-				try {Thread.sleep(300);} catch (Exception e) {}
+				try {Thread.sleep(450);} catch (Exception e) {}
 				if (distToDest() > store) { pointToDest();}		// check if heading away from destination and correct  angle(if no obstacle)
 			}
 			// if obstacle implement wall follower
@@ -118,7 +118,7 @@ public class Navigate {
 	 * calculates distance between robot and destination
 	 * @return
 	 */
-	private double distToDest() {
+	public double distToDest() {
 		double y = Math.abs(odo.getY() - yDest);
 		double x = Math.abs(odo.getX() - xDest);
 		double distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));

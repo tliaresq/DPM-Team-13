@@ -1,4 +1,3 @@
-import lejos.nxt.Sound;
 
 
 
@@ -12,9 +11,9 @@ public class Localizer {
 	private Odometer odo;
 	private Navigate nav;
 	private Robot robot;
-	double fd ;
-	double ld ;
-	double rd ;
+	private double fd ;
+	private double ld ;
+	private double rd ;
 
 	public Localizer( Navigate n, Robot r) {
 		odo = r.odo;
@@ -29,51 +28,47 @@ public class Localizer {
 		ld = odo.getLeftSensorDist();
 		rd = odo.getRightSensorDist();
 	}
+	public boolean goodOrientation(){
+		updateDists();
+		if (Math.abs(ld-rd)< 5 && rd<16 && ld< 16 && (fd>ld && fd>rd)){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
-	public void alphaLocalize() {
+	public void wallLocalize() {
 		odo.usCleft.restartUS();
 		odo.usCright.restartUS();
 		odo.usCfront.restartUS();
-		updateDists();
 		try {Thread.sleep(20);} catch (Exception e) {}
-		while(!(Math.abs(ld-rd)< 3 && rd<15 && ld< 15 && (fd>ld && fd>rd))){
+		while(!goodOrientation()){
 			nav.spinClockWise();
-			while(!(rd<55 && ld<55 && (fd>ld && fd>rd) )){//&& (Math.abs(Math.sqrt(rd*rd+ld*ld)-fd))<20)){
+			while(!(rd<55 && ld<55 && (fd>=ld && fd>=rd) )){
 				try {Thread.sleep(20);} catch (Exception e) {}
 				updateDists();		
-			}
-			nav.stopMotors();
-			
-			if(fd>ld||fd>rd){
-				Sound.beep();
+			}			
 				odo.setTheta(135);
-			}
-			if(!(Math.abs(ld-rd)< 3 && rd<15 && ld< 15 && (fd>ld || fd>rd))){
-			nav.pointTo(90+Math.toDegrees(Math.atan((ld-10)/(rd-10))));
-			}
-			nav.travelDist(2);
+			if(goodOrientation()){ break; }
+			nav.pointTo(90+Math.toDegrees(Math.atan2(ld-10, rd-10)));
+			nav.travelDist(3);
+			if(goodOrientation()){ break; }
 			nav.goForth();
 			updateDists();
 			while(fd< 90 && !(rd<3 || ld< 3 || fd< 12)){
-			//while(fd< 90 && !( fd< 10)){
-						try {Thread.sleep(20);} catch (Exception e) {}
+				try {Thread.sleep(20);} catch (Exception e) {}
 				updateDists();
 			}
-			nav.stopMotors();
-			
-			try {Thread.sleep(50);} catch (Exception e) {}
 			updateDists();
-			try {Thread.sleep(50);} catch (Exception e) {}
 		}
 		odo.usCleft.stopUS();
 		odo.usCright.stopUS();
 		odo.usCfront.stopUS();
-//		qBreak(1000);
-//		Sound.beep();
 		nav.rotateClockwise(135);
-
-		lineLocalize(0,0);
 	}
+	
+	
 
 	
 	public void beta()

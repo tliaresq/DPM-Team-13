@@ -24,9 +24,9 @@ public class Follower {
 	 */
 	public void follow(boolean withDest) {
 		robot.odo.usCleft.restartUS();
-		nav.setAccSp(robot.wallFollowAcc,robot.wallFollowSpeed);
+		nav.setAccSp(robot.followAcc,robot.followSpeed);
 		// follow obstacle while theta isn't within 5 degrees of the angle needed to reach destination
-		while (Math.abs( nav.deltaAngle(nav.destAngle()))>4 || !withDest) {
+		while (( robot.minFrontWallDist<nav.distToDest() && Math.abs( nav.deltaAngle(nav.destAngle()))>4) || !withDest) {
 			leftDistance = odo.getLeftSensorDist();
 			try {Thread.sleep(15);} catch (Exception e) {}
 			farHigh = (Math.pow((odo.getLeftSensorDist()/robot.followerSideDist),1.4));
@@ -40,49 +40,26 @@ public class Follower {
 			//too left
 			else if (leftDistance < robot.followerSideDist) {
 				nav.goForth();
-				nav.leftMotor.setSpeed((int) (robot.speed*closeHigh));
-				nav.rightMotor.setSpeed((int)(robot.speed/closeHigh));
+				nav.leftMotor.setSpeed((int) (robot.followSpeed*closeHigh));
+				nav.rightMotor.setSpeed((int)(robot.followSpeed/closeHigh));
 			} 
 
 			//too right
 			else if (leftDistance > robot.followerSideDist && leftDistance <= robot.noWallDistance) {
 				nav.goForth();
-				nav.rightMotor.setSpeed((int) (robot.speed*farHigh));
-				nav.leftMotor.setSpeed((int)robot.speed);
+				nav.rightMotor.setSpeed((int) (robot.followSpeed*farHigh));
+				nav.leftMotor.setSpeed((int)robot.followSpeed);
 			} 
 
 			// no more wall
 			else if (robot.odo.getLeftSensorDist()>robot.noWallDistance){
 				nav.goForth();
-				nav.rightMotor.setSpeed((int) (robot.speed*1.5));
-				nav.leftMotor.setSpeed((int)(robot.speed*0.6));
+				nav.rightMotor.setSpeed((int) (robot.followSpeed*2));
+				nav.leftMotor.setSpeed((int)(robot.followSpeed*1));
 			}
 
 		}
 		//robot.odo.usCleft.stopUS();
 		nav.setAccSp(robot.acc, robot.speed);
 	}
-	/**
-	 * Makes sure there is no wall at  distance by adding to the filter
-	 * We can't afford to mess up thinking there is n wall when there is one 
-	 * @param dist
-	 * @return
-	 */
-	private boolean noWall(double dist){
-		int counter = 0;
-		for (int i = 0; i<2; i++){
-			//try {Thread.sleep(5);} catch (Exception e) {}
-			if(dist<odo.getLeftSensorDist()){
-				counter++;
-			}
-		}
-		if (counter > 1){ 
-			return true;
-		}
-		else {
-			return false;
-		}
-
-	}
-
 }
