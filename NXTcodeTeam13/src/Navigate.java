@@ -61,6 +61,7 @@ public class Navigate {
 		// sets nxt pointing towards destination
 		pointToDest();
 		// keep navigating as long as destination isn't reached
+		int i = 0 ;
 		while (distToDest() >= 3) {
 			//while no obstacle and not arrived at destination
 			while (follow && (odo.getFrontSensorDist() > robot.minFrontWallDist 
@@ -71,9 +72,11 @@ public class Navigate {
 					odo.usCleft.stopUS();
 					odo.usCright.stopUS();
 				}
-				store = distToDest() ; 
+				i++;
+				if(i%5 == 0){store = distToDest() ; }
 				goForth();
-				try {Thread.sleep(450);} catch (Exception e) {}
+				
+				try {Thread.sleep(50);} catch (Exception e) {}
 				if (distToDest() > store) { pointToDest();}		// check if heading away from destination and correct  angle(if no obstacle)
 			}
 			// if obstacle implement wall follower
