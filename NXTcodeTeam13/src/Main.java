@@ -70,7 +70,7 @@ public class Main{
 	}
 
 	
-	
+	// just a quick comment
 	
 	
 	
@@ -81,7 +81,7 @@ public class Main{
 	
 	
 
-	
+
 	
 	
 	
