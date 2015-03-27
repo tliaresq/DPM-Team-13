@@ -146,9 +146,14 @@ public class Tests extends Main {
 		nav.qBreak(300);
 		nav.qBreak(300);
 		nav.qBreak(300);
-		//nav.travelTo(176.88, 165.88, true);
-		nav.travelToRelocalizeCross(6, 6);
+		nav.travelTo(187.88, 150.88, true);
+		nav.pointTo(90);
+		nav.localizer.lineLocalize(182.88, 182.88);
 		nav.travelTo(182.88, 182.88, false);
+//		nav.travelTo(50.96, 45.96, true);
+//		nav.pointTo(90);
+//		nav.localizer.lineLocalize(60.96, 60.96);
+//		nav.travelTo(60.96, 60.96, false);
 		nav.pointTo(45);
 		nav.stopMotors();
 		nav.qBreak(300);
@@ -159,22 +164,31 @@ public class Tests extends Main {
 		nav.qBreak(300);
 		nav.qBreak(300);
 		nav.qBreak(30000);	
+		
+//		nav.travelTo(54.96, 165.88, true);
+		
+		//ignore for now
+//		nav.travelToRelocalizeCross(6, 6);
+//		nav.travelTo(182.88, 182.88, false);
 	}
 
 	public static void mapDemo()
 	{
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
+		robot.odo.lsC.restartLS();
 		nav.localizer.alphaLocalize();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		nav.qBreak(500);
 		nav.qBreak(500);
-		nav.travelTo(-15, 1, false);
-		nav.travelTo(-15, 168, false);
+		nav.travelTo(-10, 1, false);
+		nav.travelTo(-10, 168, false);
 		nav.travelTo(46, 168, false);
 		nav.travelTo(46, 198, false);
 		nav.travelTo(138, 198, false);
-		nav.travelTo(183, 183, false);
+		nav.travelTo(172.88, 167.88, true);
+		nav.pointTo(90);
+		nav.localizer.lineLocalize(182.88, 182.88);
 		nav.pointTo(45.0);
 		nav.qBreak(500);
 		nav.qBreak(500);

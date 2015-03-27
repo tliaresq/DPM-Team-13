@@ -64,7 +64,7 @@ public class Navigate {
 		while (distToDest() >= 3) {
 			//while no obstacle and not arrived at destination
 			while (follow && (odo.getFrontSensorDist() > robot.minFrontWallDist 
-					&& odo.getLeftSensorDist()>robot.followerSideDist && odo.getRightSensorDist()>robot.followerSideDist)) {
+					&& odo.getLeftSensorDist()>2 && odo.getRightSensorDist()>2)) {
 				if(distToDest()<robot.minFrontWallDist+1){
 					follow = false;
 					odo.usCfront.stopUS();
@@ -83,7 +83,7 @@ public class Navigate {
 			 * ======================================== 
 			 */
 			if (follow && (odo.getFrontSensorDist() < robot.minFrontWallDist 
-					|| odo.getLeftSensorDist()<robot.followerSideDist || odo.getRightSensorDist()<robot.followerSideDist)) { 
+					|| odo.getLeftSensorDist()<2 || odo.getRightSensorDist()<2)) { 
 				rotateClockwise(90);
 				follower.follow(true) ;
 			}

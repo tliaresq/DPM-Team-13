@@ -48,12 +48,13 @@ public class Localizer {
 				Sound.beep();
 				odo.setTheta(135);
 			}
-			if(!(Math.abs(ld-rd)< 3 && rd<15 && ld< 15 && (fd>ld && fd>rd))){
-			nav.pointTo(90+Math.toDegrees(Math.atan((ld-5)/(rd-5))));
+			if(!(Math.abs(ld-rd)< 3 && rd<15 && ld< 15 && (fd>ld || fd>rd))){
+			nav.pointTo(90+Math.toDegrees(Math.atan((ld-10)/(rd-10))));
 			}
+			nav.travelDist(2);
 			nav.goForth();
 			updateDists();
-			while(fd< 90 && !(rd<4 || ld< 4 || fd< 13)){
+			while(fd< 90 && !(rd<3 || ld< 3 || fd< 12)){
 			//while(fd< 90 && !( fd< 10)){
 						try {Thread.sleep(20);} catch (Exception e) {}
 				updateDists();
