@@ -2,14 +2,8 @@
 
 #Coding TODO List
 
-_ implement a localization under a minute that works with the requirements
-
-_ implement an Odometry correction class.
-
-_ sync the launcher and the nav
-
-	The test would be to go to a location and shoot at a target 6 times from there
-
+_optimize localization.
+_calculating the right hooting spot
 _ Complete the 5 map itinerary
 
 
