@@ -75,10 +75,15 @@ public class Navigate {
 				i++;
 				if(i%5 == 0){store = distToDest() ; }
 				goForth();
+				odo.correction.goingStraight = true;
 				
 				try {Thread.sleep(50);} catch (Exception e) {}
-				if (distToDest() > store) { pointToDest();}		// check if heading away from destination and correct  angle(if no obstacle)
+				if (distToDest() > store) { 
+					odo.correction.goingStraight = false;
+					pointToDest();
+					}		// check if heading away from destination and correct  angle(if no obstacle)
 			}
+			odo.correction.goingStraight = false;
 			// if obstacle implement wall follower
 			/*
 			 * ========================================
