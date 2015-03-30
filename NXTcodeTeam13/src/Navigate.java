@@ -30,8 +30,8 @@ public class Navigate {
 		setAccSp(robot.acc, robot.speed);
 	}
 
-	public void travelToRelocalizeCross(int x, int y){
-		travelTo( x*30.48-10, y*30.48 - 20, true,true);
+	public void travelToRelocalizeCross(int x, int y, boolean follow){
+		travelTo( x*30.48-10, y*30.48 - 20, follow,false);
 		pointTo(90);
 		localizer.lineLocalize(x*30.48, y*30.48);
 	}
@@ -140,6 +140,11 @@ public class Navigate {
 	public void rotateClockwise(double angle) {
 		leftMotor.rotate(convertAngle(robot.leftWradius,robot.wwDist, angle), true);
 		rightMotor.rotate(-convertAngle(robot.rightWradius, robot.wwDist, angle), false);
+	}
+	
+	public void rotateClockwiseIR(double angle) {
+		leftMotor.rotate(convertAngle(robot.leftWradius,robot.wwDist, angle), true);
+		rightMotor.rotate(-convertAngle(robot.rightWradius, robot.wwDist, angle), true);
 	}
 
 	/**

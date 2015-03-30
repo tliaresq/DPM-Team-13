@@ -144,7 +144,7 @@ public class Tests extends Main {
 		nav.localizer.lineLocalize(0, 0);
 		nav.qBreak(300); nav.qBreak(300); nav.qBreak(300);
 		robot.speed = 200;
-		nav.travelToRelocalizeCross(6,6);
+		nav.travelToRelocalizeCross(6,6,true);
 		robot.speed = 200;
 		nav.travelTo(6*30.48, 6*30.48, false, false);
 		nav.pointTo(45);

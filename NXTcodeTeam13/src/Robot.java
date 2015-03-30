@@ -70,8 +70,8 @@ public class Robot {
 	 */
 	public int usFilterSize = 10;  		// how important is the filter for sensor values
 	public int lsFilterSize = 4;
-	public int blackM = 490;
-	public int blackR = 490;
+	public int blackM = 480;
+	public int blackR = 400;
 	
 	 			// this value needs to be in between the raw output of black and wood of the color sensor
 

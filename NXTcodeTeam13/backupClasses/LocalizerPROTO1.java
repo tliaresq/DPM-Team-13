@@ -20,55 +20,59 @@ public class Localizer {
 	public void alphaLocalize(){
 		
 		odo.usCfront.restartUS();
-		odo.setTheta(0);
-		nav.setAccSp(2000, 150);
-		while(odo.getFrontSensorDist()<100){
-		nav.spinClockWise();
-		}
-		while(odo.getFrontSensorDist()>100){
+		odo.usCleft.restartUS();
+		while(odo.usCfront.sensorDist()<30){
 			nav.spinClockWise();
-			}
-		
-		int counter = 0 ;
-		double minDistAngle = 0;
-		double storedDist;
-		double dist;
-		double minDist = Integer.MAX_VALUE;
-		nav.spinClockWise();
-		while(counter<50){
-			dist = odo.getFrontSensorDist();
-			minDist = Math.min(minDist, dist);
-			if (minDist == dist){
-				minDistAngle = odo.getTheta();
-			}	
-			if (odo.getFrontSensorDist()>250){
-				counter ++;
-			}
-			else{
-				counter =0;
-			}
-			try { Thread.sleep(10); } catch (Exception e) {}
-
 		}
-		nav.qBreak(500);nav.qBreak(500);nav.qBreak(500);
-		nav.pointTo(minDistAngle);
-		nav.qBreak(500);nav.qBreak(500);
-		nav.pointTo(minDistAngle - 90);
-		if(odo.getFrontSensorDist()<60){
-			odo.setTheta(180);
-			odo.setX(odo.getFrontSensorDist()-20);
-			odo.setY(minDist-20);
+		while(odo.usCfront.sensorDist()>30){
+			nav.spinClockWise();
+		}
+		nav.rotateClockwise(-8);
+		odo.lsM.start();
+		odo.lsR.start();
+		nav.goForth();
+		if(crossLine()==true){
+			while(!(odo.isLineM()==true && odo.isLineR()==true)){
+				nav.spinCounterClockWise();
+				crossLine()	;
+				nav.qBreak(500);
+				nav.travelDist(-5);
+				nav.goForth();
+				crossLine();
+				nav.qBreak(500);
+			}
 		}
 		else{
-			odo.setTheta(90);
-			nav.pointTo(270);
-			odo.setX(minDist-20);
-			odo.setY(odo.getFrontSensorDist()-20);
+			while(!(odo.isLineM()==true && odo.isLineR()==true)){
+				nav.spinClockWise();
+				while(crossLine()!=true){
+					try { Thread.sleep(10); } catch (Exception e) {}
+				}
+				nav.goForth();
+				while(crossLine()!=false){
+					try { Thread.sleep(10); } catch (Exception e) {}
+				}
+			}
 		}
 		
+		odo.setTheta(0);
+		odo.setX(-robot.lsDist);
+		nav.rotateClockwise(-90);
+		nav.goForth();
+		crossLine();
+		nav.travelTo(-robot.lsDist, -robot.lsDist, false, false);
+		nav.pointTo(180);
+		if(odo.getFrontSensorDist()>25){
+			odo.setX(odo.getX()+30.48);
+		}
+		nav.pointTo(270);
+		if(odo.getFrontSensorDist()>25){
+			odo.setY(odo.getY()+30.48);
+		}
+		nav.stopMotors();
+		odo.setY(-robot.lsDist);
 		nav.qBreak(500);nav.qBreak(500);nav.qBreak(500);
-		odo.lsM.start();
-		nav.travelToRelocalizeCross(0, 0,false);
+		nav.travelToRelocalizeCross(2, 2);
 		nav.qBreak(60000);	
 	}
 	
