@@ -51,7 +51,7 @@ public class Navigate {
 		if (follow){
 			odo.usCfront.restartUS();
 			odo.usCleft.restartUS();
-			odo.usCright.restartUS();
+		//	odo.usCright.restartUS();
 		}
 		xDest = x;
 		yDest = y;
@@ -65,12 +65,12 @@ public class Navigate {
 		while (distToDest() >= 3) {
 			//while no obstacle and not arrived at destination
 			while (follow && (odo.getFrontSensorDist() > robot.minFrontWallDist 
-					&& odo.getLeftSensorDist()>2 && odo.getRightSensorDist()>2)) {
+					&& odo.getLeftSensorDist()>2)) {
 				if(distToDest()<robot.minFrontWallDist+1){
 					follow = false;
 					odo.usCfront.stopUS();
 					odo.usCleft.stopUS();
-					odo.usCright.stopUS();
+				//	odo.usCright.stopUS();
 				}
 				i++;
 				if(i%5 == 0){store = distToDest() ; }
@@ -86,7 +86,7 @@ public class Navigate {
 			 * ======================================== 
 			 */
 			if (follow && (odo.getFrontSensorDist() < robot.minFrontWallDist 
-					|| odo.getLeftSensorDist()<2 || odo.getRightSensorDist()<2)) { 
+					|| odo.getLeftSensorDist()<2 )) { 
 				rotateClockwise(90);
 				follower.follow(true) ;
 			}

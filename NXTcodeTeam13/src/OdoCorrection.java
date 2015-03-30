@@ -31,7 +31,7 @@ public class OdoCorrection extends Thread{
 	 * does nothing until line is crossed
 	 */
 	private void crossLine() {
-		while (odo.getLSState()==false){
+		while (odo.isLineM()==false){
 			try { Thread.sleep(10); } catch (Exception e) {}
 		}
 	}

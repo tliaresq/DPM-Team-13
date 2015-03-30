@@ -16,8 +16,8 @@ public class Robot {
 	public RegulatedMotor leftMotor =  MirrorMotor.invertMotor(Motor.B);
 	public RegulatedMotor rightMotor = MirrorMotor.invertMotor(Motor.C);
 	public NXTRegulatedMotor armMotor = Motor.A;
-	public UltrasonicSensor usLeftSensor = new UltrasonicSensor(SensorPort.S1), usFrontSensor = new UltrasonicSensor(SensorPort.S2),usRightSensor = new UltrasonicSensor(SensorPort.S4);;
-	public ColorSensor cs1 = new ColorSensor(SensorPort.S3);
+	public UltrasonicSensor usLeftSensor = new UltrasonicSensor(SensorPort.S1), usFrontSensor = new UltrasonicSensor(SensorPort.S2);
+	public ColorSensor csM = new ColorSensor(SensorPort.S3),csR = new ColorSensor(SensorPort.S4);
 	public Odometer odo;			// Handles all data relative to location
 	/*
 	 * ===============================================
@@ -70,6 +70,9 @@ public class Robot {
 	 */
 	public int usFilterSize = 10;  		// how important is the filter for sensor values
 	public int lsFilterSize = 4;
+	public int blackM = 490;
+	public int blackR = 490;
+	
 	 			// this value needs to be in between the raw output of black and wood of the color sensor
 
 

@@ -13,26 +13,25 @@ public class Odometer extends Thread {
 	private double x, y, theta;
 	private int nowTachoL, nowTachoR, lastTachoL, lastTachoR;
 	private int sensorLeftDist, sensorRightDist, sensorFrontDist;
-	private boolean isLine;
+	private boolean isLineM,isLineR;
 
 
 	private OdometryDisplay odometryDisplay = new OdometryDisplay(this); // displays all odometer data
 	public OdoCorrection correction;
 	public Robot robot;
 	
-	public USController usCleft, usCfront,usCright;
-	public LSController lsC;
+	public USController usCleft, usCfront;//usCright;
+	public LSController lsM,lsR;
 
 
 	public Odometer(Robot r) {
 		lock = new Object();
 		robot = r;
-		lsC = new LSController(robot.cs1, robot.lsFilterSize);
+		lsM = new LSController(robot.csM, robot.lsFilterSize,robot.blackM);
+		lsR = new LSController(robot.csR, robot.lsFilterSize,robot.blackR);
 		correction = new OdoCorrection(this);
 		usCleft = new USController(robot.usLeftSensor, robot.usFilterSize);
 		usCfront  = new USController(robot.usFrontSensor,robot.usFilterSize);
-		usCright  = new USController(robot.usRightSensor,robot.usFilterSize);
-
 		x = 0.0;
 		y = 0.0;
 		theta = 90.0;
@@ -47,7 +46,7 @@ public class Odometer extends Thread {
 		odometryDisplay.start();
 		usCleft.start();
 		usCfront.start();
-		usCright.start();
+		//usCright.start();
 		correction.start();
 
 
@@ -57,8 +56,9 @@ public class Odometer extends Thread {
 				double distL, distR, deltaD, deltaT, dX, dY;
 				sensorLeftDist = usCleft.sensorDist();
 				sensorFrontDist = usCfront.sensorDist();
-				sensorRightDist  = usCright.sensorDist();
-				isLine = lsC.getLS();
+				//sensorRightDist  = usCright.sensorDist();
+				isLineM = lsM.getLS();
+				isLineR = lsR.getLS();
 				
 				nowTachoL = (robot.leftMotor.getTachoCount());
 				nowTachoR = (robot.rightMotor.getTachoCount());
@@ -138,13 +138,7 @@ public class Odometer extends Thread {
 		}
 		return result;
 	}
-	public double getRightSensorDist() {
-		double result;
-		synchronized (lock) {
-			result = sensorRightDist;
-		}
-		return result;
-	}
+	
 	public double getFrontSensorDist() {
 		double result;
 		synchronized (lock) {
@@ -152,13 +146,21 @@ public class Odometer extends Thread {
 		}
 		return result;
 	}
-	public boolean getLSState() {
+	public boolean isLineM() {
 		boolean result;
 		synchronized (lock) {
-			result = isLine;
+			result = isLineM;
 		}
 		return result;
 	}
+	public boolean isLineR() {
+		boolean result;
+		synchronized (lock) {
+			result = isLineR;
+		}
+		return result;
+	}
+	
 	public void setX(double x) {
 		synchronized (lock) {
 			this.x = x;

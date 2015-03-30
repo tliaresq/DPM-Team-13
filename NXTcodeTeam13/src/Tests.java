@@ -75,22 +75,22 @@ public class Tests extends Main {
 		try {Thread.sleep(100);} catch (Exception e) {}
 		robot.odo.usCfront.restartUS();
 		robot.odo.usCleft.restartUS();
-		robot.odo.usCright.restartUS();
+		//robot.odo.usCright.restartUS();
 		nav.qBreak(500);
 		robot.odo.usCfront.stopUS();
 		robot.odo.usCleft.stopUS();
-		robot.odo.usCright.stopUS();
+		//robot.odo.usCright.stopUS();
 		nav.qBreak(500);
 		robot.odo.usCfront.restartUS();
 		robot.odo.usCleft.restartUS();
-		robot.odo.usCright.restartUS();
+		//robot.odo.usCright.restartUS();
 
 	}
 	public void lsTest(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		robot.odo.lsC.start();
-
+		robot.odo.lsM.start();
+		robot.odo.lsR.start();
 		try {Thread.sleep(50000);} catch (Exception e) {}
 
 	}
@@ -108,7 +108,7 @@ public class Tests extends Main {
 	public void localize(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.localizer.wallLocalize();
+		nav.localizer.alphaLocalize();
 	}
 
 
@@ -138,8 +138,8 @@ public class Tests extends Main {
 		robot.speed = 200;
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.localizer.wallLocalize();
-		robot.odo.lsC.start();
+		nav.localizer.alphaLocalize();
+		robot.odo.lsM.start();
 		nav.qBreak(100);
 		nav.localizer.lineLocalize(0, 0);
 		nav.qBreak(300); nav.qBreak(300); nav.qBreak(300);
@@ -159,8 +159,8 @@ public class Tests extends Main {
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 
-		nav.localizer.wallLocalize();
-		robot.odo.lsC.start();
+		nav.localizer.alphaLocalize();
+		robot.odo.lsM.start();
 		nav.localizer.lineLocalize(0, 0);
 		try {Thread.sleep(100);} catch (Exception e) {}
 		nav.qBreak(500);

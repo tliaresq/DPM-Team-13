@@ -8,13 +8,14 @@ import lejos.nxt.ColorSensor;
 public class LSController extends Thread {
 	public ColorSensor colorSensor;
 	private boolean line;
-	private int black = 490;
+	private int black;
 	private int fSize;
 
-	public LSController(ColorSensor cs, int filterSize) {
+	public LSController(ColorSensor cs, int filterSize, int b){
 		colorSensor = cs;
 		line = false;
 		fSize = filterSize;
+		black = b;
 	}
 
 	public void run() {
