@@ -1,3 +1,5 @@
+import lejos.nxt.Sound;
+
 
 
 /**
@@ -47,6 +49,8 @@ public class Odometer extends Thread {
 		usCleft.start();
 		usCfront.start();
 		//usCright.start();
+		lsM.start();
+		lsR.start();
 		correction.start();
 
 

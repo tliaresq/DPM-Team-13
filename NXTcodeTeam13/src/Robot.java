@@ -27,8 +27,8 @@ public class Robot {
 	public double wwDist = 15.5; // less turns less & more turns more
 	public double leftWradius = 2.06;//less travels more  
 	public double rightWradius = leftWradius ;    
-	public double lsDist = 8;
-	public double lsDistR = 5;
+	public double lsDist = 7.8;
+	public double lsDistR = 4.2;
 	public double lsrAngle = Math.atan2(lsDistR, lsDist);
 	public double lsrDist = Math.sqrt(lsDist*lsDist+lsDistR*lsDistR);
 	
@@ -73,9 +73,9 @@ public class Robot {
 	 *  ==============================================
 	 */
 	public int usFilterSize = 10;  		// how important is the filter for sensor values
-	public int lsFilterSize = 4;
+	public int lsFilterSize = 3;
 	public int blackM = 480;
-	public int blackR = 400;
+	public int blackR = 420;
 	
 	 			// this value needs to be in between the raw output of black and wood of the color sensor
 

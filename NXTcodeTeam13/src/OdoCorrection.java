@@ -1,4 +1,4 @@
-import lejos.nxt.Sound;
+import lejos.nxt.*;
 /**
  * Corrects the odometer each time a line is crossed if conditions are right
  * @author Cedric
@@ -9,17 +9,12 @@ public class OdoCorrection extends Thread{
 	public boolean goingStraight;
 	private boolean stop;
 	private double[] lines = {0,30.48,60.96,91.44,121.92,152.40,182.88,213.36,243.84,274.32,304.8,335.28,365.76,396.24,426.72,457.20,487.68};
-
-
-	private int[] lX,lY,rX, rY;
+	private double[] detLine = {-1.0, -1.0, -1.0};
+	private double[] pos = {-1.0, -1.0, -1.0};
 
 	public OdoCorrection( Odometer o){
 		stop = true;
 		odo = o;
-		lX = new int[2];
-		lY = new int[2];
-		rX= new int[2];
-		rY = new int[2];
 	}
 
 	public void run(){
@@ -29,53 +24,15 @@ public class OdoCorrection extends Thread{
 				try {Thread.sleep(10);} catch (Exception e) {}
 			}
 			else{
-				if(crossLine()){ //found a line
-					updateLeft();
+				crossLine();
+				//found a line
+				if(odo.isLineM())
+				{
+					update(0.0);
 				}
-				else{
-					updateRight();
-				}
-				double travelledDist;
-				if(lX[0]>0 && rX[0]>0){
-					travelledDist = rX[0] - lX[0];
-					if(odo.getTheta()>90 && odo.getTheta()<270){
-						if (travelledDist<0){
-							odo.setTheta(270 -Math.abs(Math.atan(odo.robot.lsDistR/ travelledDist)));
-						}
-						else{
-							odo.setTheta(90+Math.abs(Math.atan(odo.robot.lsDistR/ travelledDist)));
-						}
-							
-					}
-					else{
-						if (travelledDist>0){
-							odo.setTheta(270 +Math.abs(Math.atan(odo.robot.lsDistR/ travelledDist)));
-						}
-						else{
-							odo.setTheta(90-Math.abs(Math.atan(odo.robot.lsDistR/ travelledDist)));
-						}
-					}
-					
-				}					
-				if(lY[0]>0 && rY[0]>0){
-					travelledDist = rY[0] - lY[0];
-					if(odo.getTheta()>180 && odo.getTheta()<360){
-						if (travelledDist<0){
-							odo.setTheta(180 -Math.abs(Math.atan(odo.robot.lsDistR/ travelledDist)));
-						}
-						else{
-							odo.setTheta(0+Math.abs(Math.atan(odo.robot.lsDistR/ travelledDist)));
-						}
-							
-					}
-					else{
-						if (travelledDist>0){
-							odo.setTheta(180 +Math.abs(Math.atan(odo.robot.lsDistR/ travelledDist)));
-						}
-						else{
-							odo.setTheta(0-Math.abs(Math.atan(odo.robot.lsDistR/ travelledDist)));
-						}
-					}
+				if(odo.isLineR())
+				{
+					update(1.0);
 				}
 			}
 		}
@@ -83,42 +40,31 @@ public class OdoCorrection extends Thread{
 	/**
 	 * does nothing until line is crossed
 	 */
-	private boolean crossLine() {
-		boolean left = false;
-		boolean right = false;
-		while (!(left==true || right==true)){
-			left = odo.isLineM();
-			right = odo.isLineR();
-			if(!goingStraight){
-				lX[0] = -1;
-				lX[1] = -1;
-				lY[0] = -1;
-				lY[1] = -1;
-				rX[0] = -1;
-				rX[1] = -1;
-				rY[0] = -1;
-				rY[1] = -1;
-			}
+	private void crossLine() {
+		while (odo.isLineM()==false && odo.isLineR()==false){
 			try { Thread.sleep(10); } catch (Exception e) {}
 		}
-
-		if (left == true ){
-			return true;
-		}
-		else{
-			return false;
-		}
-
-
 	}
 	/**
 	 * 
 	 * once a line is crossed at a given point, checks what different lines it could be
 	 * if that point is far from any line intersection and close enough to a line it will update x and y accordingly 
 	 */
-	private void updateLeft(){
-		double dy = odo.robot.lsDist*Math.sin(Math.toRadians(odo.getTheta()));
-		double dx = odo.robot.lsDist*Math.cos(Math.toRadians(odo.getTheta()));
+	private void update(double sen){
+		double lsDist = 0.0;
+		double dt = 0.0;
+		if(sen==0)
+		{
+			lsDist = odo.robot.lsDist;
+			dt = 0.0;
+		}
+		else if(sen==1)
+		{
+			lsDist = Math.sqrt((odo.robot.lsDist*odo.robot.lsDist)+(odo.robot.lsDistR*odo.robot.lsDistR));
+			dt = -Math.toDegrees(Math.atan(odo.robot.lsDistR/odo.robot.lsDist));
+		}
+		double dy = lsDist*Math.sin(Math.toRadians(odo.getTheta()+dt));
+		double dx = lsDist*Math.cos(Math.toRadians(odo.getTheta()+dt));
 		double xDetect = odo.getX()+dx;
 		double yDetect = odo.getY()+dy;
 		double yCrossed = -100;
@@ -130,63 +76,100 @@ public class OdoCorrection extends Thread{
 		}
 		if(xCrossed== -100 && yCrossed == -100){
 			//Error 
-			// or the odometer is too off for appropriate correction
+			// or the odometer is too off for apropriate correction
 			// or it has detected a line it shouldn't have
 		}
 		if(xCrossed!= -100 && yCrossed != -100){
 			// the robot is close to a line intersection
-			// we will not take the risk to update since we don't know whether to update x or y;
+			// we will not take the risk to update since we don't know wether to update x or y;
 		}
 		if(xCrossed!= -100 && yCrossed == -100){
-			odo.setX(xCrossed-dx);
-			lX[0] = odo.robot.leftMotor.getTachoCount();
-			lX[1] = odo.robot.rightMotor.getTachoCount();			
+			if(sen==0)
+			{
+				odo.setX(xCrossed-dx);
+				Sound.beep();
+			}
+			thetaUpdate(sen, 0.0, xCrossed);
 			Sound.beep();
-
+			try {Thread.sleep(50);} catch (Exception e) {}
 		}
 		if(xCrossed== -100 && yCrossed != -100){
-			odo.setY(yCrossed - dy);
-			lY[0] = odo.robot.leftMotor.getTachoCount();
-			lY[1] = odo.robot.rightMotor.getTachoCount();
+			if(sen==0)
+			{
+				odo.setY(yCrossed - dy);
+				Sound.beep();
+			}
+			thetaUpdate(sen, 1.0, yCrossed);
 			Sound.beep();
+			try {Thread.sleep(50);} catch (Exception e) {}
 		}
 	}
-	private void updateRight(){
-		double dy = odo.robot.lsrDist*Math.sin(Math.toRadians(odo.getTheta() - odo.robot.lsrAngle));
-		double dx = odo.robot.lsrDist*Math.cos(Math.toRadians(odo.getTheta()- odo.robot.lsrAngle));
-		double xDetect = odo.getX()+dx;
-		double yDetect = odo.getY()+dy;
-		double yCrossed = -100;
-		double xCrossed = -100;
-
-		for (int i = 0; i < lines.length; i++ ){
-			if(inBand(yDetect, lines[i])){yCrossed = lines[i];}
-			if(inBand(xDetect, lines[i])){xCrossed = lines[i];}
-		}
-		if(xCrossed== -100 && yCrossed == -100){
-			//Error 
-			// or the odometer is too off for appropriate correction
-			// or it has detected a line it shouldn't have
-		}
-		if(xCrossed!= -100 && yCrossed != -100){
-			// the robot is close to a line intersection
-			// we will not take the risk to update since we don't know whether to update x or y;
-		}
-		if(xCrossed!= -100 && yCrossed == -100){
-			rX[0] = odo.robot.leftMotor.getTachoCount();
-			rX[1] = odo.robot.rightMotor.getTachoCount();
-			odo.setX(xCrossed-dx);
-			Sound.beep();
-		}
-		if(xCrossed== -100 && yCrossed != -100){
-			odo.setY(yCrossed - dy);
-			rY[0] = odo.robot.leftMotor.getTachoCount();
-			rY[1] = odo.robot.rightMotor.getTachoCount();
-			Sound.beep();
-		}
+	
+	private void thetaUpdate(double sen, double axis, double coord)
+	{
+			if(detLine[0]!=sen && detLine[1]==axis && detLine[2]==coord && Math.abs(pos[0]-odo.getTheta())<=3)
+			{
+				double k = odo.robot.lsDistR;
+				double d = (Math.toRadians(Math.abs(Motor.B.getTachoCount()-pos[1])))*2.06;
+				
+//				double x = odo.getX();
+//				double y = odo.getY();
+				
+//				double k = odo.robot.lsDistR;
+//				double d = Math.sqrt(((y-pos[2])*(y-pos[2]))+((x-pos[1])*(x-pos[1])));
+				
+				if(axis==0.0 && odo.getTheta()<=180.0 && sen==1.0)
+				{
+					double theta = Math.toDegrees(Math.atan(k/d));
+					odo.setTheta(theta);
+				}
+				else if(axis==0.0 && odo.getTheta()<=180.0 && sen==0.0)
+				{
+					double theta = Math.toDegrees(Math.atan(d/k))+90.0;
+					odo.setTheta(theta);
+				}
+				else if(axis==0.0 && odo.getTheta()>=180.0 && sen==1.0)
+				{
+					double theta = Math.toDegrees(Math.atan(k/d))+180.0;
+					odo.setTheta(theta);
+				}
+				else if(axis==0.0 && odo.getTheta()>=180.0 && sen==0.0)
+				{
+					double theta = Math.toDegrees(Math.atan(d/k))+270.0;
+					odo.setTheta(theta);
+				}
+				else if(axis==1.0 && (odo.getTheta()<=90.0 || odo.getTheta()>=270.0) && sen==1.0)
+				{
+					double theta = Math.toDegrees(Math.atan(k/d))+270.0;
+					odo.setTheta(theta);
+				}
+				else if(axis==1.0 && (odo.getTheta()<=90.0 || odo.getTheta()>=270.0) && sen==0.0)
+				{
+					double theta = Math.toDegrees(Math.atan(d/k))+90.0;
+					odo.setTheta(theta);
+				}
+				else if(axis==1.0 && (odo.getTheta()>=90.0 && odo.getTheta()<=270.0) && sen==1.0)
+				{
+					double theta = Math.toDegrees(Math.atan(k/d))+90.0;
+					odo.setTheta(theta);
+				}
+				else if(axis==1.0 && (odo.getTheta()>=90.0 && odo.getTheta()<=270.0) && sen==0.0)
+				{
+					double theta = Math.toDegrees(Math.atan(d/k))+180;
+					odo.setTheta(theta);
+				}
+			}
+				detLine[0]=sen;
+				detLine[1]=axis;
+				detLine[2]=coord;
+				
+				pos[0]=odo.getTheta();
+				pos[1]=Motor.B.getTachoCount();
+				
+//				pos[0]=odo.getTheta();
+//				pos[1]=odo.getX();
+//				pos[2]=odo.getY();
 	}
-
-
 	/**
 	 * check if a certain value "d" is within a certain range of a reference value
 	 * @param d

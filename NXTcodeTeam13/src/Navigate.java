@@ -78,7 +78,7 @@ public class Navigate {
 				odo.correction.goingStraight = true;
 				
 				try {Thread.sleep(50);} catch (Exception e) {}
-				if (distToDest() > store) { 
+				if (distToDest() > store || Math.abs( deltaAngle(destAngle()))>3) { 
 					odo.correction.goingStraight = false;
 					pointToDest();
 					}		// check if heading away from destination and correct  angle(if no obstacle)
