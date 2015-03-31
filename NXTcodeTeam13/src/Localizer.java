@@ -31,7 +31,7 @@ public class Localizer {
 		
 		int counter = 0 ;
 		double minDistAngle = 0;
-		double storedDist;
+		
 		double dist;
 		double minDist = Integer.MAX_VALUE;
 		nav.spinClockWise();
@@ -85,17 +85,17 @@ public class Localizer {
 		try {Thread.sleep(100);} catch (Exception e) {}
 
 		nav.goForth();
-		crossLine();
+		nav.crossLine();
 		nav.travelDist(robot.lsDist);
 		odo.setY(y);
 		nav.spinCounterClockWise();
-		crossLine();
+		nav.crossLine();
 		odo.setTheta(180);
 		nav.rotateClockwise(90);
 		nav.travelDist(2);
 		nav.rotateClockwise(90);
 		nav.goForth();
-		crossLine();
+		nav.crossLine();
 		nav.travelDist(robot.lsDist);
 		odo.setX(x);
 		//odo.lsC.stopLS();;
@@ -103,25 +103,7 @@ public class Localizer {
 	}
 	
 
-	/**
-	 * Keeps the thread running until a line is detected
-	 * @return
-	 */
-	private boolean crossLine() {
-		boolean middle = false;
-		boolean right = false;
-		while (middle == false && right == false){
-			try { Thread.sleep(10); } catch (Exception e) {}
-			middle = odo.isLineM();
-			right = odo.isLineR();
-		}
-		if (right = true){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
+
 	
 
 }

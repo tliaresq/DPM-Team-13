@@ -28,6 +28,10 @@ public class Robot {
 	public double leftWradius = 2.06;//less travels more  
 	public double rightWradius = leftWradius ;    
 	public double lsDist = 8;
+	public double lsDistR = 5;
+	public double lsrAngle = Math.atan2(lsDistR, lsDist);
+	public double lsrDist = Math.sqrt(lsDist*lsDist+lsDistR*lsDistR);
+	
 
 	/*
 	 * ===============================================

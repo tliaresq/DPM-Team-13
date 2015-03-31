@@ -12,7 +12,7 @@ public class Odometer extends Thread {
 	private Object lock;
 	private double x, y, theta;
 	private int nowTachoL, nowTachoR, lastTachoL, lastTachoR;
-	private int sensorLeftDist, sensorRightDist, sensorFrontDist;
+	private int sensorLeftDist, sensorFrontDist;
 	private boolean isLineM,isLineR;
 
 

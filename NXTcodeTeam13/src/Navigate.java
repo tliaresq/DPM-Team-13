@@ -175,6 +175,25 @@ public class Navigate {
 
 	}
 	/**
+	 * Keeps the thread running until a line is detected
+	 * @return
+	 */
+	public boolean crossLine() {
+		boolean middle = false;
+		boolean right = false;
+		while (middle == false && right == false){
+			try { Thread.sleep(10); } catch (Exception e) {}
+			middle = odo.isLineM();
+			right = odo.isLineR();
+		}
+		if (right = true){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	/**
 	 * robot spins clockwise until told to do something else
 	 */
 	public void spinClockWise() {
