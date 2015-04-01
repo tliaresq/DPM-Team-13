@@ -1,0 +1,242 @@
+import lejos.nxt.Sound;
+
+
+/**
+ * Implements Localisation methods to localize at specific times
+ * Different localization methods may be used depending on how inaccurate is the odometer at the time of localization and the known environment
+ * @author Cedric
+ *
+ */
+public class Localizer {
+	private Odometer odo;
+	private Navigate nav;
+	private Robot robot;
+
+
+	public Localizer( Navigate n, Robot r) {
+		odo = r.odo;
+		nav = n;
+		robot = r;
+	}
+
+	public void alphaLocalize(){
+
+		odo.usCfront.restartUS();
+		odo.setTheta(0);
+		nav.setAccSp(2000, 250);
+		try {Thread.sleep(100);} catch (Exception e) {}
+
+		while(odo.getFrontSensorDist()<60){
+			nav.spinClockWise();
+			try {Thread.sleep(10);} catch (Exception e) {}
+
+		}
+		while(odo.getFrontSensorDist()>60){
+			nav.spinClockWise();
+			try {Thread.sleep(10);} catch (Exception e) {}
+
+		}
+
+		int counter = 0 ;
+		double minDistAngle = 0;
+
+		double dist;
+		double minDist = Integer.MAX_VALUE;
+		nav.setAccSp(2000, 150);
+
+		nav.spinClockWise();
+		while(counter<50){
+			dist = odo.getFrontSensorDist();
+			minDist = Math.min(minDist, dist);
+			if (minDist == dist){
+				minDistAngle = odo.getTheta();
+			}	
+			if (odo.getFrontSensorDist()>60){
+				counter ++;
+			}
+			else{
+				counter =0;
+			}
+			try { Thread.sleep(10); } catch (Exception e) {}
+
+		}
+		nav.qBreak(500);nav.qBreak(500);nav.qBreak(500);
+		nav.pointTo(minDistAngle + 5);
+		Sound.buzz();
+		nav.qBreak(500);nav.qBreak(500);
+		nav.pointTo(minDistAngle+ 5 - 90);
+		if(odo.getFrontSensorDist()<60){
+			odo.setTheta(180);
+			odo.setX(odo.getFrontSensorDist()-20);
+			odo.setY(minDist-20);
+		}
+		else{
+			odo.setTheta(90);
+			nav.pointTo(270);
+			odo.setX(minDist-20);
+			odo.setY(odo.getFrontSensorDist()-20);
+		}
+
+		nav.qBreak(500);nav.qBreak(500);nav.qBreak(500);
+		nav.travelTo(0, 0, false , false);
+		odo.lsM.start();
+		localize360();
+		nav.travelTo(0, 0, false , false);
+
+		Sound.buzz();
+		//		nav.travelToRelocalizeCross(0, 0,false);
+		Sound.buzz();
+
+		nav.qBreak(60000);	
+	}
+
+	public void risingEdge(){
+		odo.usCfront.restartUS();
+		nav.setAccSp(2000, 200);
+		nav.spinCounterClockWise();
+		findWall();
+		nav.spinCounterClockWise();
+		findNoWall();
+		odo.setTheta(0);
+		Sound.beep();
+		nav.spinClockWise();
+		findWall();
+		nav.spinClockWise();
+		findNoWall();
+		Sound.beep();
+		odo.setTheta(90 + (odo.getTheta() / 2 - 45));
+		nav.pointTo(180);
+		odo.setX(8+odo.getFrontSensorDist());
+		nav.pointTo(270);
+		odo.setY(8+odo.getFrontSensorDist());
+		nav.travelToRelocalizeCross(0, 0, false);
+
+	}
+
+	public void localize360(){
+		double[] deg = new double[4];
+		nav.rotateClockwiseIR(370);
+		for(int i = 0 ; i <deg.length; i++){
+			while(odo.isLineM()==true){
+				try {Thread.sleep(30);} catch (Exception e) {}
+			}
+			while(odo.isLineM()==false){
+				try {Thread.sleep(15);} catch (Exception e) {}
+			}
+			deg[i] = odo.getTheta();
+		}
+
+		while(!(deg[0]>0 && deg[0]<180 && deg[3]>90 && deg[3]<270)){
+			shift(deg);
+		}
+		Sound.buzz();
+
+		double a,b;
+		a =robot.lsDist*Math.cos( Math.toRadians((180 - angleDiff(deg[0],deg[2]))/2));
+		b =robot.lsDist*Math.cos( Math.toRadians((180 - angleDiff(deg[1],deg[3]))/2));
+		if(deg[0]>90 && deg[2]<270){
+			odo.setX(a);
+		}
+		else{
+			odo.setX(-a);
+		}
+		if(deg[1]>180 && deg[2]<360){
+			odo.setY(b);
+		}
+		else{
+			odo.setY(-b);
+		}
+
+	}
+
+	public void shift(double[] array){
+		double[] result = new double[array.length];
+		for(int i = 0 ; i < array.length-1; i ++){
+			result[i+1] = array[i];
+		}
+		result[0]= array[array.length];
+		array = result;
+
+	}
+
+	public double angleDiff(double a,double b) {
+		a = (a + 360) % 360;
+		if (b > 180) {
+			b -= 360;
+		}
+		if (a > 180) {
+			a -= 360;
+		}
+		double deltaAngle = a - b;
+
+		if (deltaAngle > 180) {
+			deltaAngle -= 360;
+		}
+		if (deltaAngle < -180) {
+			deltaAngle += 360;
+		}
+		return deltaAngle;
+	}
+
+
+
+	/**
+	 * to work the robot needs to be pointing north
+	 * @param x	line directly east of the light sensor
+	 * @param y line directly north of the light sensor
+	 */
+	public void lineLocalize(double x, double y) {
+		nav.setAccSp(9000, 100);
+		nav.goForth();
+		nav.crossLine();
+		nav.travelDist(robot.lsDist);
+		odo.setY(y);
+		nav.spinClockWise();
+		nav.crossLine();
+		odo.setTheta(0);
+		nav.rotateClockwise(90);
+		nav.travelDist(4);
+		nav.rotateClockwise(-90);
+		nav.goForth();
+		nav.crossLine();
+		nav.travelDist(robot.lsDist);
+		odo.setX(x);
+		nav.setAccSp(robot.acc, robot.speed);
+	}
+
+
+	private void findWall() {
+		int counter = 0;
+		double sensorDist;
+		int maxCount = 15;
+		do {
+			sensorDist = odo.getFrontSensorDist();
+			if (sensorDist <=60  ) {
+				counter++;
+			} else {
+				counter = 0;
+			}
+		} while (counter < maxCount);
+
+	}
+
+	private void findNoWall() {
+		int counter = 0;
+		double sensorDist;
+		int maxCount = 15;
+		do {
+			sensorDist = odo.getFrontSensorDist();
+			try {
+				Thread.sleep(20);
+			} catch (Exception e) {
+			}
+			if (sensorDist >= 60) {
+				counter++;
+			} else {
+				counter = 0;
+			}
+		} while (counter < maxCount);
+	}
+
+
+}

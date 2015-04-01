@@ -97,6 +97,8 @@ public class Tests extends Main {
 	public void odoCorrectTest(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
+		robot.odo.lsM.start();
+		robot.odo.lsR.start();
 		robot.odo.setX(15.0);
 		try {Thread.sleep(100);} catch (Exception e) {}
 		robot.odo.setY(15.0);
@@ -121,7 +123,7 @@ public class Tests extends Main {
 	public void localize(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.localizer.alphaLocalize();
+		nav.localizer.risingEdge();;
 	}
 
 
@@ -147,50 +149,6 @@ public class Tests extends Main {
 	}
 
 
-	public void demoMain(){
-		robot.speed = 200;
-		robot.odo.start();
-		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.localizer.alphaLocalize();
-		robot.odo.lsM.start();
-		nav.qBreak(100);
-		nav.localizer.lineLocalize(0, 0);
-		nav.qBreak(300); nav.qBreak(300); nav.qBreak(300);
-		robot.speed = 200;
-		nav.travelToRelocalizeCross(6,6,true);
-		robot.speed = 200;
-		nav.travelTo(6*30.48, 6*30.48, false, false);
-		nav.pointTo(45);
-		nav.stopMotors();
-		nav.qBreak(300);nav.qBreak(300);nav.qBreak(300);
-		crossbow.shoot(8);
-		nav.qBreak(300);nav.qBreak(300);nav.qBreak(300);nav.qBreak(30000);	
-	}
-
-	public static void mapDemo()
-	{
-		robot.odo.start();
-		try {Thread.sleep(100);} catch (Exception e) {}
-
-		nav.localizer.alphaLocalize();
-		robot.odo.lsM.start();
-		nav.localizer.lineLocalize(0, 0);
-		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.qBreak(500);
-		nav.qBreak(500);
-		nav.travelTo(-10, 1, false,true);
-		nav.travelTo(-10, 168, false,true);
-		nav.travelTo(46, 168, false,true);
-		nav.travelTo(46, 198, false,true);
-		nav.travelTo(138, 198, false,true);
-		nav.travelTo(172.88, 167.88, true,true);
-		nav.pointTo(90);
-		nav.localizer.lineLocalize(182.88, 182.88);
-		nav.pointTo(45.0);
-		nav.qBreak(500);
-		nav.qBreak(500);
-		crossbow.shoot(6);
-	}
 
 
 

@@ -3,7 +3,7 @@
   realizations="false" associations="false" dependencies="false" nesting-relationships="false">  
   <class id="1" language="java" name="OdometryDisplay" project="NXTcodeTeam13" 
     file="/NXTcodeTeam13/src/OdometryDisplay.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="353" y="540"/>    
+    <position height="-1" width="-1" x="337" y="580"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,7 +12,7 @@
   </class>  
   <class id="2" language="java" name="Follower" project="NXTcodeTeam13" file="/NXTcodeTeam13/src/Follower.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1072" y="285"/>    
+    <position height="-1" width="-1" x="1128" y="289"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,7 +30,7 @@
   </class>  
   <class id="4" language="java" name="OdoCorrection" project="NXTcodeTeam13" 
     file="/NXTcodeTeam13/src/OdoCorrection.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1042" y="31"/>    
+    <position height="-1" width="-1" x="1145" y="7"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -39,7 +39,7 @@
   </class>  
   <class id="5" language="java" name="Localizer" project="NXTcodeTeam13" file="/NXTcodeTeam13/src/Localizer.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="876" y="67"/>    
+    <position height="-1" width="-1" x="920" y="71"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -48,7 +48,7 @@
   </class>  
   <class id="6" language="java" name="USController" project="NXTcodeTeam13" file="/NXTcodeTeam13/src/USController.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="894" y="352"/>    
+    <position height="-1" width="-1" x="918" y="352"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -57,7 +57,7 @@
   </class>  
   <class id="7" language="java" name="LSController" project="NXTcodeTeam13" file="/NXTcodeTeam13/src/LSController.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="563" y="494"/>    
+    <position height="-1" width="-1" x="573" y="568"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -66,7 +66,7 @@
   </class>  
   <class id="8" language="java" name="Odometer" project="NXTcodeTeam13" file="/NXTcodeTeam13/src/Odometer.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="133" y="246"/>    
+    <position height="-1" width="-1" x="107" y="224"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -75,7 +75,7 @@
   </class>  
   <class id="9" language="java" name="Tests" project="NXTcodeTeam13" file="/NXTcodeTeam13/src/Tests.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="726" y="93"/>    
+    <position height="-1" width="-1" x="742" y="97"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -84,7 +84,7 @@
   </class>  
   <class id="10" language="java" name="Crossbow" project="NXTcodeTeam13" file="/NXTcodeTeam13/src/Crossbow.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="981" y="545"/>    
+    <position height="-1" width="-1" x="1115" y="495"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -93,7 +93,7 @@
   </class>  
   <class id="11" language="java" name="Main" project="NXTcodeTeam13" file="/NXTcodeTeam13/src/Main.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="724" y="439"/>    
+    <position height="-1" width="-1" x="738" y="491"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -102,7 +102,7 @@
   </class>  
   <class id="12" language="java" name="Exit" project="NXTcodeTeam13" file="/NXTcodeTeam13/src/Exit.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="852" y="538"/>    
+    <position height="-1" width="-1" x="902" y="536"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -111,7 +111,7 @@
   </class>  
   <class id="13" language="java" name="Robot" project="NXTcodeTeam13" file="/NXTcodeTeam13/src/Robot.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="557" y="137"/>    
+    <position height="-1" width="-1" x="569" y="141"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      

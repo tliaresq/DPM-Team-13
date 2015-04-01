@@ -50,9 +50,9 @@ public class Main{
  */
 	public static void mainEnter(){
 		//input your string corresponding to the test you want to work on
-		//test.runOption("localize");
+		test.runOption("localize");
 		//test.runOption("LS test");
-		test.demoMain();
+		//test.demoMain();
 	}
 
 	

@@ -1,3 +1,5 @@
+import lejos.nxt.Sound;
+
 
 /**
  * Implements Localisation methods to localize at specific times
@@ -16,64 +18,35 @@ public class Localizer {
 		nav = n;
 		robot = r;
 	}
-	
-	public void alphaLocalize(){
-		
-		odo.usCfront.restartUS();
-		odo.setTheta(0);
-		nav.setAccSp(2000, 150);
-		while(odo.getFrontSensorDist()<100){
-		nav.spinClockWise();
-		}
-		while(odo.getFrontSensorDist()>100){
-			nav.spinClockWise();
-			}
-		
-		int counter = 0 ;
-		double minDistAngle = 0;
-		
-		double dist;
-		double minDist = Integer.MAX_VALUE;
-		nav.spinClockWise();
-		while(counter<50){
-			dist = odo.getFrontSensorDist();
-			minDist = Math.min(minDist, dist);
-			if (minDist == dist){
-				minDistAngle = odo.getTheta();
-			}	
-			if (odo.getFrontSensorDist()>250){
-				counter ++;
-			}
-			else{
-				counter =0;
-			}
-			try { Thread.sleep(10); } catch (Exception e) {}
 
-		}
-		nav.qBreak(500);nav.qBreak(500);nav.qBreak(500);
-		nav.pointTo(minDistAngle);
-		nav.qBreak(500);nav.qBreak(500);
-		nav.pointTo(minDistAngle - 90);
-		if(odo.getFrontSensorDist()<60){
-			odo.setTheta(180);
-			odo.setX(odo.getFrontSensorDist()-20);
-			odo.setY(minDist-20);
-		}
-		else{
-			odo.setTheta(90);
-			nav.pointTo(270);
-			odo.setX(minDist-20);
-			odo.setY(odo.getFrontSensorDist()-20);
-		}
-		
-		nav.qBreak(500);nav.qBreak(500);nav.qBreak(500);
-		odo.lsM.start();
-		nav.travelToRelocalizeCross(0, 0,false);
-		nav.qBreak(60000);	
+	public void risingEdge(){
+		odo.usCfront.restartUS();
+		nav.setAccSp(2000, 200);
+		nav.spinCounterClockWise();
+		findWall();
+		nav.spinCounterClockWise();
+		findNoWall();
+		odo.setTheta(0);
+		Sound.beep();
+		nav.spinClockWise();
+		findWall();
+		nav.spinClockWise();
+		findNoWall();
+		Sound.beep();
+		odo.setTheta(90 + (odo.getTheta() / 2 - 45));
+		nav.pointTo(180);
+		odo.setX(8+odo.getFrontSensorDist()-38);
+		nav.pointTo(270);
+		odo.setY(8+odo.getFrontSensorDist()-38);
+		nav.travelToRelocalizeCross(0, 0, false);
+		nav.qBreak(500);
+		nav.qBreak(500);
+		nav.qBreak(500);
+
 	}
-	
-	
-	
+
+
+
 	/**
 	 * to work the robot needs to be pointing north
 	 * @param x	line directly east of the light sensor
@@ -81,29 +54,75 @@ public class Localizer {
 	 */
 	public void lineLocalize(double x, double y) {
 		nav.setAccSp(9000, 100);
-		//odo.lsC.restartLS();;
-		try {Thread.sleep(100);} catch (Exception e) {}
-
 		nav.goForth();
 		nav.crossLine();
 		nav.travelDist(robot.lsDist);
 		odo.setY(y);
-		nav.spinCounterClockWise();
+		nav.spinClockWise();
 		nav.crossLine();
-		odo.setTheta(180);
+		odo.setTheta(0);
 		nav.rotateClockwise(90);
-		nav.travelDist(2);
-		nav.rotateClockwise(90);
+		nav.travelDist(4);
+		nav.rotateClockwise(-90);
 		nav.goForth();
 		nav.crossLine();
 		nav.travelDist(robot.lsDist);
 		odo.setX(x);
-		//odo.lsC.stopLS();;
 		nav.setAccSp(robot.acc, robot.speed);
 	}
-	
 
 
-	
+	private void findWall() {
+		int counter = 0;
+		double sensorDist;
+		int maxCount = 5;
+		do {
+			sensorDist = odo.getFrontSensorDist();
+			if (sensorDist <=60  ) {
+				counter++;
+			} else {
+				counter = 0;
+			}
+		} while (counter < maxCount);
+
+	}
+
+	private void findNoWall() {
+		int counter = 0;
+		double sensorDist;
+		int maxCount = 5;
+		do {
+			sensorDist = odo.getFrontSensorDist();
+			try {
+				Thread.sleep(20);
+			} catch (Exception e) {
+			}
+			if (sensorDist >= 60) {
+				counter++;
+			} else {
+				counter = 0;
+			}
+		} while (counter < maxCount);
+	}
+
+
+	private double angleDiff(double a,double b) {
+		a = (a + 360) % 360;
+		if (b > 180) {
+			b -= 360;
+		}
+		if (a > 180) {
+			a -= 360;
+		}
+		double deltaAngle = a - b;
+
+		if (deltaAngle > 180) {
+			deltaAngle -= 360;
+		}
+		if (deltaAngle < -180) {
+			deltaAngle += 360;
+		}
+		return deltaAngle;
+	}
 
 }
