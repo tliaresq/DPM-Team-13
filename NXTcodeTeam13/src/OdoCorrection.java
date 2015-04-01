@@ -27,6 +27,10 @@ public class OdoCorrection extends Thread{
 			else{
 				crossLine();
 				//found a line
+				if(odo.isLineM() && odo.isLineR())
+				{
+					update(2.0);
+				}
 				if(odo.isLineM())
 				{
 					update(0.0);
@@ -54,12 +58,12 @@ public class OdoCorrection extends Thread{
 	private void update(double sen){
 		double lsDist = 0.0;
 		double dt = 0.0;
-		if(sen==0)
+		if(sen==0.0 || sen==2.0)
 		{
 			lsDist = odo.robot.lsDist;
 			dt = 0.0;
 		}
-		else if(sen==1)
+		else if(sen==1.0)
 		{
 			lsDist = Math.sqrt((odo.robot.lsDist*odo.robot.lsDist)+(odo.robot.lsDistR*odo.robot.lsDistR));
 			dt = -Math.toDegrees(Math.atan(odo.robot.lsDistR/odo.robot.lsDist));
@@ -85,22 +89,36 @@ public class OdoCorrection extends Thread{
 			// we will not take the risk to update since we don't know wether to update x or y;
 		}
 		if(xCrossed!= -100 && yCrossed == -100){
-			thetaUpdate(sen, 1.0, xCrossed);
-			Sound.beep();
-//			if(pos[2]==1.0)
-//			{
+			if(sen==2.0 && odo.getTheta()<=270.0 && odo.getTheta()>=90.0)
+			{
+				odo.setTheta(180.0);
+			}
+			else if(sen==2.0 && (odo.getTheta()>270.0 || odo.getTheta()<90.0))
+			{
+				odo.setTheta(0.0);
+			}
+			else
+			{
+				thetaUpdate(sen, 1.0, xCrossed);
+			}
 				odo.setX(xCrossed-dx);
 				Sound.beep();
-//			}
 		}
 		if(xCrossed== -100 && yCrossed != -100){
-			thetaUpdate(sen, 0.0, yCrossed);
-			Sound.beep();
-//			if(pos[2]==1.0)
-//			{
+			if(sen==2.0 && odo.getTheta()<=180.0)
+			{
+				odo.setTheta(90.0);
+			}
+			else if(sen==2.0 && odo.getTheta()>180.0)
+			{
+				odo.setTheta(270.0);
+			}
+			else
+			{
+				thetaUpdate(sen, 0.0, yCrossed);
+			}
 				odo.setY(yCrossed - dy);
 				Sound.beep();
-//			}
 		}
 	}
 	

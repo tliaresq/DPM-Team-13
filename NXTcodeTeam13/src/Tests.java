@@ -97,21 +97,22 @@ public class Tests extends Main {
 	public void odoCorrectTest(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		robot.odo.setX(15.0);
+		robot.odo.setX(75.0);
 		try {Thread.sleep(100);} catch (Exception e) {}
-		robot.odo.setY(15.0);
+		robot.odo.setY(75.0);
 		try {Thread.sleep(100);} catch (Exception e) {}
-		robot.odo.setTheta(90.0);
+		robot.odo.setTheta(180.0);
 		try {Thread.sleep(100);} catch (Exception e) {}
 		//robot.odo.correctionOn();
-		nav.travelTo(15.0, 45.0, false,true);
-		nav.qBreak(500);
-		nav.travelTo(45.0, 45.0, false,true);
-		nav.qBreak(500);
-		nav.travelTo(45.0, 15.0, false,true);
+		nav.travelTo(15.0, 75.0, false,true);
 		nav.qBreak(500);
 		nav.travelTo(15.0, 15.0, false,true);
 		nav.qBreak(500);
+		nav.travelTo(75.0, 15.0, false,true);
+		nav.qBreak(500);
+		nav.travelTo(75.0, 75.0, false,true);
+		nav.qBreak(500);
+		nav.travelTo(60.96, 60.96, false,true);
 		nav.pointTo(90.0);
 		nav.qBreak(20000);
 	}
