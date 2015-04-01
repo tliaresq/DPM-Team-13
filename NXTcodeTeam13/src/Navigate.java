@@ -95,7 +95,7 @@ public class Navigate {
 				rotateClockwise(90);
 				follower.follow(true) ;
 			}
-			if(deltaAngle(destAngle())>1){
+			if(Math.abs(deltaAngle(destAngle()))>1){
 				pointToDest();
 			}
 			goForth();
