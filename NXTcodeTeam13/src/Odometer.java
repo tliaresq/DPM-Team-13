@@ -16,6 +16,7 @@ public class Odometer extends Thread {
 	private int nowTachoL, nowTachoR, lastTachoL, lastTachoR;
 	private int sensorLeftDist, sensorFrontDist;
 	private boolean isLineM,isLineR;
+	public double var1,var2;
 
 
 	private OdometryDisplay odometryDisplay = new OdometryDisplay(this); // displays all odometer data
@@ -37,6 +38,8 @@ public class Odometer extends Thread {
 		x = 0.0;
 		y = 0.0;
 		theta = 90.0;
+		var1 = 0; 
+		var2 = 0;
 	}
 
 
@@ -51,7 +54,7 @@ public class Odometer extends Thread {
 		//usCright.start();
 		//lsM.start();
 		//lsR.start();
-		correction.start();
+		//correction.start();
 
 
 		while (true) {
@@ -178,6 +181,16 @@ public class Odometer extends Thread {
 	public void setTheta(double theta) {
 		synchronized (lock) {
 			this.theta = theta;
+		}
+	}
+	public void setVar1(double v) {
+		synchronized (lock) {
+			this.var1 = v;
+		}
+	}
+	public void setVar2(double v) {
+		synchronized (lock) {
+			this.var2 = v;
 		}
 	}
 }

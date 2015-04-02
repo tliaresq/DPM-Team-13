@@ -6,6 +6,13 @@ import lejos.nxt.LCD;
  *
  */
 public class Tests extends Main {
+	
+	
+	
+	
+	
+	
+	
 
 	public void runOption(String option){
 		switch (option){
@@ -151,6 +158,6 @@ public class Tests extends Main {
 
 
 
-
+	
 
 }

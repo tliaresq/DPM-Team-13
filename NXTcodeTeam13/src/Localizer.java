@@ -24,9 +24,10 @@ public class Localizer {
 		odo.lsM.start();
 		odo.usCfront.start();
 		odo.usCfront.restartUS();
-
+		robot.speed=300;
+		robot.acc=2000;
 		try {Thread.sleep(50);} catch (Exception e) {}
-		nav.setAccSp(1000, 250);
+		nav.setAccSp(robot.acc, robot.speed);
 		nav.spinClockWise();
 		while(!crossLine()){
 			Sound.buzz();
@@ -35,12 +36,10 @@ public class Localizer {
 			nav.spinClockWise();
 		}
 		nav.stopMotors();
-		nav.setAccSp(2000, 300);
 		nav.travelDist(robot.lsDist);
 		nav.qBreak(1000);
 		nav.pointTo(findCorrectLine());
-		nav.setAccSp(2000, 300);
-		
+		nav.setAccSp(robot.acc, robot.speed);
 		double wallA = odo.getFrontSensorDist();
 		if (wallA > 50){
 			nav.rotateClockwise(180);
@@ -70,10 +69,8 @@ public class Localizer {
 			odo.setY(wallA-23);
 
 		}
-		nav.setAccSp(2000, 300);
 		lineLocalizeNE();
 		Sound.buzz();
-		nav.qBreak(6000);
 	}
 	
 	private double findMinDist(){
@@ -95,7 +92,6 @@ public class Localizer {
 
 		nav.spinClockWise();
 		while(counter<13){
-			//dist = odo.getFrontSensorDist();
 			dist = odo.getFrontSensorDist();
 			minDist = Math.min(minDist, dist);
 			if (minDist == dist){
@@ -117,24 +113,27 @@ public class Localizer {
 
 	}
 
-
+	public double[] linePos = new double[4];
+	
+	
 	private double findCorrectLine(){
-		double[] linePos = new double[4];
-		nav.setAccSp(2000, 200);
+		//double[] linePos = new double[4];
+		nav.setAccSp(2000, 250);
 		for(int i=0 ; i< linePos.length; i++){
 			nav.spinCounterClockWise();
 			crossLine();
 			Sound.beep();
 			linePos[i] = odo.getTheta();
-			if(angleDiff(linePos[0],linePos[1])>165){
+			if(angleDiff(linePos[0],linePos[1])>170 && i>=1){
 				return linePos[1];
 			}
-			if(angleDiff(linePos[0],linePos[2])>165){
+			else if(angleDiff(linePos[0],linePos[2])>170 && i>=2){
 				return linePos[2];
 			}
-			else if (angleDiff(linePos[1],linePos[3])>165){
+			else if (angleDiff(linePos[1],linePos[3])>170 && i>=3){
 				return linePos[3];
 			}
+
 			try { Thread.sleep(200); } catch (Exception e) {}
 
 
@@ -206,9 +205,9 @@ public class Localizer {
 	}
 	
 	public void lineLocalizeNE() {
-		nav.travelTo(20, 20, false, false);
+		nav.travelTo(15, 20, false, false);
 		nav.pointTo(270);
-		nav.setAccSp(9000, 100);
+		nav.setAccSp(9000, 150);
 		nav.goForth();
 		nav.crossLine();
 		nav.travelDist(robot.lsDist);

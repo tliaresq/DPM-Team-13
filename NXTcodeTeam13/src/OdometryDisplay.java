@@ -33,6 +33,9 @@ public class OdometryDisplay extends Thread {
 				LCD.drawString(formattedDoubleToString(position[i], 2), 5, i);
 			}
 			
+//			LCD.drawString("v1: "+formattedDoubleToString(odometer.var1,2), 0, 3);
+//			LCD.drawString("v2: "+formattedDoubleToString(odometer.var2,2), 0, 4);
+//			
 			LCD.drawString("Front: "+formattedDoubleToString(odometer.getFrontSensorDist(),2), 0, 3);
 			LCD.drawString("Left: "+formattedDoubleToString(odometer.getLeftSensorDist(),2), 0, 4);
 			LCD.drawString("color: "+formattedBooleanToString(odometer.isLineM()), 0, 5);
