@@ -177,6 +177,55 @@ public class Localizer {
 		}
 		return deltaAngle;
 	}
+private double findMinDist(){
+		while(odo.getFrontSensorDist()<45){
+			nav.spinClockWise();
+			try {Thread.sleep(40);} catch (Exception e) {}
+
+		}
+		while(odo.getFrontSensorDist()>40){
+			nav.spinClockWise();
+			try {Thread.sleep(20);} catch (Exception e) {}
+
+		}
+
+		int counter = 0 ;
+		double minDistAngle = 0;
+		double dist;
+		double minDist = Integer.MAX_VALUE;
+		nav.setAccSp(2000, 80);
+
+		nav.spinClockWise();
+		while(counter<13){
+			//dist = odo.getFrontSensorDist();
+			dist = odo.getFrontSensorDist();
+			minDist = Math.min(minDist, dist);
+			if (minDist == dist){
+				minDistAngle = odo.getTheta();
+			}	
+			if (odo.getFrontSensorDist()>50){
+				counter ++;
+			}
+			else{
+				counter =0;
+			}
+			try { Thread.sleep(10); } catch (Exception e) {}
+
+		}
+		nav.qBreak(500);nav.qBreak(500);nav.qBreak(500);
+		nav.setAccSp(2000, 200);
+		Sound.buzz();
+		if (minDist>20){
+			nav.pointTo(minDistAngle);
+			while(!(odo.getFrontSensorDist()<12||odo.getFrontSensorDist()>40)){
+				nav.goForth();
+			}
+			minDistAngle = findMinDist();
+		}
+		return minDistAngle+2;
+
+	}
+	
 
 
 

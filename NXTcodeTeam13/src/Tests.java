@@ -124,7 +124,7 @@ public class Tests extends Main {
 	public void localize(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.localizer.risingEdge();;
+		nav.localizer.alphaLocalize();
 	}
 
 

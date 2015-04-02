@@ -35,7 +35,7 @@ public class Main{
 	 */
 
 
-	static Exit exit;							// Listens to escape button to exit program at any time
+	//static Exit exit;							// Listens to escape button to exit program at any time
 	static Robot robot;							// All the hardware Data
 	static Navigate nav;						// Manages driving nxt to a given location
 	static Crossbow crossbow;
@@ -86,8 +86,8 @@ public class Main{
 	 * @param args
 	 */
 		public static void main(String[] args) {
-			exit = new Exit();									
-			exit.start();
+		//	exit = new Exit();									
+			//exit.start();
 			objectsIni();
 			printMainMenu();
 		}

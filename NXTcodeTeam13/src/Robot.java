@@ -72,7 +72,7 @@ public class Robot {
 	 * 				FILTERS
 	 *  ==============================================
 	 */
-	public int usFilterSize = 15;  		// how important is the filter for sensor values
+	public int usFilterSize = 4;  		// how important is the filter for sensor values
 	public int lsFilterSize = 3;
 	public int blackM = 500;
 	public int blackR = 500;
