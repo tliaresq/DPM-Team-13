@@ -31,11 +31,11 @@ public class OdoCorrection extends Thread{
 				{
 					update(2.0);
 				}
-				if(odo.isLineM())
+				else if(odo.isLineM())
 				{
 					update(0.0);
 				}
-				if(odo.isLineR())
+				else if(odo.isLineR())
 				{
 					update(1.0);
 				}
