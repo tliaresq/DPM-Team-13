@@ -18,9 +18,10 @@ public class Localizer {
 		nav = n;
 		robot = r;
 	}
-
-
-	public void alphaLocalize(){
+	
+//	n==0 if it is the first localization (bottom left corner). 
+//	n==1 if second localization (top right corner).
+	public void alphaLocalize(int n){
 		odo.usCfront.restartUS();
 		robot.speed=300;
 		robot.acc=2000;
@@ -57,32 +58,50 @@ public class Localizer {
 
 		Sound.buzz();
 		Sound.beep();
-		if (!firstTry){
-			odo.setTheta(270);
-			odo.setX(wallA-23);
-			odo.setY(wallB-23);
+		
+		if(n==0)
+		{
+			if (!firstTry){
+				odo.setTheta(270);
+				odo.setX(wallA-30.48+robot.lsDist);
+				odo.setY(wallB-30.48+robot.lsDist);
+			}
+			else{
+				odo.setTheta(180);
+				odo.setX(wallB-30.48+robot.lsDist);
+				odo.setY(wallA-30.48+robot.lsDist);
+			}
+			lineLocalizeNE();
 		}
-		else{
-			odo.setTheta(180);
-			odo.setX(wallB-23);
-			odo.setY(wallA-23);
-
+		else
+		{
+			if (!firstTry){
+				odo.setTheta(0);
+				odo.setX(335.28-wallB-robot.lsDist);
+				odo.setY(335.28-wallA-robot.lsDist);
+			}
+			else{
+				odo.setTheta(90);
+				odo.setX(335.28-wallA-robot.lsDist);
+				odo.setY(335.28-wallB-robot.lsDist);
+			}
+			omegalineLocalizeNE();
 		}
-		lineLocalizeNE();
 		Sound.buzz();
 	}
 	
 	private double findMinDist(){
 		double minDistAngle = 0;
 		double dist;
-		double minDist = Integer.MAX_VALUE;
+		double minDist = 256;
 		nav.spinClockWise();
 		double store = odo.getTheta();
 		try { Thread.sleep(200); } catch (Exception e) {}
-		while(Math.abs(odo.getTheta()-store)>1){
+		while(Math.abs(odo.getTheta()-store)>3){
 			dist = odo.getFrontSensorDist();
-			minDist = Math.min(minDist, dist);
-			if (minDist == dist){
+			if(dist<minDist)
+			{
+				minDist=dist;
 				minDistAngle = odo.getTheta();
 			}
 			try { Thread.sleep(10); } catch (Exception e) {}
@@ -121,7 +140,7 @@ public class Localizer {
 		double store = odo.getTheta();
 		boolean isLine = false;
 		try { Thread.sleep(200); } catch (Exception e) {}
-		while (isLine==false && Math.abs(odo.getTheta()-store)>1){
+		while (isLine==false && Math.abs(odo.getTheta()-store)>3){
 			isLine=odo.isLineM();
 			try { Thread.sleep(10); } catch (Exception e) {}
 		}
@@ -133,8 +152,6 @@ public class Localizer {
 		}
 
 	}
-
-
 
 	private double angleDiff(double a,double b) {
 		a = (a + 360) % 360;
@@ -154,8 +171,6 @@ public class Localizer {
 		}
 		return (Math.abs(deltaAngle));
 	}
-
-
 
 	/**
 	 * to work the robot needs to be pointing north
@@ -182,7 +197,7 @@ public class Localizer {
 	}
 	
 	public void lineLocalizeNE() {
-		nav.travelTo(15, 20, false, false);
+		nav.travelTo(15, 15, false, false);
 		nav.pointTo(270);
 		nav.setAccSp(9000, 150);
 		nav.goForth();
@@ -199,6 +214,27 @@ public class Localizer {
 		nav.crossLine();
 		nav.travelDist(robot.lsDist);
 		odo.setX(0);
+		nav.setAccSp(robot.acc, robot.speed);
+	}
+	
+	public void omegalineLocalizeNE() {
+		nav.travelTo(290, 290, false, false);
+		nav.pointTo(90);
+		nav.setAccSp(9000, 150);
+		nav.goForth();
+		nav.crossLine();
+		nav.travelDist(robot.lsDist);
+		odo.setY(304.8);
+		nav.spinClockWise();
+		nav.crossLine();
+		odo.setTheta(0);
+		nav.rotateClockwise(90);
+		nav.travelDist(4);
+		nav.rotateClockwise(-90);
+		nav.goForth();
+		nav.crossLine();
+		nav.travelDist(robot.lsDist);
+		odo.setX(304.8);
 		nav.setAccSp(robot.acc, robot.speed);
 	}
 }

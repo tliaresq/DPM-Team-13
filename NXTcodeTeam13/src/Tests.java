@@ -108,16 +108,18 @@ public class Tests extends Main {
 		try {Thread.sleep(100);} catch (Exception e) {}
 		robot.odo.lsM.start();
 		robot.odo.lsR.start();
-		robot.odo.setX(75.0);
+		robot.odo.usCfront.start();
+		robot.odo.usCleft.start();
+		robot.odo.correction.start();
+		robot.odo.setX(15.0);
 		try {Thread.sleep(100);} catch (Exception e) {}
-		robot.odo.setY(75.0);
+		robot.odo.setY(15.0);
 		try {Thread.sleep(100);} catch (Exception e) {}
-		robot.odo.setTheta(180.0);
+		robot.odo.setTheta(90.0);
 		try {Thread.sleep(100);} catch (Exception e) {}
-		//robot.odo.correctionOn();
-		nav.travelTo(15.0, 75.0, false,true);
+		nav.travelTo(15.0, 75.0, true,true);
 		nav.qBreak(500);
-		nav.travelTo(15.0, 15.0, false,true);
+		nav.travelTo(15.0, 15.0, true,true);
 		nav.qBreak(500);
 		nav.travelTo(75.0, 15.0, false,true);
 		nav.qBreak(500);
@@ -132,10 +134,10 @@ public class Tests extends Main {
 	}
 	public void localize(){
 		robot.odo.start();
-		try {Thread.sleep(100);} catch (Exception e) {}
+		try {Thread.sleep(1000);} catch (Exception e) {}
 		robot.odo.lsM.start();
 		robot.odo.usCfront.start();
-		nav.localizer.alphaLocalize();
+		nav.localizer.alphaLocalize(0);
 	}
 
 

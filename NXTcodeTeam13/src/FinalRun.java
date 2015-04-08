@@ -26,67 +26,63 @@ public class FinalRun extends Main {
 		try {Thread.sleep(1000);} catch (Exception e) {}
 		robot.odo.lsM.start();
 		robot.odo.usCfront.start();
-		nav.localizer.alphaLocalize();
+		nav.localizer.alphaLocalize(0);
 		nav.qBreak(500);nav.qBreak(500);nav.qBreak(1000);
 		robot.odo.lsR.start();
 		robot.odo.usCleft.start();
 		robot.odo.usCleft.restartUS();
-		robot.odo.correction.start();
-		robot.odo.correction.restart();
 		robot.speed = 300;
 		robot.acc = 700;
 		nav.setAccSp(robot.acc, robot.speed);
-		if (test){nav.travelToRelocalizeCross(5, 5, true);}
-		else{nav.travelToRelocalizeCross(9, 9, true);}
-		doTargetInstructions(target1, test);
-		doTargetInstructions(target2, test);
-		if (test){nav.travelToRelocalizeCross(5, 5, true);}
-		else{nav.travelToRelocalizeCross(9, 9, true);}	
-		nav.travelToRelocalizeCross(0, 0, true);
+		robot.odo.correction.start();
+		robot.odo.correction.restart();
+		if (test){nav.travelToAlphaRelocalizeCross(0, 10, true, 1);}
+		else{nav.travelToAlphaRelocalizeCross(10, 10, true, 1);}
+		doTargetInstructions(target1);
+		doTargetInstructions(target2);
+		nav.travelToRelocalizeCross(9, 9, true);
+		nav.travelToAlphaRelocalizeCross(0, 10, true, 0);
+		nav.travelTo(0, 0, false, false);
+		nav.pointTo(90);
 		nav.qBreak(500);
 		nav.qBreak(500);
 		nav.qBreak(12000);//2min;
 		System.exit(0);
 	}
 
-	private void doTargetInstructions(int targetNum, boolean test) {
-		double i = 0.0;
+	private void doTargetInstructions(int targetNum) {
 		double x = 0.0;
 		double y = 0.0;
 		double angle = 0.0;
-		if(test)
-		{
-			i = 4.0;
-		}
 		
-		if      (targetNum==  1){x= 9   -i;  y= 8.42-i;  angle=113.6;}
-		else if (targetNum==  2){x= 9   -i;  y= 9.42-i;  angle=113.6;}
-		else if (targetNum==  3){x= 8   -i;  y= 8   -i;  angle= 90  ;}
-		else if (targetNum==  4){x= 8   -i;  y= 9   -i;  angle= 90  ;}
-		else if (targetNum==  5){x= 9   -i;  y= 8   -i;  angle= 90  ;}
-		else if (targetNum==  6){x= 9   -i;  y= 9   -i;  angle= 90  ;}
-		else if (targetNum==  7){x=10   -i;  y= 8   -i;  angle= 90  ;}
-		else if (targetNum==  8){x=10   -i;  y= 9   -i;  angle= 90  ;}
-		else if (targetNum==  9){x= 9   -i;  y= 8.42-i;  angle= 66.4;}
-		else if (targetNum== 10){x= 9   -i;  y= 9.42-i;  angle= 66.4;}
-		else if (targetNum== 11){x=10   -i;  y= 8.42-i;  angle= 66.4;}
-		else if (targetNum== 12){x=10   -i;  y= 9.42-i;  angle= 66.4;}
-		else if (targetNum== 13){x= 8.42-i;  y= 9   -i;  angle=336.4;}
-		else if (targetNum== 14){x= 8   -i;  y= 8   -i;  angle=  0  ;}
-		else if (targetNum== 15){x= 8   -i;  y= 9   -i;  angle=  0  ;}
-		else if (targetNum== 16){x= 8   -i;  y=10   -i;  angle=  0  ;}
-		else if (targetNum== 17){x= 8.42-i;  y= 9   -i;  angle= 23.6;}
-		else if (targetNum== 18){x= 8.42-i;  y=10   -i;  angle= 23.6;}
-		else if (targetNum== 19){x= 9.46-i;  y= 9.46-i;  angle= 45  ;}
-		else if (targetNum== 20){x= 9.46-i;  y=10.46-i;  angle= 45  ;}
-		else if (targetNum== 21){x= 9.42-i;  y= 9   -i;  angle=336.4;}
-		else if (targetNum== 22){x= 9   -i;  y= 8   -i;  angle=  0  ;}
-		else if (targetNum== 23){x= 9   -i;  y= 9   -i;  angle=  0  ;}
-		else if (targetNum== 24){x= 9   -i;  y=10   -i;  angle=  0  ;}
-		else if (targetNum== 25){x= 9.42-i;  y= 9   -i;  angle= 23.6;}
-		else if (targetNum== 26){x= 9.42-i;  y=10   -i;  angle= 23.6;}
-		else if (targetNum== 27){x=10.46-i;  y= 9.46-i;  angle= 45  ;}
-		else if (targetNum== 28){x=10.46-i;  y=10.46-i;  angle= 45  ;}
+		if      (targetNum==  1){x= 9   ;  y= 8.42;  angle=113.6;}
+		else if (targetNum==  2){x= 9   ;  y= 9.42;  angle=113.6;}
+		else if (targetNum==  3){x= 8   ;  y= 8   ;  angle= 90  ;}
+		else if (targetNum==  4){x= 8   ;  y= 9   ;  angle= 90  ;}
+		else if (targetNum==  5){x= 9   ;  y= 8   ;  angle= 90  ;}
+		else if (targetNum==  6){x= 9   ;  y= 9   ;  angle= 90  ;}
+		else if (targetNum==  7){x=10   ;  y= 8   ;  angle= 90  ;}
+		else if (targetNum==  8){x=10   ;  y= 9   ;  angle= 90  ;}
+		else if (targetNum==  9){x= 9   ;  y= 8.42;  angle= 66.4;}
+		else if (targetNum== 10){x= 9   ;  y= 9.42;  angle= 66.4;}
+		else if (targetNum== 11){x=10   ;  y= 8.42;  angle= 66.4;}
+		else if (targetNum== 12){x=10   ;  y= 9.42;  angle= 66.4;}
+		else if (targetNum== 13){x= 8.42;  y= 9   ;  angle=336.4;}
+		else if (targetNum== 14){x= 8   ;  y= 8   ;  angle=  0  ;}
+		else if (targetNum== 15){x= 8   ;  y= 9   ;  angle=  0  ;}
+		else if (targetNum== 16){x= 8   ;  y=10   ;  angle=  0  ;}
+		else if (targetNum== 17){x= 8.42;  y= 9   ;  angle= 23.6;}
+		else if (targetNum== 18){x= 8.42;  y=10   ;  angle= 23.6;}
+		else if (targetNum== 19){x= 9.46;  y= 9.46;  angle= 45  ;}
+		else if (targetNum== 20){x= 9.46;  y=10.46;  angle= 45  ;}
+		else if (targetNum== 21){x= 9.42;  y= 9   ;  angle=336.4;}
+		else if (targetNum== 22){x= 9   ;  y= 8   ;  angle=  0  ;}
+		else if (targetNum== 23){x= 9   ;  y= 9   ;  angle=  0  ;}
+		else if (targetNum== 24){x= 9   ;  y=10   ;  angle=  0  ;}
+		else if (targetNum== 25){x= 9.42;  y= 9   ;  angle= 23.6;}
+		else if (targetNum== 26){x= 9.42;  y=10   ;  angle= 23.6;}
+		else if (targetNum== 27){x=10.46;  y= 9.46;  angle= 45  ;}
+		else if (targetNum== 28){x=10.46;  y=10.46;  angle= 45  ;}
 		nav.travelTo(30.48*x, 30.48*y, false, true);
 		nav.pointTo(angle);
 		nav.qBreak(500);

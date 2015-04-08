@@ -26,7 +26,7 @@ public class OdoCorrection extends Thread{
 			}
 			else{
 				crossLine();
-				//found a line
+//				found a line
 				if(odo.isLineM() && odo.isLineR())
 				{
 					update(2.0);
