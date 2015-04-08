@@ -98,6 +98,8 @@ public class Tests extends Main {
 		try {Thread.sleep(100);} catch (Exception e) {}
 		robot.odo.lsM.start();
 		robot.odo.lsR.start();
+		robot.odo.lsM.start();
+		robot.odo.usCfront.start();
 		try {Thread.sleep(50000);} catch (Exception e) {}
 
 	}
@@ -131,6 +133,8 @@ public class Tests extends Main {
 	public void localize(){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
+		robot.odo.lsM.start();
+		robot.odo.usCfront.start();
 		nav.localizer.alphaLocalize();
 	}
 

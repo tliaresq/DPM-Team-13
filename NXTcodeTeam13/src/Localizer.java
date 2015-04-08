@@ -21,8 +21,6 @@ public class Localizer {
 
 
 	public void alphaLocalize(){
-		odo.lsM.start();
-		odo.usCfront.start();
 		odo.usCfront.restartUS();
 		robot.speed=300;
 		robot.acc=2000;
@@ -32,6 +30,7 @@ public class Localizer {
 		while(!crossLine()){
 			Sound.buzz();
 			nav.pointTo(findMinDist());
+			nav.qBreak(1000);
 			nav.travelDist(odo.getFrontSensorDist()-25);
 			nav.spinClockWise();
 		}
@@ -74,43 +73,21 @@ public class Localizer {
 	}
 	
 	private double findMinDist(){
-		while(odo.getFrontSensorDist()<45){
-			nav.spinClockWise();
-			try {Thread.sleep(40);} catch (Exception e) {}
-
-		}
-		while(odo.getFrontSensorDist()>40){
-			nav.spinClockWise();
-			try {Thread.sleep(20);} catch (Exception e) {}
-		}
-
-		int counter = 0 ;
 		double minDistAngle = 0;
 		double dist;
 		double minDist = Integer.MAX_VALUE;
-		nav.setAccSp(2000,300);
-
 		nav.spinClockWise();
-		while(counter<13){
+		double store = odo.getTheta();
+		try { Thread.sleep(200); } catch (Exception e) {}
+		while(Math.abs(odo.getTheta()-store)>1){
 			dist = odo.getFrontSensorDist();
 			minDist = Math.min(minDist, dist);
 			if (minDist == dist){
 				minDistAngle = odo.getTheta();
-			}	
-			if (odo.getFrontSensorDist()>50){
-				counter ++;
-			}
-			else{
-				counter =0;
 			}
 			try { Thread.sleep(10); } catch (Exception e) {}
-
 		}
-		nav.qBreak(500);nav.qBreak(500);nav.qBreak(500);
-		nav.setAccSp(2000, 300);
-
-		return minDistAngle+2;
-
+		return minDistAngle;
 	}
 
 	public double[] linePos = new double[4];
@@ -124,13 +101,13 @@ public class Localizer {
 			crossLine();
 			Sound.beep();
 			linePos[i] = odo.getTheta();
-			if(angleDiff(linePos[0],linePos[1])>170 && i>=1){
+			if(angleDiff(linePos[0],linePos[1])>165 && i>=1){
 				return linePos[1];
 			}
-			else if(angleDiff(linePos[0],linePos[2])>170 && i>=2){
+			else if(angleDiff(linePos[0],linePos[2])>165 && i>=2){
 				return linePos[2];
 			}
-			else if (angleDiff(linePos[1],linePos[3])>170 && i>=3){
+			else if (angleDiff(linePos[1],linePos[3])>165 && i>=3){
 				return linePos[3];
 			}
 
@@ -138,7 +115,7 @@ public class Localizer {
 
 
 		}
-		return 0;
+		return linePos[3];
 	}
 	private boolean crossLine() {
 		double store = odo.getTheta();

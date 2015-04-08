@@ -24,6 +24,8 @@ public class FinalRun extends Main {
 		}
 		robot.odo.start();
 		try {Thread.sleep(1000);} catch (Exception e) {}
+		robot.odo.lsM.start();
+		robot.odo.usCfront.start();
 		nav.localizer.alphaLocalize();
 		nav.qBreak(500);nav.qBreak(500);nav.qBreak(1000);
 		robot.odo.lsR.start();
