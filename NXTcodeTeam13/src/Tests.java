@@ -126,7 +126,7 @@ public class Tests extends Main {
 		nav.qBreak(20000);
 	}
 	public void shoot999(){
-		crossbow.shoot(999);
+		crossbow.shoot(6);
 	}
 	public void localize(){
 		robot.odo.start();
