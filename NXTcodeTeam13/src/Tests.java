@@ -137,7 +137,7 @@ public class Tests extends Main {
 		try {Thread.sleep(1000);} catch (Exception e) {}
 		robot.odo.lsM.start();
 		robot.odo.usCfront.start();
-		nav.localizer.alphaLocalize(0);
+		nav.localizer.alphaLocalize(false);
 	}
 
 

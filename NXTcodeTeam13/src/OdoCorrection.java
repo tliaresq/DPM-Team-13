@@ -210,4 +210,18 @@ public class OdoCorrection extends Thread{
 	public void stop(){
 		stop = true;
 	}
+	
+	private void signal(){
+		LCD.clear();
+		LCD.drawString("################################", 0, 0);
+		LCD.drawString("################################", 0, 1);
+		LCD.drawString("################################", 0, 2);
+		LCD.drawString("################################", 0, 3);
+		LCD.drawString("################################", 0, 5);
+		LCD.drawString("################################", 0, 6);
+		LCD.drawString("################################", 0, 7);
+		
+	}
 }
+
+

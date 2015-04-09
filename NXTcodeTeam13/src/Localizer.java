@@ -21,7 +21,7 @@ public class Localizer {
 	
 //	n==0 if it is the first localization (bottom left corner). 
 //	n==1 if second localization (top right corner).
-	public void alphaLocalize(int n){
+	public void alphaLocalize(boolean n){
 		odo.usCfront.restartUS();
 		robot.speed=300;
 		robot.acc=2000;
@@ -59,7 +59,7 @@ public class Localizer {
 		Sound.buzz();
 		Sound.beep();
 		
-		if(n==0)
+		if(n== false)
 		{
 			if (!firstTry){
 				odo.setTheta(270);

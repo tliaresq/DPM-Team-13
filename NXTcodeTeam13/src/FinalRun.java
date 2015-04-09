@@ -26,7 +26,7 @@ public class FinalRun extends Main {
 		try {Thread.sleep(1000);} catch (Exception e) {}
 		robot.odo.lsM.start();
 		robot.odo.usCfront.start();
-		nav.localizer.alphaLocalize(0);
+		nav.localizer.alphaLocalize(false);
 		nav.qBreak(500);nav.qBreak(500);nav.qBreak(1000);
 		robot.odo.lsR.start();
 		robot.odo.usCleft.start();
@@ -35,13 +35,13 @@ public class FinalRun extends Main {
 		robot.acc = 700;
 		nav.setAccSp(robot.acc, robot.speed);
 		robot.odo.correction.start();
-		robot.odo.correction.restart();
-		if (test){nav.travelToAlphaRelocalizeCross(0, 10, true, 1);}
-		else{nav.travelToAlphaRelocalizeCross(10, 10, true, 1);}
+		try {Thread.sleep(100);} catch (Exception e) {}
+		if (test){nav.travelToAlphaRelocalizeCross(0, 10, true, true);}
+		else{nav.travelToAlphaRelocalizeCross(10, 10, true, true);}
 		doTargetInstructions(target1);
 		doTargetInstructions(target2);
 		nav.travelToRelocalizeCross(9, 9, true);
-		nav.travelToAlphaRelocalizeCross(0, 10, true, 0);
+		nav.travelToAlphaRelocalizeCross(0, 10, true, false);
 		nav.travelTo(0, 0, false, false);
 		nav.pointTo(90);
 		nav.qBreak(500);

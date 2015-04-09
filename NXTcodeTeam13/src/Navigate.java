@@ -36,7 +36,7 @@ public class Navigate {
 		localizer.lineLocalize(x*30.48, y*30.48);
 	}
 
-	public void travelToAlphaRelocalizeCross(int x, int y, boolean follow, int localization){
+	public void travelToAlphaRelocalizeCross(int x, int y, boolean follow, boolean localization){
 		travelTo( x*30.48, y*30.48, follow, true);
 		localizer.alphaLocalize(localization);
 	}
