@@ -127,10 +127,7 @@ public class FinalRun extends Main {
 	}
 	
 	
-	
-	
-
-	private void mapToOrigin(int mapNumber) {
+	private void mapToTarget(int mapNumber) {
 		double tile  = 30.48;
 		if (mapNumber == 1){
 		nav.travelTo(tile+15, tile + 15, false, false);
@@ -146,11 +143,13 @@ public class FinalRun extends Main {
 		
 		nav.travelToRelocalizeCross(9, 9, false);
 	}
+	
 
-	private void mapToTarget(int mapNumber) {
-		// TODO Auto-generated method stub
-		
+	private void mapToOrigin(int mapNumber) {
+	
 	}
+
+
 
 	private void doTargetInstructions(int targetNum) {
 		double x = 0.0;
