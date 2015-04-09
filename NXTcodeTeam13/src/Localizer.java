@@ -19,9 +19,13 @@ public class Localizer {
 		robot = r;
 	}
 	
-//	n==0 if it is the first localization (bottom left corner). 
-//	n==1 if second localization (top right corner).
+//	n==true if it is the first localization (bottom left corner). 
+//	n==false if second localization (top right corner).
 	public void alphaLocalize(boolean n){
+		
+		odo.correction.stop();
+		odo.usCleft.stopUS();
+		
 		odo.usCfront.restartUS();
 		robot.speed=300;
 		robot.acc=2000;
@@ -59,7 +63,7 @@ public class Localizer {
 		Sound.buzz();
 		Sound.beep();
 		
-		if(n== false)
+		if(n== true)
 		{
 			if (!firstTry){
 				odo.setTheta(270);
@@ -76,14 +80,14 @@ public class Localizer {
 		else
 		{
 			if (!firstTry){
-				odo.setTheta(0);
-				odo.setX(335.28-wallB-robot.lsDist);
-				odo.setY(335.28-wallA-robot.lsDist);
-			}
-			else{
 				odo.setTheta(90);
 				odo.setX(335.28-wallA-robot.lsDist);
 				odo.setY(335.28-wallB-robot.lsDist);
+			}
+			else{
+				odo.setTheta(0);
+				odo.setX(335.28-wallB-robot.lsDist);
+				odo.setY(335.28-wallA-robot.lsDist);
 			}
 			omegalineLocalizeNE();
 		}

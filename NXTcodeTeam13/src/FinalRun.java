@@ -11,6 +11,9 @@ public class FinalRun extends Main {
 
 //	test should be false for the final run 
 //	it makes the robot simulate the final on a 2 by 2 board map
+	
+//	problem with the sensors and second localizer
+	
 	public void finalRun(boolean test){
 		int target1 = targetSelect(1);
 		int target2 = targetSelect(2);
@@ -22,28 +25,46 @@ public class FinalRun extends Main {
 		while(buttonPressed !=Button.ID_ENTER){
 			buttonPressed = Button.waitForAnyPress();
 		}
+		
 		robot.odo.start();
 		try {Thread.sleep(1000);} catch (Exception e) {}
+		
 		robot.odo.lsM.start();
 		robot.odo.usCfront.start();
-		nav.localizer.alphaLocalize(false);
+		
+		nav.localizer.alphaLocalize(true);
 		nav.qBreak(500);nav.qBreak(500);nav.qBreak(1000);
+		
 		robot.odo.lsR.start();
 		robot.odo.usCleft.start();
 		robot.odo.usCleft.restartUS();
+		
 		robot.speed = 300;
 		robot.acc = 700;
 		nav.setAccSp(robot.acc, robot.speed);
+		
 		robot.odo.correction.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		if (test){nav.travelToAlphaRelocalizeCross(0, 10, true, true);}
+		
+		if (test){nav.travelToAlphaRelocalizeCross(0, 6, true, true);}
 		else{nav.travelToAlphaRelocalizeCross(10, 10, true, true);}
+		
 		doTargetInstructions(target1);
 		doTargetInstructions(target2);
-		nav.travelToRelocalizeCross(9, 9, true);
-		nav.travelToAlphaRelocalizeCross(0, 10, true, false);
+		try {Thread.sleep(1000);} catch (Exception e) {}
+		
+		nav.localizer.omegalineLocalizeNE();
+		
+		robot.odo.usCleft.start();
+		robot.odo.usCleft.restartUS();
+		robot.odo.correction.start();
+		try {Thread.sleep(100);} catch (Exception e) {}
+		
+		nav.travelToAlphaRelocalizeCross(0, 0, true, true);
+		
 		nav.travelTo(0, 0, false, false);
 		nav.pointTo(90);
+		
 		nav.qBreak(500);
 		nav.qBreak(500);
 		nav.qBreak(12000);//2min;
