@@ -26,7 +26,7 @@ public class Follower {
 		robot.odo.usCleft.restartUS();
 		nav.setAccSp(robot.followAcc,robot.followSpeed);
 		// follow obstacle while theta isn't within 5 degrees of the angle needed to reach destination
-		while (( robot.minFrontWallDist<nav.distToDest() && Math.abs( nav.deltaAngle(nav.destAngle()))>4) || !withDest) {
+		while (( robot.minFrontWallDist<nav.distToDest() && Math.abs( nav.deltaAngle(nav.destAngle()))>6) || !withDest) {
 			leftDistance = odo.getLeftSensorDist();
 			try {Thread.sleep(15);} catch (Exception e) {}
 			farHigh = (Math.pow((odo.getLeftSensorDist()/robot.followerSideDist),1.4));

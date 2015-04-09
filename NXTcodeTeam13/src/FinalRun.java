@@ -47,7 +47,7 @@ public class FinalRun extends Main {
 		try {Thread.sleep(100);} catch (Exception e) {}
 		
 		if (test){nav.travelToAlphaRelocalizeCross(0, 6, true, true);}
-		else{nav.travelToAlphaRelocalizeCross(10, 10, true, true);}
+		else{nav.travelToAlphaRelocalizeCross(10, 9, true, true);}
 		
 		doTargetInstructions(target1);
 		doTargetInstructions(target2);

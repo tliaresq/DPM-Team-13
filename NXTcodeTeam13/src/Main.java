@@ -53,7 +53,7 @@ public class Main{
 //		test.runOption("localize");
 		//test.runOption("LS test");
 		//test.demoMain();
-		finalrun.finalRun(true);
+		finalrun.finalRun(false);
 	}
 	
 	

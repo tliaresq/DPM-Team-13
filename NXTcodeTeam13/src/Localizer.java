@@ -24,8 +24,8 @@ public class Localizer {
 	public void alphaLocalize(boolean n){
 		
 		odo.correction.stop();
+		try {Thread.sleep(100);} catch (Exception e) {}
 		odo.usCleft.stopUS();
-		
 		odo.usCfront.restartUS();
 		robot.speed=300;
 		robot.acc=2000;
@@ -182,7 +182,7 @@ public class Localizer {
 	 * @param y line directly north of the light sensor
 	 */
 	public void lineLocalize(double x, double y) {
-		nav.setAccSp(9000, 100);
+		nav.setAccSp(9000, 150);
 		nav.goForth();
 		nav.crossLine();
 		nav.travelDist(robot.lsDist);
