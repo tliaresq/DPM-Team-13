@@ -131,8 +131,20 @@ public class FinalRun extends Main {
 	
 
 	private void mapToOrigin(int mapNumber) {
-		// TODO Auto-generated method stub
+		double tile  = 30.48;
+		if (mapNumber == 1){
+		nav.travelTo(tile+15, tile + 15, false, false);
+		nav.travelTo(4*tile+15, tile + 15, false, false);
+		nav.travelTo(4*tile+15, -tile + 15, false, false);
+		nav.travelTo(7*tile+15, -tile + 15, false, false);
+		nav.travelTo(7*tile+15,0 + 15, false, false);
+		nav.travelTo(8*tile+15,0 + 15, false, false);
+		nav.travelTo(9*tile+15,2*tile + 15, false, false);
+		nav.travelTo(10*tile+15, 2 *tile + 15, false, false);
+		nav.travelTo(10*tile+15, 8 *tile + 15, false, false);
+		}
 		
+		nav.travelToRelocalizeCross(9, 9, false);
 	}
 
 	private void mapToTarget(int mapNumber) {
