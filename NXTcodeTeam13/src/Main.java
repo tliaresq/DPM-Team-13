@@ -53,7 +53,7 @@ public class Main{
 //		test.runOption("localize");
 		//test.runOption("LS test");
 		//test.demoMain();
-		finalrun.finalRun(true);
+		finalrun.finalRun(false);
 	}
 	
 	
@@ -66,7 +66,7 @@ public class Main{
 		//input your string corresponding to the test you want to work on
 		//test.runOption("LS test");
 		//test.runOption("localize");
-		test.shoot999();
+		finalrun.finalMapRun(false);
 	}
 
 

@@ -70,6 +70,75 @@ public class FinalRun extends Main {
 		nav.qBreak(12000);//2min;
 		System.exit(0);
 	}
+	
+	public void finalMapRun(boolean test){
+		int mapNumber = mapSelect();
+		int target1 = targetSelect(1);
+		int target2 = targetSelect(2);
+		LCD.clear();
+		LCD.drawString("press ENTER to", 0, 0);
+
+		LCD.drawString("GO", 8, 3);
+		int buttonPressed = 0;
+		while(buttonPressed !=Button.ID_ENTER){
+			buttonPressed = Button.waitForAnyPress();
+		}
+		
+		robot.odo.start();
+		try {Thread.sleep(1000);} catch (Exception e) {}
+		
+		robot.odo.lsM.start();
+		robot.odo.usCfront.start();
+		
+		nav.localizer.alphaLocalize(true);
+		nav.qBreak(500);nav.qBreak(500);nav.qBreak(1000);
+		
+		robot.odo.lsR.start();
+		robot.odo.usCleft.start();
+		robot.odo.usCleft.restartUS();
+		
+		robot.speed = 300;
+		robot.acc = 700;
+		nav.setAccSp(robot.acc, robot.speed);
+		
+		robot.odo.correction.start();
+		try {Thread.sleep(100);} catch (Exception e) {}
+		
+		mapToTarget(mapNumber);
+		doTargetInstructions(target1);
+		doTargetInstructions(target2);
+		try {Thread.sleep(1000);} catch (Exception e) {}
+		
+		nav.localizer.omegalineLocalizeNE();
+		
+		robot.odo.usCleft.start();
+		robot.odo.usCleft.restartUS();
+		robot.odo.correction.start();
+		try {Thread.sleep(100);} catch (Exception e) {}
+		
+		mapToOrigin(mapNumber);
+		nav.travelTo(0, 0, false, false);
+		nav.pointTo(90);
+		
+		nav.qBreak(500);
+		nav.qBreak(500);
+		nav.qBreak(12000);//2min;
+		System.exit(0);
+	}
+	
+	
+	
+	
+
+	private void mapToOrigin(int mapNumber) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void mapToTarget(int mapNumber) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	private void doTargetInstructions(int targetNum) {
 		double x = 0.0;
@@ -110,9 +179,27 @@ public class FinalRun extends Main {
 		crossbow.shoot(3);
 		nav.qBreak(500);
 	}
-
+	public int mapSelect(){
+		int map = 1;
+		int button = 0;
+		String dis = ("Select Map number: ");
+		while(button!=Button.ID_ENTER){
+			LCD.clear();
+			LCD.drawString(dis, 0, 0);
+			
+			if(button==Button.ID_LEFT){
+				map--;
+			}
+			if(button==Button.ID_RIGHT){
+				map++;
+			}
+			LCD.drawInt(map, 8, 3);
+			button = Button.waitForAnyPress();	
+		}
+		return map;
+	}
 	public int targetSelect(int number){
-		int target = 0;
+		int target = 1;
 		int button = 0;
 		String dis = ("target number "+number);
 		while(button!=Button.ID_ENTER){
