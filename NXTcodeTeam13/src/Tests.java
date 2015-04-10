@@ -75,7 +75,8 @@ public class Tests extends Main {
 	public void travelToTest(int x ,int y){
 		robot.odo.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
-		nav.travelTo(60, 90, true,true);
+		nav.travelTo(0, 300, false,false);
+		try {Thread.sleep(100000);} catch (Exception e) {}
 	}
 	public void usTest(){
 		robot.odo.start();

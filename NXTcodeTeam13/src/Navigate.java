@@ -17,9 +17,6 @@ public class Navigate {
 
 	private Odometer odo;
 
-
-
-
 	public Navigate(Robot r, Odometer o) {
 		robot = r;
 		leftMotor = r.leftMotor;
@@ -31,13 +28,13 @@ public class Navigate {
 	}
 	
 	public void travelToRelocalizeCross(int x, int y, boolean follow){
-		travelTo( x*30.48-15, y*30.48-15, follow, true);
+		travelTo( x*30.48-15, y*30.48-15, follow, false);
 		pointTo(90);
 		localizer.lineLocalize(x*30.48, y*30.48);
 	}
 
 	public void travelToAlphaRelocalizeCross(int x, int y, boolean follow, boolean localization){
-		travelTo( x*30.48, y*30.48, follow, true);
+		travelTo( x*30.48, y*30.48, follow, false);
 		localizer.alphaLocalize(localization);
 	}
 
@@ -97,8 +94,15 @@ public class Navigate {
 			 */
 			if (follow && (odo.getFrontSensorDist() < robot.minFrontWallDist 
 					|| odo.getLeftSensorDist()<2 )) { 
+				odo.correction.stop();
+				try {Thread.sleep(50);} catch (Exception e) {}
+
 				rotateClockwise(90);
 				follower.follow(true) ;
+				odo.correction.restart();
+				try {Thread.sleep(50);} catch (Exception e) {}
+
+				
 			}
 			if(Math.abs(deltaAngle(destAngle()))>1){
 				pointToDest();
