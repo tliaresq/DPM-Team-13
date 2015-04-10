@@ -80,7 +80,12 @@ public class Tests extends Main {
 	}
 	public void usTest(){
 		robot.odo.start();
+		
 		try {Thread.sleep(100);} catch (Exception e) {}
+		robot.odo.usCfront.start();
+		robot.odo.usCleft.start();
+		try {Thread.sleep(100);} catch (Exception e) {}
+
 		robot.odo.usCfront.restartUS();
 		robot.odo.usCleft.restartUS();
 		//robot.odo.usCright.restartUS();

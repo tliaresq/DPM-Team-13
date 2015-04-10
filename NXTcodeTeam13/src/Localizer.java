@@ -45,7 +45,7 @@ public class Localizer {
 		nav.pointTo(findCorrectLine());
 		nav.setAccSp(robot.acc, robot.speed);
 		double wallA = odo.getFrontSensorDist();
-		if (wallA > 50){
+		if (wallA > 45){
 			nav.rotateClockwise(180);
 			wallA = odo.getFrontSensorDist();
 		}
@@ -54,7 +54,7 @@ public class Localizer {
 		nav.rotateClockwise(90);
 		boolean firstTry = true;
 		double wallB = odo.getFrontSensorDist();
-		if (wallB>50){
+		if (wallB>45){
 			nav.rotateClockwise(180);
 			firstTry = false;
 			wallB = odo.getFrontSensorDist();
