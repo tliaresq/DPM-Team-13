@@ -266,7 +266,7 @@ public class FinalRun extends Main {
 		return map;
 	}
 	public int targetSelect(int number){
-		int target = 1;
+		int target = 14;
 		int button = 0;
 		String dis = ("target number "+number);
 		while(button!=Button.ID_ENTER){
