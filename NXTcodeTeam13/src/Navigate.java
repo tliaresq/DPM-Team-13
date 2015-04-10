@@ -66,8 +66,8 @@ public class Navigate {
 		int i = 0 ;
 		while (distToDest() >= 3) {
 			//while no obstacle and not arrived at destination
-			while (follow && (odo.getFrontSensorDist() > robot.minFrontWallDist 
-					&& odo.getLeftSensorDist()>2)) {
+			while (follow && (odo.getFrontSensorDist() > robot.minFrontWallDist
+					&& odo.getLeftSensorDist()>5)) {
 				if(distToDest()<robot.minFrontWallDist+1){
 					follow = false;
 					odo.usCfront.stopUS();
@@ -93,7 +93,7 @@ public class Navigate {
 			 * ======================================== 
 			 */
 			if (follow && (odo.getFrontSensorDist() < robot.minFrontWallDist 
-					|| odo.getLeftSensorDist()<2 )) { 
+					|| odo.getLeftSensorDist()<5 )) { 
 				odo.correction.stop();
 				try {Thread.sleep(50);} catch (Exception e) {}
 
