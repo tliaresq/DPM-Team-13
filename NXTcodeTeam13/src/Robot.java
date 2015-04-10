@@ -39,8 +39,8 @@ public class Robot {
 	 *  ==============================================
 	 */
 	public double followAcc = 500;
-	public double followSpeed = 100;
-	public double noWallDistance = 40;
+	public double followSpeed = 200;
+	public double noWallDistance = 30;
 	public double minFrontWallDist = 14; 		// distance the robot has to be from a wall when following it.
 	public double followerSideDist = 18;
 
