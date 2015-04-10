@@ -125,13 +125,13 @@ public class Localizer {
 			crossLine();
 			Sound.beep();
 			linePos[i] = odo.getTheta();
-			if(angleDiff(linePos[0],linePos[1])>165 && i>=1){
+			if(angleDiff(linePos[0],linePos[1])>170 && i>=1){
 				return linePos[1];
 			}
-			else if(angleDiff(linePos[0],linePos[2])>165 && i>=2){
+			else if(angleDiff(linePos[0],linePos[2])>170 && i>=2){
 				return linePos[2];
 			}
-			else if (angleDiff(linePos[1],linePos[3])>165 && i>=3){
+			else if (angleDiff(linePos[1],linePos[3])>170 && i>=3){
 				return linePos[3];
 			}
 
