@@ -32,7 +32,7 @@ public class FinalRun extends Main {
 		robot.odo.lsM.start();
 		robot.odo.usCfront.start();
 		
-		nav.localizer.alphaLocalize(true);
+	//	nav.localizer.alphaLocalize(true);
 		nav.qBreak(500);nav.qBreak(500);nav.qBreak(1000);
 		
 		robot.odo.lsR.start();

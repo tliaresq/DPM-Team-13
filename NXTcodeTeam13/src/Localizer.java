@@ -89,7 +89,8 @@ public class Localizer {
 				odo.setX(335.28-wallB-robot.lsDist);
 				odo.setY(335.28-wallA-robot.lsDist);
 			}
-			omegalineLocalizeNE();
+			//omegalineLocalizeNE();
+			nav.travelToRelocalizeCross(10, 10, false);
 		}
 		Sound.buzz();
 	}
@@ -231,6 +232,7 @@ public class Localizer {
 		odo.setY(304.8);
 		nav.spinClockWise();
 		nav.crossLine();
+		nav.qBreak(1000);
 		odo.setTheta(0);
 		nav.rotateClockwise(90);
 		nav.travelDist(4);

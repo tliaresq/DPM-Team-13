@@ -71,7 +71,7 @@ public class Odometer extends Thread {
 				nowTachoR = (robot.rightMotor.getTachoCount());
 				
 				// getting distances traveled by the left and right wheel respectively
-				distL = Math.PI *(robot.leftWradius - 0.02)* (nowTachoL - lastTachoL) / 180;
+				distL = Math.PI *(robot.leftWradius)* (nowTachoL - lastTachoL) / 180;
 				distR = Math.PI *robot.leftWradius* (nowTachoR - lastTachoR) / 180;
 				lastTachoL = nowTachoL;
 				lastTachoR = nowTachoR;

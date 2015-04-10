@@ -28,13 +28,13 @@ public class Navigate {
 	}
 	
 	public void travelToRelocalizeCross(int x, int y, boolean follow){
-		travelTo( x*30.48-15, y*30.48-15, follow, false);
+		travelTo( x*30.48-15, y*30.48-15, follow, true);
 		pointTo(90);
 		localizer.lineLocalize(x*30.48, y*30.48);
 	}
 
 	public void travelToAlphaRelocalizeCross(int x, int y, boolean follow, boolean localization){
-		travelTo( x*30.48, y*30.48, follow, false);
+		//travelTo( x*30.48, y*30.48, follow, true);
 		localizer.alphaLocalize(localization);
 	}
 
@@ -189,18 +189,15 @@ public class Navigate {
 	 */
 	public boolean crossLine() {
 		boolean middle = false;
-		boolean right = false;
-		while (middle == false && right == false){
+		//boolean right = false;
+		while (middle == false){
 			try { Thread.sleep(10); } catch (Exception e) {}
 			middle = odo.isLineM();
-			right = odo.isLineR();
+			//right = odo.isLineR();
 		}
-		if (right = true){
-			return true;
-		}
-		else{
+		
 			return false;
-		}
+		
 	}
 	/**
 	 * robot spins clockwise until told to do something else

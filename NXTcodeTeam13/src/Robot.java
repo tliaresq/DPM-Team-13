@@ -49,7 +49,7 @@ public class Robot {
 	 * 				ODOMETRY CORRECTION
 	 *  ==============================================
 	 */
-	public double odoCorBand = 7.5; 		//radius of the error accepted to correct the odometer
+	public double odoCorBand = 10; 		//radius of the error accepted to correct the odometer
 
 
 	/*

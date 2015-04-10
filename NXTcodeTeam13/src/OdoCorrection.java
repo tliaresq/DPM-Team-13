@@ -89,11 +89,11 @@ public class OdoCorrection extends Thread{
 			// we will not take the risk to update since we don't know wether to update x or y;
 		}
 		if(xCrossed!= -100 && yCrossed == -100){
-			if(sen==2.0 && odo.getTheta()<=270.0 && odo.getTheta()>=90.0)
+			if(sen==2.0 && odo.getTheta()<=195.0 && odo.getTheta()>=165.0)
 			{
 				odo.setTheta(180.0);
 			}
-			else if(sen==2.0 && (odo.getTheta()>270.0 || odo.getTheta()<90.0))
+			else if(sen==2.0 && (odo.getTheta()>345.0 || odo.getTheta()<15.0))
 			{
 				odo.setTheta(0.0);
 			}
@@ -105,11 +105,11 @@ public class OdoCorrection extends Thread{
 				Sound.beep();
 		}
 		if(xCrossed== -100 && yCrossed != -100){
-			if(sen==2.0 && odo.getTheta()<=180.0)
+			if(sen==2.0 && odo.getTheta()<=105.0 && odo.getTheta()>=75.0)
 			{
 				odo.setTheta(90.0);
 			}
-			else if(sen==2.0 && odo.getTheta()>180.0)
+			else if(sen==2.0 && odo.getTheta()>255.0 && odo.getTheta()<255.0)
 			{
 				odo.setTheta(270.0);
 			}
@@ -124,7 +124,7 @@ public class OdoCorrection extends Thread{
 	
 	private void thetaUpdate(double sen, double axis, double coord)
 	{
-			if(detLine[0]!=sen && detLine[1]==axis && detLine[2]==coord && Math.abs(pos[0]-odo.getTheta())<=3)
+			if(detLine[0]!=sen && detLine[1]==axis && detLine[2]==coord && Math.abs(pos[0]-odo.getTheta())<=1)
 			{
 				double k = odo.robot.lsDistR;
 				double d = (Math.toRadians(Math.abs(Motor.C.getTachoCount()-pos[1])))*odo.robot.leftWradius;
