@@ -206,7 +206,9 @@ public class Localizer {
 		nav.pointTo(270);
 		nav.setAccSp(9000, 150);
 		nav.goForth();
-		nav.crossLine();
+		if (!nav.crossLine()){
+			alphaLocalize(true);
+		}
 		nav.travelDist(robot.lsDist);
 		odo.setY(0);
 		nav.spinClockWise();
@@ -219,7 +221,14 @@ public class Localizer {
 		nav.crossLine();
 		nav.travelDist(robot.lsDist);
 		odo.setX(0);
+		double check1 = odo.getFrontSensorDist();
+		nav.rotateClockwise(-90);
+		double check2 = odo.getFrontSensorDist();
+		if (Math.abs(check1-22)>7 || Math.abs(check2-26)>7){
+			alphaLocalize(true);
+		}
 		nav.setAccSp(robot.acc, robot.speed);
+		
 	}
 	
 	public void omegalineLocalizeNE() {

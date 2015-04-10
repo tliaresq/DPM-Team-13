@@ -188,16 +188,22 @@ public class Navigate {
 	 * @return
 	 */
 	public boolean crossLine() {
-		boolean middle = false;
-		//boolean right = false;
-		while (middle == false){
-			try { Thread.sleep(10); } catch (Exception e) {}
-			middle = odo.isLineM();
-			//right = odo.isLineR();
+		int counter = 0;
+		while (counter <4 && ! (odo.getFrontSensorDist()<5)){
+			try { Thread.sleep(12); } catch (Exception e) {}
+			if( odo.isLineM()){
+				counter ++;
+			}
+			else {
+				counter = 0;
+			}
 		}
-		
+		if (counter > 3){
+			return true;
+		}
+		else{
 			return false;
-		
+		}
 	}
 	/**
 	 * robot spins clockwise until told to do something else
