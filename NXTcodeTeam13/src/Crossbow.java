@@ -29,7 +29,7 @@ public class Crossbow {
 	 */
 	private void shoot(){
 		motor.setAcceleration(6000);
-		motor.setSpeed(150);
+		motor.setSpeed(200);
 		motor.rotate(360);
 
 	}

@@ -67,6 +67,7 @@ public class Main{
 		//test.runOption("LS test");
 		//test.runOption("localize");
 	//	test.travelToTest(0 ,0);
+		
 		finalrun.finalMapRun(false);
 	}
 
