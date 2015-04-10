@@ -32,7 +32,7 @@ public class FinalRun extends Main {
 		robot.odo.lsM.start();
 		robot.odo.usCfront.start();
 		
-	//	nav.localizer.alphaLocalize(true);
+		nav.localizer.alphaLocalize(true);
 		nav.qBreak(500);nav.qBreak(500);nav.qBreak(1000);
 		
 		robot.odo.lsR.start();
@@ -46,18 +46,20 @@ public class FinalRun extends Main {
 		robot.odo.correction.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		
-		if (test){nav.travelToAlphaRelocalizeCross(0, 6, true, true);}
-		else{nav.travelToAlphaRelocalizeCross(10, 10, true, true);}
-		
+		if (test){nav.travelToAlphaRelocalizeCross(0, 6, true, false);}
+		else{nav.travelToAlphaRelocalizeCross(10, 10, true, false);}
+		nav.qBreak(2000);
 		doTargetInstructions(target1);
+		nav.qBreak(2000);
 		doTargetInstructions(target2);
+		nav.qBreak(2000);
 		try {Thread.sleep(1000);} catch (Exception e) {}
 		
-		nav.localizer.omegalineLocalizeNE();
+		//nav.localizer.omegalineLocalizeNE();
 		
-		robot.odo.usCleft.start();
+		//robot.odo.usCleft.start();
 		robot.odo.usCleft.restartUS();
-		robot.odo.correction.start();
+		//robot.odo.correction.start();
 		try {Thread.sleep(100);} catch (Exception e) {}
 		
 		nav.travelToAlphaRelocalizeCross(0, 0, true, true);
@@ -152,10 +154,10 @@ public class FinalRun extends Main {
 
 
 	private void doTargetInstructions(int targetNum) {
-		double x = 0.0;
-		double y = 0.0;
+		double x = 10.0;
+		double y = 10.0;
 		double angle = 0.0;
-		
+		//signal();
 		if      (targetNum==  1){x= 9   ;  y= 8.42;  angle=113.6;}
 		else if (targetNum==  2){x= 9   ;  y= 9.42;  angle=113.6;}
 		else if (targetNum==  3){x= 8   ;  y= 8   ;  angle= 90  ;}
@@ -236,6 +238,17 @@ public class FinalRun extends Main {
 
 			
 		}
+	}
+	private void signal(){
+		LCD.clear();
+		LCD.drawString("################################", 0, 0);
+		LCD.drawString("################################", 0, 1);
+		LCD.drawString("################################", 0, 2);
+		LCD.drawString("################################", 0, 3);
+		LCD.drawString("################################", 0, 5);
+		LCD.drawString("################################", 0, 6);
+		LCD.drawString("################################", 0, 7);
+		
 	}
 
 

@@ -11,7 +11,7 @@ public class OdoCorrection extends Thread{
 	private double[] lines = {0,30.48,60.96,91.44,121.92,152.40,182.88,213.36,243.84,274.32,304.8,335.28,365.76,396.24,426.72,457.20,487.68};
 	private double[] detLine = {-1.0, -1.0, -1.0};
 	private double[] pos = {-1.0, -1.0, 0.0};
-	
+
 
 	public OdoCorrection( Odometer o){
 		stop = true;
@@ -26,7 +26,7 @@ public class OdoCorrection extends Thread{
 			}
 			else{
 				crossLine();
-//				found a line
+				//				found a line
 				if(odo.isLineM() && odo.isLineR())
 				{
 					update(2.0);
@@ -91,97 +91,126 @@ public class OdoCorrection extends Thread{
 		if(xCrossed!= -100 && yCrossed == -100){
 			if(sen==2.0 && odo.getTheta()<=195.0 && odo.getTheta()>=165.0)
 			{
+				if(angleDiff(180,odo.getTheta())<8){
+
 				odo.setTheta(180.0);
+				}
 			}
 			else if(sen==2.0 && (odo.getTheta()>345.0 || odo.getTheta()<15.0))
 			{
+				if(angleDiff(0,odo.getTheta())<8){
+
 				odo.setTheta(0.0);
+				}
 			}
 			else
 			{
 				thetaUpdate(sen, 1.0, xCrossed);
 			}
-				odo.setX(xCrossed-dx);
-				Sound.beep();
+			odo.setX(xCrossed-dx);
+			Sound.beep();
 		}
 		if(xCrossed== -100 && yCrossed != -100){
 			if(sen==2.0 && odo.getTheta()<=105.0 && odo.getTheta()>=75.0)
 			{
+				if(angleDiff(90,odo.getTheta())<8){
+
 				odo.setTheta(90.0);
+				}
 			}
 			else if(sen==2.0 && odo.getTheta()>255.0 && odo.getTheta()<255.0)
 			{
+				if(angleDiff(270,odo.getTheta())<8){
+
 				odo.setTheta(270.0);
+				}
 			}
 			else
 			{
 				thetaUpdate(sen, 0.0, yCrossed);
 			}
-				odo.setY(yCrossed - dy);
-				Sound.beep();
+			odo.setY(yCrossed - dy);
+			Sound.beep();
 		}
 	}
-	
+
 	private void thetaUpdate(double sen, double axis, double coord)
 	{
-			if(detLine[0]!=sen && detLine[1]==axis && detLine[2]==coord && Math.abs(pos[0]-odo.getTheta())<=1)
+		if(detLine[0]!=sen && detLine[1]==axis && detLine[2]==coord && Math.abs(pos[0]-odo.getTheta())<=1)
+		{
+			double k = odo.robot.lsDistR;
+			double d = (Math.toRadians(Math.abs(Motor.C.getTachoCount()-pos[1])))*odo.robot.leftWradius;
+			double maxCorrect = 8;
+
+			if(axis==0.0 && odo.getTheta()<=180.0 && sen==1.0)
 			{
-				double k = odo.robot.lsDistR;
-				double d = (Math.toRadians(Math.abs(Motor.C.getTachoCount()-pos[1])))*odo.robot.leftWradius;
-				
-				if(axis==0.0 && odo.getTheta()<=180.0 && sen==1.0)
-				{
-					double theta = Math.toDegrees(Math.atan(k/d));
+				double theta = Math.toDegrees(Math.atan(k/d));
+				if(angleDiff(theta,odo.getTheta())<maxCorrect){
 					odo.setTheta(theta);
 				}
-				else if(axis==0.0 && odo.getTheta()<=180.0 && sen==0.0)
-				{
-					double theta =180.0 - Math.toDegrees(Math.atan(k/d));
-					odo.setTheta(theta);
-				}
-				else if(axis==0.0 && odo.getTheta()>=180.0 && sen==1.0)
-				{
-					double theta = Math.toDegrees(Math.atan(k/d))+180.0;
-					odo.setTheta(theta);
-				}
-				else if(axis==0.0 && odo.getTheta()>=180.0 && sen==0.0)
-				{
-					double theta = 360.0 - Math.toDegrees(Math.atan(k/d));
-					odo.setTheta(theta);
-				}
-				else if(axis==1.0 && (odo.getTheta()<=90.0 || odo.getTheta()>=270.0) && sen==1.0)
-				{
-					double theta = Math.toDegrees(Math.atan(k/d))+270.0;
-					odo.setTheta(theta);
-				}
-				else if(axis==1.0 && (odo.getTheta()<=90.0 || odo.getTheta()>=270.0) && sen==0.0)
-				{
-					double theta = 90.0 - Math.toDegrees(Math.atan(k/d));
-					odo.setTheta(theta);
-				}
-				else if(axis==1.0 && (odo.getTheta()>=90.0 && odo.getTheta()<=270.0) && sen==1.0)
-				{
-					double theta = Math.toDegrees(Math.atan(k/d))+90.0;
-					odo.setTheta(theta);
-				}
-				else if(axis==1.0 && (odo.getTheta()>=90.0 && odo.getTheta()<=270.0) && sen==0.0)
-				{
-					double theta = 270.0 - Math.toDegrees(Math.atan(k/d));
-					odo.setTheta(theta);
-				}
-				pos[2]=1.0;
 			}
-			else
+			else if(axis==0.0 && odo.getTheta()<=180.0 && sen==0.0)
 			{
-				detLine[0]=sen;
-				detLine[1]=axis;
-				detLine[2]=coord;
-				
-				pos[0]=odo.getTheta();
-				pos[1]=Motor.C.getTachoCount();
-				pos[2]=0.0;
+				double theta =180.0 - Math.toDegrees(Math.atan(k/d));
+				if(angleDiff(theta,odo.getTheta())<maxCorrect){
+					odo.setTheta(theta);
+				}
 			}
-				
+			else if(axis==0.0 && odo.getTheta()>=180.0 && sen==1.0)
+			{
+				double theta = Math.toDegrees(Math.atan(k/d))+180.0;
+				if(angleDiff(theta,odo.getTheta())<maxCorrect){
+					odo.setTheta(theta);
+				}
+			}
+			else if(axis==0.0 && odo.getTheta()>=180.0 && sen==0.0)
+			{
+				double theta = 360.0 - Math.toDegrees(Math.atan(k/d));
+				if(angleDiff(theta,odo.getTheta())<maxCorrect){
+					odo.setTheta(theta);
+				}
+			}
+			else if(axis==1.0 && (odo.getTheta()<=90.0 || odo.getTheta()>=270.0) && sen==1.0)
+			{
+				double theta = Math.toDegrees(Math.atan(k/d))+270.0;
+				if(angleDiff(theta,odo.getTheta())<maxCorrect){
+					odo.setTheta(theta);
+				}
+			}
+			else if(axis==1.0 && (odo.getTheta()<=90.0 || odo.getTheta()>=270.0) && sen==0.0)
+			{
+				double theta = 90.0 - Math.toDegrees(Math.atan(k/d));
+				if(angleDiff(theta,odo.getTheta())<maxCorrect){
+					odo.setTheta(theta);
+				}
+			}
+			else if(axis==1.0 && (odo.getTheta()>=90.0 && odo.getTheta()<=270.0) && sen==1.0)
+			{
+				double theta = Math.toDegrees(Math.atan(k/d))+90.0;
+				if(angleDiff(theta,odo.getTheta())<maxCorrect){
+					odo.setTheta(theta);
+				}
+			}
+			else if(axis==1.0 && (odo.getTheta()>=90.0 && odo.getTheta()<=270.0) && sen==0.0)
+			{
+				double theta = 270.0 - Math.toDegrees(Math.atan(k/d));
+				if(angleDiff(theta,odo.getTheta())<maxCorrect){
+					odo.setTheta(theta);
+				}
+			}
+			pos[2]=1.0;
+		}
+		else
+		{
+			detLine[0]=sen;
+			detLine[1]=axis;
+			detLine[2]=coord;
+
+			pos[0]=odo.getTheta();
+			pos[1]=Motor.C.getTachoCount();
+			pos[2]=0.0;
+		}
+
 	}
 	/**
 	 * check if a certain value "d" is within a certain range of a reference value
@@ -210,7 +239,27 @@ public class OdoCorrection extends Thread{
 	public void stop(){
 		stop = true;
 	}
-	
+
+
+	private double angleDiff(double a,double b) {
+		a = (a + 360) % 360;
+		if (b > 180) {
+			b -= 360;
+		}
+		if (a > 180) {
+			a -= 360;
+		}
+		double deltaAngle = a - b;
+
+		if (deltaAngle > 180) {
+			deltaAngle -= 360;
+		}
+		if (deltaAngle < -180) {
+			deltaAngle += 360;
+		}
+		return (Math.abs(deltaAngle));
+	}
+
 	private void signal(){
 		LCD.clear();
 		LCD.drawString("################################", 0, 0);
@@ -220,7 +269,7 @@ public class OdoCorrection extends Thread{
 		LCD.drawString("################################", 0, 5);
 		LCD.drawString("################################", 0, 6);
 		LCD.drawString("################################", 0, 7);
-		
+
 	}
 }
 

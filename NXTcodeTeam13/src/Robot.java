@@ -41,7 +41,7 @@ public class Robot {
 	public double followAcc = 500;
 	public double followSpeed = 200;
 	public double noWallDistance = 40;
-	public double minFrontWallDist = 10; 		// distance the robot has to be from a wall when following it.
+	public double minFrontWallDist = 12; 		// distance the robot has to be from a wall when following it.
 	public double followerSideDist = 18;
 
 	/*
@@ -49,7 +49,7 @@ public class Robot {
 	 * 				ODOMETRY CORRECTION
 	 *  ==============================================
 	 */
-	public double odoCorBand = 10; 		//radius of the error accepted to correct the odometer
+	public double odoCorBand = 7; 		//radius of the error accepted to correct the odometer
 
 
 	/*
