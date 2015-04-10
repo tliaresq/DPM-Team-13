@@ -27,11 +27,11 @@ public class OdoCorrection extends Thread{
 			else{
 				crossLine();
 				//				found a line
-				if(odo.isLineM() && odo.isLineR())
-				{
-					update(2.0);
-				}
-				else if(odo.isLineM())
+//				if(odo.isLineM() && odo.isLineR())
+//				{
+//					update(2.0);
+//				}
+				if(odo.isLineM())
 				{
 					update(0.0);
 				}
@@ -94,6 +94,7 @@ public class OdoCorrection extends Thread{
 				if(angleDiff(180,odo.getTheta())<8){
 
 				odo.setTheta(180.0);
+				
 				}
 			}
 			else if(sen==2.0 && (odo.getTheta()>345.0 || odo.getTheta()<15.0))

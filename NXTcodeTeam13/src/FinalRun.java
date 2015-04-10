@@ -132,23 +132,77 @@ public class FinalRun extends Main {
 	private void mapToTarget(int mapNumber) {
 		double tile  = 30.48;
 		if (mapNumber == 1){
-		nav.travelTo(tile+15, tile + 15, false, false);
-		nav.travelTo(4*tile+15, tile + 15, false, false);
-		nav.travelTo(4*tile+15, -tile + 15, false, false);
-		nav.travelTo(7*tile+15, -tile + 15, false, false);
-		nav.travelTo(7*tile+15,0 + 15, false, false);
-		nav.travelTo(8*tile+15,0 + 15, false, false);
-		nav.travelTo(9*tile+15,2*tile + 15, false, false);
-		nav.travelTo(10*tile+15, 2 *tile + 15, false, false);
-		nav.travelTo(10*tile+15, 8 *tile + 15, false, false);
+			nav.travelTo(1.5*tile, 1.5*tile, false, true);
+			nav.travelTo(4.5*tile, 1.5*tile, false, true);
+			nav.travelTo(4.5*tile, -0.5*tile, false, true);
+			nav.travelTo(7.5*tile, -0.5*tile, false, true);
+			nav.travelTo(7.5*tile, 0.5*tile, false, true);
+			nav.travelTo(8.5*tile, 0.5*tile, false, true);
+			nav.travelTo(9.5*tile,2.5*tile, false, true);
+			nav.travelTo(10.5*tile, 2.5*tile, false, true);
+			nav.travelTo(10.5*tile, 8.5*tile, false, true);
 		}
-		
+		else if (mapNumber == 2){
+			nav.travelTo(2.5*tile, 3*tile, false, true);
+			nav.travelTo(2.5*tile, 5*tile, false, true);
+			nav.travelTo(1.5*tile, 6.5*tile, false, true);
+			nav.travelTo(1.5*tile, 8.5*tile, false, true);
+			nav.travelTo(-0.5*tile, 8.5*tile, false, true);
+			nav.travelTo(-0.5*tile, 10.5*tile, false, true);
+			nav.travelTo(9*tile, 10.5*tile, false, true);
+			}
+		else if (mapNumber == 3){
+			nav.travelTo(-0.5*tile, 2*tile, false, true);
+			nav.travelTo(-0.5*tile, 4.5*tile, false, true);
+			nav.travelTo(2.5*tile, 4.5*tile, false, true);
+			nav.travelTo(2.5*tile, 7.5*tile, false, true);
+			nav.travelTo(-0.5*tile, 7.5*tile, false, true);
+			nav.travelTo(-0.5*tile, 9.5*tile, false, true);
+			nav.travelTo(0.5*tile, 9.5*tile, false, true);
+			nav.travelTo(0.5*tile, 10.5*tile, false, true);
+			nav.travelTo(9*tile, 10.5*tile, false, true);
+			}
 		nav.travelToRelocalizeCross(9, 9, false);
 	}
 	
 
 	private void mapToOrigin(int mapNumber) {
-	
+		double tile  = 30.48;
+		if (mapNumber == 1){
+			nav.travelTo(10.5*tile, 8.5*tile, false, true);
+			nav.travelTo(10.5*tile, 2.5*tile, false, true);
+			nav.travelTo(9.5*tile,2.5*tile, false, true);
+			nav.travelTo(8.5*tile, 0.5*tile, false, true);
+			nav.travelTo(7.5*tile, 0.5*tile, false, true);
+			nav.travelTo(7.5*tile, -0.5*tile, false, true);
+			nav.travelTo(4.5*tile, -0.5*tile, false, true);
+			nav.travelTo(4.5*tile, 1.5*tile, false, true);
+			nav.travelTo(1.5*tile, 1.5*tile, false, true);
+			nav.travelTo(0, 0.5*tile, false, true);	
+		}
+		else if (mapNumber == 2){
+			nav.travelTo(9*tile, 10.5*tile, false, true);
+			nav.travelTo(-0.5*tile, 10.5*tile, false, true);
+			nav.travelTo(-0.5*tile, 8.5*tile, false, true);
+			nav.travelTo(1.5*tile, 8.5*tile, false, true);
+			nav.travelTo(1.5*tile, 6.5*tile, false, true);
+			nav.travelTo(2.5*tile, 5*tile, false, true);
+			nav.travelTo(2.5*tile, 3*tile, false, true);
+			nav.travelTo(0, 0.5*tile, false, true);
+			}
+		else if (mapNumber == 3){
+			nav.travelTo(9*tile, 10.5*tile, false, true);
+			nav.travelTo(0.5*tile, 10.5*tile, false, true);
+			nav.travelTo(0.5*tile, 9.5*tile, false, true);
+			nav.travelTo(-0.5*tile, 9.5*tile, false, true);
+			nav.travelTo(-0.5*tile, 7.5*tile, false, true);
+			nav.travelTo(2.5*tile, 7.5*tile, false, true);
+			nav.travelTo(2.5*tile, 4.5*tile, false, true);
+			nav.travelTo(-0.5*tile, 4.5*tile, false, true);
+			nav.travelTo(-0.5*tile, 2*tile, false, true);
+			nav.travelTo(0, 0.5*tile, false, true);
+			}
+		nav.travelToRelocalizeCross(0, 0, false);
 	}
 
 
