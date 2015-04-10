@@ -66,7 +66,8 @@ public class Main{
 		//input your string corresponding to the test you want to work on
 		//test.runOption("LS test");
 		//test.runOption("localize");
-		test.travelToTest(0 ,0);
+	//	test.travelToTest(0 ,0);
+		finalrun.finalMapRun(false);
 	}
 
 
