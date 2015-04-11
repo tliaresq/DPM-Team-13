@@ -131,6 +131,10 @@ public class OdoCorrection extends Thread{
 		}
 	}
 
+	/**
+	 * if all the condition are respected, the odometer will use this method to calculate and correct the 
+	 * value of theta using trigonometry
+	 */
 	private void thetaUpdate(double sen, double axis, double coord)
 	{
 		if(detLine[0]!=sen && detLine[1]==axis && detLine[2]==coord && Math.abs(pos[0]-odo.getTheta())<=1)
@@ -257,5 +261,3 @@ public class OdoCorrection extends Thread{
 		return (Math.abs(deltaAngle));
 	}
 }
-
-

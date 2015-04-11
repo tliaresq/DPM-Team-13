@@ -7,13 +7,6 @@ import lejos.nxt.LCD;
  */
 public class Tests extends Main {
 
-
-
-
-
-
-
-
 	public void runOption(String option){
 		switch (option){
 		case "360": do360();break;
@@ -63,9 +56,6 @@ public class Tests extends Main {
 		try {Thread.sleep(100);} catch (Exception e) {}
 		nav.travelDist(dist);
 		try {Thread.sleep(10000);} catch (Exception e) {}
-		//		nav.rotateClockwise(180);
-		//		nav.travelDist(dist);
-		//		nav.rotateClockwise(180);
 	}
 	public void travelToTest(int x ,int y){
 		robot.odo.start();
@@ -83,16 +73,12 @@ public class Tests extends Main {
 
 		robot.odo.usCfront.restartUS();
 		robot.odo.usCleft.restartUS();
-		//robot.odo.usCright.restartUS();
 		nav.qBreak(500);
 		robot.odo.usCfront.stopUS();
 		robot.odo.usCleft.stopUS();
-		//robot.odo.usCright.stopUS();
 		nav.qBreak(500);
 		robot.odo.usCfront.restartUS();
 		robot.odo.usCleft.restartUS();
-		//robot.odo.usCright.restartUS();
-
 	}
 	public void lsTest(){
 		robot.odo.start();
@@ -146,9 +132,4 @@ public class Tests extends Main {
 		LCD.drawString("ERROR", 0, 0);
 		LCD.drawString("no such option", 0, 1);
 	}
-
-
-
-
-
 }

@@ -64,7 +64,6 @@ public class Navigate {
 		if (follow){
 			odo.usCfront.restartUS();
 			odo.usCleft.restartUS();
-			//	odo.usCright.restartUS();
 		}
 		xDest = x;
 		yDest = y;
@@ -83,7 +82,6 @@ public class Navigate {
 					follow = false;
 					odo.usCfront.stopUS();
 					odo.usCleft.stopUS();
-					//	odo.usCright.stopUS();
 				}
 				i++;
 				if(i%5 == 0){store = distToDest() ; }
@@ -98,11 +96,6 @@ public class Navigate {
 			}
 			odo.correction.goingStraight = false;
 			// if obstacle implement wall follower
-			/*
-			 * ========================================
-			 *	CHECK SYNC IN IF STATEMENT BELOW
-			 * ======================================== 
-			 */
 			if (follow && (odo.getFrontSensorDist() < robot.minFrontWallDist 
 					|| odo.getLeftSensorDist()<5 )) { 
 				odo.correction.stop();
@@ -298,16 +291,6 @@ public class Navigate {
 		double destAngle;
 		destAngle =Math.atan2(yDest - odo.getY(),xDest - odo.getX());
 		destAngle = Math.toDegrees(destAngle);
-		//		destAngle = Math.atan2(yDest - odo.getY(), xDest - odo.getX()) ;
-		//		if(xDest - odo.getX()>0){
-		//		destAngle = Math.atan((yDest - odo.getY())/(xDest - odo.getX()));
-		//		destAngle = 180 - Math.toDegrees(destAngle);
-		//		}
-		//		
-		//		else{
-		//			destAngle =  Math.atan((yDest - odo.getY())/(xDest - odo.getX()));
-		//			destAngle =  - Math.toDegrees(destAngle);
-		//		}
 		return destAngle;
 	}
 	/**

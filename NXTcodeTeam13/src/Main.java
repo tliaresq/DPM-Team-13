@@ -9,32 +9,6 @@ import lejos.nxt.*;
 public class Main{
 
 	static String[] optionList = {"travel to","error","360","travel 61", "USfront test","LS test", "odoCorrect test","shoot 999",  "localize","follow test"}; 
-	/* 
-	 *  full List of available options
-	 * {"error","follow test","360","travel 60", "USfront test", "odoCorrect test","shoot 999", "travel to", "localize","map1","map2","map3","map4","map5"};
-	 * 
-	 * ===========Copy the commented list of tests you want to work from and paste it in the working "optionList"  
-	 * 
-	 * {"error","360","travel 60", "USfront test", "odoCorrect test","shoot 999", "travel to", "localize"};
-	 * 
-	 * 
-	 */
-
-	//===========TO CREATE YOUR OWN TEST
-	/*
-	 * Go in the Test.java class
-	 * add the method for your test naming it like you want.
-	 * add a case to the runOption method. Carefully choose the string case.
-	 * add that String to the full list of available options in Main.
-	 * 
-	 * If you are working specificly on that set of instruction:
-	 * use mainEnter() and mainLeft to call that method directly 
-	 * 
-	 * Create your own list as a comment
-	 * 
-	 */
-
-
 	//static Exit exit;							// Listens to escape button to exit program at any time
 	static Robot robot;							// All the hardware Data
 	static Navigate nav;						// Manages driving nxt to a given location
@@ -49,10 +23,6 @@ public class Main{
 	 * Quick Access to Test Or Demo
 	 */
 	public static void mainEnter(){
-		//input your string corresponding to the test you want to work on
-		//		test.runOption("localize");
-		//test.runOption("LS test");
-		//test.demoMain();
 		finalrun.finalRun(false);
 	}
 
@@ -63,33 +33,15 @@ public class Main{
 	 * Quick Access to Test Or Demo
 	 */
 	public static void mainLeft(){
-		//input your string corresponding to the test you want to work on
-		//test.runOption("LS test");
-		//test.runOption("localize");
-		//	test.travelToTest(0 ,0);
-
 		finalrun.finalMapRun(false);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
+	
 	/**
 	 * Starting point of program
 	 * Initializes instances of all needed objects
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		//	exit = new Exit();									
-		//exit.start();
 		objectsIni();
 		printMainMenu();
 	}

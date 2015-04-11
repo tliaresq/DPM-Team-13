@@ -1,6 +1,3 @@
-
-
-
 /**
  * Basic odometer
  * Also store all the sensor values for any class to call and use when necessary.
@@ -51,7 +48,6 @@ public class Odometer extends Thread {
 				double distL, distR, deltaD, deltaT, dX, dY;
 				sensorLeftDist = usCleft.sensorDist();
 				sensorFrontDist = usCfront.sensorDist();
-				//sensorRightDist  = usCright.sensorDist();
 				isLineM = lsM.getLS();
 				isLineR = lsR.getLS();
 
