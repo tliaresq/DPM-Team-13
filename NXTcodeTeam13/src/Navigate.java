@@ -26,13 +26,24 @@ public class Navigate {
 		localizer  = new Localizer(this, robot);
 		setAccSp(robot.acc, robot.speed);
 	}
-	
+	/**
+	 * travels to a position to do a precision localization arround an intersection
+	 * @param x
+	 * @param y
+	 * @param follow
+	 */
 	public void travelToRelocalizeCross(int x, int y, boolean follow){
 		travelTo( x*30.48-15, y*30.48-15, follow, true);
 		pointTo(90);
 		localizer.lineLocalize(x*30.48, y*30.48);
 	}
-
+	/**
+	 * travels to a position and relocalizes independantly of any odometer variable
+	 * @param x
+	 * @param y
+	 * @param follow
+	 * @param localization
+	 */
 	public void travelToAlphaRelocalizeCross(int x, int y, boolean follow, boolean localization){
 		travelTo( x*30.48, y*30.48, follow, true);
 		localizer.alphaLocalize(localization);
@@ -47,13 +58,13 @@ public class Navigate {
 	public void travelTo(double x, double y,boolean follow, boolean correct) {
 
 		if (correct){
-		odo.correction.restart();
+			odo.correction.restart();
 		}
 		qBreak(50);
 		if (follow){
 			odo.usCfront.restartUS();
 			odo.usCleft.restartUS();
-		//	odo.usCright.restartUS();
+			//	odo.usCright.restartUS();
 		}
 		xDest = x;
 		yDest = y;
@@ -72,18 +83,18 @@ public class Navigate {
 					follow = false;
 					odo.usCfront.stopUS();
 					odo.usCleft.stopUS();
-				//	odo.usCright.stopUS();
+					//	odo.usCright.stopUS();
 				}
 				i++;
 				if(i%5 == 0){store = distToDest() ; }
 				goForth();
 				odo.correction.goingStraight = true;
-				
+
 				try {Thread.sleep(50);} catch (Exception e) {}
 				if (distToDest() > store || Math.abs( deltaAngle(destAngle()))>3) { 
 					odo.correction.goingStraight = false;
 					pointToDest();
-					}		// check if heading away from destination and correct  angle(if no obstacle)
+				}		// check if heading away from destination and correct  angle(if no obstacle)
 			}
 			odo.correction.goingStraight = false;
 			// if obstacle implement wall follower
@@ -102,7 +113,7 @@ public class Navigate {
 				odo.correction.restart();
 				try {Thread.sleep(50);} catch (Exception e) {}
 
-				
+
 			}
 			if(Math.abs(deltaAngle(destAngle()))>1){
 				pointToDest();
@@ -150,7 +161,10 @@ public class Navigate {
 		leftMotor.rotate(convertAngle(robot.leftWradius,robot.wwDist, angle), true);
 		rightMotor.rotate(-convertAngle(robot.rightWradius, robot.wwDist, angle), false);
 	}
-	
+	/**
+	 * rotates clockwise a certain angle but lets the thread run whatever method it wants in the mean time
+	 * @param angle
+	 */
 	public void rotateClockwiseIR(double angle) {
 		leftMotor.rotate(convertAngle(robot.leftWradius,robot.wwDist, angle), true);
 		rightMotor.rotate(-convertAngle(robot.rightWradius, robot.wwDist, angle), true);

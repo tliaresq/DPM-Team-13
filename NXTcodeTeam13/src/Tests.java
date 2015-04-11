@@ -6,13 +6,13 @@ import lejos.nxt.LCD;
  *
  */
 public class Tests extends Main {
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 
 	public void runOption(String option){
 		switch (option){
@@ -27,11 +27,6 @@ public class Tests extends Main {
 		case "opt test": printMsg();
 		case "follow test": followerTest();break;
 
-		case "map1":			break;
-		case "map2":			break;
-		case "map3":			break;
-		case "map4":			break;
-		case "map5":			break;
 
 		default:
 			printMsg();
@@ -80,7 +75,7 @@ public class Tests extends Main {
 	}
 	public void usTest(){
 		robot.odo.start();
-		
+
 		try {Thread.sleep(100);} catch (Exception e) {}
 		robot.odo.usCfront.start();
 		robot.odo.usCleft.start();
@@ -146,22 +141,6 @@ public class Tests extends Main {
 		nav.localizer.alphaLocalize(false);
 	}
 
-
-	public void map1(){
-
-	}
-	public void map2(){
-
-	}
-	public void map3(){
-
-	}
-	public void map4(){
-
-	}
-	public void map5(){
-
-	}
 	private void printMsg() {
 		LCD.clear();
 		LCD.drawString("ERROR", 0, 0);
@@ -170,6 +149,6 @@ public class Tests extends Main {
 
 
 
-	
+
 
 }

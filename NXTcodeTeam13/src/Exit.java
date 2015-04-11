@@ -3,7 +3,6 @@ import lejos.nxt.Button;
 /**
  * Thread that allows to exit all running programs simply using the esc button at any time
  * @author Cedric
- *
  */
 public class Exit extends Thread {
 	public void run() {

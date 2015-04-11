@@ -18,8 +18,8 @@ public class Main{
 	 * {"error","360","travel 60", "USfront test", "odoCorrect test","shoot 999", "travel to", "localize"};
 	 * 
 	 * 
-	*/
-	
+	 */
+
 	//===========TO CREATE YOUR OWN TEST
 	/*
 	 * Go in the Test.java class
@@ -41,68 +41,68 @@ public class Main{
 	static Crossbow crossbow;
 	static Tests test = new Tests();
 	static FinalRun finalrun = new FinalRun();
-	
-	
-	
-	
-/**
- * Quick Access to Test Or Demo
- */
+
+
+
+
+	/**
+	 * Quick Access to Test Or Demo
+	 */
 	public static void mainEnter(){
 		//input your string corresponding to the test you want to work on
-//		test.runOption("localize");
+		//		test.runOption("localize");
 		//test.runOption("LS test");
 		//test.demoMain();
 		finalrun.finalRun(false);
 	}
-	
-	
-	
-	
-/**
- * Quick Access to Test Or Demo
- */
+
+
+
+
+	/**
+	 * Quick Access to Test Or Demo
+	 */
 	public static void mainLeft(){
 		//input your string corresponding to the test you want to work on
 		//test.runOption("LS test");
 		//test.runOption("localize");
-	//	test.travelToTest(0 ,0);
-		
+		//	test.travelToTest(0 ,0);
+
 		finalrun.finalMapRun(false);
 	}
 
 
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
 	/**
 	 * Starting point of program
 	 * Initializes instances of all needed objects
 	 * @param args
 	 */
-		public static void main(String[] args) {
+	public static void main(String[] args) {
 		//	exit = new Exit();									
-			//exit.start();
-			objectsIni();
-			printMainMenu();
-		}
-		private static void objectsIni(){
-			robot = new Robot();					
-			nav = new Navigate(robot, robot.odo);			
-			crossbow = new Crossbow(robot);
-		}
-	
-/**
- * handles the LIST MENU 
- * Displays the options and shifts them when left or right button is pressed 
- */
+		//exit.start();
+		objectsIni();
+		printMainMenu();
+	}
+	private static void objectsIni(){
+		robot = new Robot();					
+		nav = new Navigate(robot, robot.odo);			
+		crossbow = new Crossbow(robot);
+	}
+
+	/**
+	 * handles the LIST MENU 
+	 * Displays the options and shifts them when left or right button is pressed 
+	 */
 	public static void mainRight(){
 		boolean display = true;
 		String storeOption;
@@ -147,9 +147,9 @@ public class Main{
 		}		
 	}
 
-/**
- * prints main menu (initial display)
- */
+	/**
+	 * prints main menu (initial display)
+	 */
 	public static void printMainMenu(){
 		LCD.clear();
 		LCD.drawString("Enter = Full Demo", 0, 0);

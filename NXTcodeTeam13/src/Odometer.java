@@ -1,4 +1,3 @@
-import lejos.nxt.Sound;
 
 
 
@@ -22,7 +21,7 @@ public class Odometer extends Thread {
 	private OdometryDisplay odometryDisplay = new OdometryDisplay(this); // displays all odometer data
 	public OdoCorrection correction;
 	public Robot robot;
-	
+
 	public USController usCleft, usCfront;//usCright;
 	public LSController lsM,lsR;
 
@@ -45,18 +44,7 @@ public class Odometer extends Thread {
 
 	public void run() {
 		long updateStart, updateEnd;
-		//=====================================================
-		//       start only the sensors available for run
-		//=====================================================
 		odometryDisplay.start();
-		//usCleft.start();
-		//usCfront.start();
-		//usCright.start();
-		//lsM.start();
-		//lsR.start();
-		//correction.start();
-
-
 		while (true) {
 			updateStart = System.currentTimeMillis();
 			synchronized (lock) {
@@ -66,10 +54,10 @@ public class Odometer extends Thread {
 				//sensorRightDist  = usCright.sensorDist();
 				isLineM = lsM.getLS();
 				isLineR = lsR.getLS();
-				
+
 				nowTachoL = (robot.leftMotor.getTachoCount());
 				nowTachoR = (robot.rightMotor.getTachoCount());
-				
+
 				// getting distances traveled by the left and right wheel respectively
 				distL = Math.PI *(robot.leftWradius-0.007)* (nowTachoL - lastTachoL) / 180;
 				distR = Math.PI *robot.leftWradius* (nowTachoR - lastTachoR) / 180;
@@ -145,7 +133,7 @@ public class Odometer extends Thread {
 		}
 		return result;
 	}
-	
+
 	public double getFrontSensorDist() {
 		double result;
 		synchronized (lock) {
@@ -167,7 +155,7 @@ public class Odometer extends Thread {
 		}
 		return result;
 	}
-	
+
 	public void setX(double x) {
 		synchronized (lock) {
 			this.x = x;

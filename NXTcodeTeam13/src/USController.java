@@ -62,10 +62,10 @@ public class USController extends Thread {
 			}
 			if(count == 0){loop = false;}
 		}
-//		double avrg = temp[(temp.length/2)]+temp[(temp.length/2)+1]+temp[(temp.length/2)+2];
-//		avrg = avrg/3;
+		//		double avrg = temp[(temp.length/2)]+temp[(temp.length/2)+1]+temp[(temp.length/2)+2];
+		//		avrg = avrg/3;
 		return temp[(temp.length/2)+1];
-//		return (int)avrg;
+		//		return (int)avrg;
 	}
 	/**
 	 * stops the US sensor

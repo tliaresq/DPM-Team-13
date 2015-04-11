@@ -26,11 +26,7 @@ public class OdoCorrection extends Thread{
 			}
 			else{
 				crossLine();
-				//				found a line
-//				if(odo.isLineM() && odo.isLineR())
-//				{
-//					update(2.0);
-//				}
+				
 				if(odo.isLineM())
 				{
 					update(0.0);
@@ -259,18 +255,6 @@ public class OdoCorrection extends Thread{
 			deltaAngle += 360;
 		}
 		return (Math.abs(deltaAngle));
-	}
-
-	private void signal(){
-		LCD.clear();
-		LCD.drawString("################################", 0, 0);
-		LCD.drawString("################################", 0, 1);
-		LCD.drawString("################################", 0, 2);
-		LCD.drawString("################################", 0, 3);
-		LCD.drawString("################################", 0, 5);
-		LCD.drawString("################################", 0, 6);
-		LCD.drawString("################################", 0, 7);
-
 	}
 }
 

@@ -11,39 +11,53 @@ public class Localizer {
 	private Odometer odo;
 	private Navigate nav;
 	private Robot robot;
-
+	public double[] linePos = new double[4];
 
 	public Localizer( Navigate n, Robot r) {
 		odo = r.odo;
 		nav = n;
 		robot = r;
 	}
-	
-//	n==true if it is the first localization (bottom left corner). 
-//	n==false if second localization (top right corner).
-	public void alphaLocalize(boolean n){
-		
+
+
+
+	/**
+	 * Localizes independently of any odometer variables
+	 * 
+	 * @param origin if true localization should be at the starting area, else it should be at the shooting area.
+	 */
+	public void alphaLocalize(boolean origin){
+		//correction has to be stopped not to interfeer with the calculation by implementing jumps in theta for example
 		odo.correction.stop();
 		try {Thread.sleep(100);} catch (Exception e) {}
+		//us left sensor has to be stopped to make sure the front distance detected does not catch any interfeerance.(safety measure but it shouldn't happen anyways)
 		odo.usCleft.stopUS();
+		//resetting all that needs to be innitialized for a propper localization
 		odo.usCfront.restartUS();
 		robot.speed=300;
 		robot.acc=2000;
 		try {Thread.sleep(50);} catch (Exception e) {}
 		nav.setAccSp(robot.acc, robot.speed);
+		//tries to find a line within its radius
 		nav.spinClockWise();
 		while(!crossLine()){
+			//if it wasn't able to find a line, it will point to the wall from which it is closest
 			Sound.buzz();
 			nav.pointTo(findMinDist());
 			nav.qBreak(1000);
+			//it travels to a distance from the wall such that a line should be in its radius range.
 			nav.travelDist(odo.getFrontSensorDist()-25);
 			nav.spinClockWise();
 		}
+		//the robots sensor should be placed on a line at this point
 		nav.stopMotors();
+		//places the center of rotation of the robot on the line.
 		nav.travelDist(robot.lsDist);
 		nav.qBreak(1000);
+		//places the light sensor on the line on which the center of rotation of the robot is.
 		nav.pointTo(findCorrectLine());
 		nav.setAccSp(robot.acc, robot.speed);
+		//checks the placement of the walls relative to the robot to set theta accordingly.
 		double wallA = odo.getFrontSensorDist();
 		if (wallA > 45){
 			nav.rotateClockwise(180);
@@ -62,8 +76,8 @@ public class Localizer {
 
 		Sound.buzz();
 		Sound.beep();
-		
-		if(n== true)
+		// sets theta x and y depending on the distances from the walls the robot read.
+		if(origin== true)
 		{
 			if (!firstTry){
 				odo.setTheta(270);
@@ -89,12 +103,15 @@ public class Localizer {
 				odo.setX(335.28-wallB-robot.lsDist);
 				odo.setY(335.28-wallA-robot.lsDist);
 			}
+			// replaces itself to relocalize much more accurately 
 			omegalineLocalizeNE();
-			//nav.travelToRelocalizeCross(10, 10, false);
 		}
-		Sound.buzz();
 	}
-	
+
+	/**
+	 * rotates 360 degrees and returns the angle at which the us sensor found the minimum distance
+	 * @return
+	 */
 	private double findMinDist(){
 		double minDistAngle = 0;
 		double dist;
@@ -114,9 +131,13 @@ public class Localizer {
 		return minDistAngle;
 	}
 
-	public double[] linePos = new double[4];
-	
-	
+
+
+
+	/**
+	 * when the center of rotation of the robot is placed on a line, rotates the robot and returns the angle at which the line  the robot is on points to.
+	 * @return
+	 */
 	private double findCorrectLine(){
 		//double[] linePos = new double[4];
 		nav.setAccSp(2000, 250);
@@ -136,11 +157,13 @@ public class Localizer {
 			}
 
 			try { Thread.sleep(200); } catch (Exception e) {}
-
-
 		}
 		return linePos[3];
 	}
+	/**
+	 * lets the robot run (or do whatever it is already doing) until it crosses a line
+	 * @return
+	 */
 	private boolean crossLine() {
 		double store = odo.getTheta();
 		boolean isLine = false;
@@ -157,7 +180,12 @@ public class Localizer {
 		}
 
 	}
-
+	/**
+	 * returns a the minimum absolute value of the angle between 2 angles
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	private double angleDiff(double a,double b) {
 		a = (a + 360) % 360;
 		if (b > 180) {
@@ -178,6 +206,7 @@ public class Localizer {
 	}
 
 	/**
+	 * this localizes around an intersection
 	 * to work the robot needs to be pointing north
 	 * @param x	line directly east of the light sensor
 	 * @param y line directly north of the light sensor
@@ -200,7 +229,10 @@ public class Localizer {
 		odo.setX(x);
 		nav.setAccSp(robot.acc, robot.speed);
 	}
-	
+
+	/**
+	 * this is a precision localization at the origin
+	 */
 	public void lineLocalizeNE() {
 		nav.travelTo(15, 15, false, false);
 		nav.pointTo(270);
@@ -228,9 +260,11 @@ public class Localizer {
 			alphaLocalize(true);
 		}
 		nav.setAccSp(robot.acc, robot.speed);
-		
+
 	}
-	
+	/**
+	 * this is a precision localization at the shooting area
+	 */
 	public void omegalineLocalizeNE() {
 		nav.travelTo(290, 290, false, false);
 		nav.pointTo(90);

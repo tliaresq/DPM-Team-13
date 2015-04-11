@@ -1,6 +1,5 @@
 import lejos.nxt.NXTRegulatedMotor;
 
-
 /**
  * Manages shooting Ping Pong balls
  * @author Cedric
@@ -11,7 +10,6 @@ public class Crossbow {
 	public Crossbow(Robot r){
 		motor = r.armMotor;	
 	}
-
 
 	/**
 	 * Makes the motor rotate "n" revolutions to shoot "n" times

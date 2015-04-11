@@ -20,6 +20,7 @@ public class Follower {
 	}
 	/**
 	 * This method follows a wall on the left of a robot
+	 * It implements a P type follower 
 	 * @param withDest if true, the method will check whether the robot is pointing towards the navigation's destination and stop the wall follower if it is the case
 	 */
 	public void follow(boolean withDest) {
