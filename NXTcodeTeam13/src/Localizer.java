@@ -139,7 +139,6 @@ public class Localizer {
 	 * @return
 	 */
 	private double findCorrectLine(){
-		//double[] linePos = new double[4];
 		nav.setAccSp(2000, 250);
 		for(int i=0 ; i< linePos.length; i++){
 			nav.spinCounterClockWise();

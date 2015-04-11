@@ -75,16 +75,12 @@ public class Robot {
 	public int usFilterSize = 5;  		// how important is the filter for sensor values
 	public int lsFilterSize = 3;
 	public int blackM = 500;
-	public int blackR = 500;
-	
-	 			// this value needs to be in between the raw output of black and wood of the color sensor
+	public int blackR = 500;            // this value needs to be in between the raw output of black and wood of the color sensor
 
 
 
 
 	public Robot (){
-		//leftMotor = MirrorMotor.invertMotor(Motor.A);
-
 		odo = new Odometer(this);
 	}
 
