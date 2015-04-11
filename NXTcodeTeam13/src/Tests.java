@@ -9,11 +9,6 @@ public class Tests extends Main {
 
 
 
-
-
-
-
-
 	public void runOption(String option){
 		switch (option){
 		case "360": do360();break;
